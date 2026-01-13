@@ -1,0 +1,6 @@
+C:\Users\Matias PC\Desktop\TP_Turnos_Clinica\TP_Turnos_Clinica\Dominio\bin\Debug\Dominio.dll
+C:\Users\Matias PC\Desktop\TP_Turnos_Clinica\TP_Turnos_Clinica\Dominio\bin\Debug\Dominio.pdb
+C:\Users\Matias PC\Desktop\TP_Turnos_Clinica\TP_Turnos_Clinica\Dominio\obj\Debug\Dominio.csproj.AssemblyReference.cache
+C:\Users\Matias PC\Desktop\TP_Turnos_Clinica\TP_Turnos_Clinica\Dominio\obj\Debug\Dominio.csproj.CoreCompileInputs.cache
+C:\Users\Matias PC\Desktop\TP_Turnos_Clinica\TP_Turnos_Clinica\Dominio\obj\Debug\Dominio.dll
+C:\Users\Matias PC\Desktop\TP_Turnos_Clinica\TP_Turnos_Clinica\Dominio\obj\Debug\Dominio.pdb
