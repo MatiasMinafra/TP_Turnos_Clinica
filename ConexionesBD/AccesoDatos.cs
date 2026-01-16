@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Data;
-using System.Data.SqlClient;
+
 
 namespace ConexionesBD
 {
@@ -18,8 +19,10 @@ namespace ConexionesBD
 
         public AccesoDatos()
         {
-            
-            conexion = new SqlConnection(@"server=.\SQLEXPRESS; database=ClinicaTurnosDB; integrated security=true");
+
+            conexion = new SqlConnection(
+                @"server=.\SQLEXPRESS; database=ClinicaTurnosDB; integrated security=true"
+            );
             comando = new SqlCommand();
         }
 
