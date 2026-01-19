@@ -11,10 +11,10 @@ namespace TP_Turnos_Clinica
 {
     public partial class Pacientes : System.Web.UI.Page
     {
-        PacientesNegocio negocio = new PacientesNegocio();
+        PacienteNegocio negocio = new PacienteNegocio();
         protected void Page_Load(object sender, EventArgs e)
         {
-            // Seguridad: sesión obligatoria
+            
             if (Session["usuario"] == null)
             {
                 Response.Redirect("~/Login.aspx");
@@ -29,7 +29,7 @@ namespace TP_Turnos_Clinica
 
         private void CargarGrilla(string filtro = "")
         {
-            List<Dominio.Pacientes> lista = negocio.Listar(filtro);
+            List<Paciente> lista = negocio.Listar(filtro);
             gvPacientes.DataSource = lista;
             gvPacientes.DataBind();
         }
@@ -39,21 +39,16 @@ namespace TP_Turnos_Clinica
             CargarGrilla(txtBuscar.Text.Trim());
         }
 
-        protected void gvPacientes_RowCommand(object sender, System.Web.UI.WebControls.GridViewCommandEventArgs e)
+        protected void Pacientes_ComandoPorFila(object sender, System.Web.UI.WebControls.GridViewCommandEventArgs e)
         {
+            if (e.CommandName != "Desactivar")
+                return;
+
             int index = Convert.ToInt32(e.CommandArgument);
             int idPaciente = Convert.ToInt32(gvPacientes.DataKeys[index].Value);
 
-            if (e.CommandName == "Editar")
-            {
-                Response.Redirect($"~/Pacientes/Form.aspx?id={idPaciente}");
-            }
-
-            if (e.CommandName == "Desactivar")
-            {
-                negocio.Desactivar(idPaciente);
-                CargarGrilla(txtBuscar.Text.Trim());
-            }
+            negocio.Desactivar(idPaciente);
+            CargarGrilla(txtBuscar.Text.Trim());
         }
     }
 }

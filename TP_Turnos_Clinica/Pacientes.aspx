@@ -7,7 +7,6 @@
 
     <h3 class="mb-3">Pacientes</h3>
 
-    <!-- BUSCADOR -->
     <div class="row mb-3">
         <div class="col-md-4">
             <asp:TextBox ID="txtBuscar" runat="server" CssClass="form-control"
@@ -21,41 +20,46 @@
         </div>
 
         <div class="col-md-3 offset-md-3 text-end">
-            <asp:HyperLink ID="lnkNuevo" runat="server"
-                NavigateUrl="~/PacienteForm.aspx"
-                CssClass="btn btn-success">
+            <!-- NUEVO: va al formulario real -->
+            <a class="btn btn-success" href="<%= ResolveUrl("~/PacienteForm.aspx") %>">
                 Nuevo Paciente
-            </asp:HyperLink>
+            </a>
         </div>
     </div>
 
-    <!-- GRILLA -->
     <asp:GridView ID="gvPacientes" runat="server"
         CssClass="table table-striped table-bordered"
         AutoGenerateColumns="false"
         DataKeyNames="PacienteID"
-        OnRowCommand="gvPacientes_RowCommand">
+        OnRowCommand="Pacientes_ComandoPorFila">
 
         <Columns>
-            <asp:BoundField DataField="Dni" HeaderText="DNI" />
+            <asp:BoundField DataField="DNI" HeaderText="DNI" />
             <asp:BoundField DataField="Nombre" HeaderText="Nombre" />
             <asp:BoundField DataField="Apellido" HeaderText="Apellido" />
             <asp:BoundField DataField="Telefono" HeaderText="Teléfono" />
             <asp:CheckBoxField DataField="Activo" HeaderText="Activo" />
 
-            <asp:ButtonField
-                Text="Editar"
-                CommandName="Editar"
-                ButtonType="Button"
-                ControlStyle-CssClass="btn btn-warning btn-sm" />
+            <asp:TemplateField HeaderText="Acciones">
+                <ItemTemplate>
+                    <!-- EDITAR: va al formulario real con id -->
+                    <asp:HyperLink ID="hlEditar" runat="server"
+                        Text="Editar"
+                        NavigateUrl='<%# ResolveUrl("~/PacienteForm.aspx?id=" + Eval("PacienteID")) %>'
+                        CssClass="btn btn-warning btn-sm me-1" />
 
-            <asp:ButtonField
-                Text="Desactivar"
-                CommandName="Desactivar"
-                ButtonType="Button"
-                ControlStyle-CssClass="btn btn-danger btn-sm" />
+                    <!-- DESACTIVAR: sigue usando RowCommand -->
+                    <asp:LinkButton ID="btnDesactivar" runat="server"
+                        Text="Desactivar"
+                        CommandName="Desactivar"
+                        CommandArgument="<%# Container.DataItemIndex %>"
+                        CssClass="btn btn-danger btn-sm"
+                        CausesValidation="false"
+                        OnClientClick="return confirm('¿Seguro que querés desactivar este paciente?');" />
+                </ItemTemplate>
+            </asp:TemplateField>
+
         </Columns>
-
     </asp:GridView>
 
 </asp:Content>

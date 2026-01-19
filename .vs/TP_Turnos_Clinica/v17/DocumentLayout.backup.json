@@ -3,47 +3,67 @@
   "WorkspaceRootPath": "C:\\Users\\Matias PC\\Desktop\\TP_Turnos_Clinica\\TP_Turnos_Clinica\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{CAE10438-8383-4F56-8B7F-A1E818F49CC1}|TP_Turnos_Clinica\\TP_Turnos_Clinica.csproj|c:\\users\\matias pc\\desktop\\tp_turnos_clinica\\tp_turnos_clinica\\tp_turnos_clinica\\pacientes.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
-      "RelativeMoniker": "D:0:0:{CAE10438-8383-4F56-8B7F-A1E818F49CC1}|TP_Turnos_Clinica\\TP_Turnos_Clinica.csproj|solutionrelative:tp_turnos_clinica\\pacientes.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}"
+      "AbsoluteMoniker": "D:0:0:{CAE10438-8383-4F56-8B7F-A1E818F49CC1}|TP_Turnos_Clinica\\TP_Turnos_Clinica.csproj|c:\\users\\matias pc\\desktop\\tp_turnos_clinica\\tp_turnos_clinica\\tp_turnos_clinica\\login.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
+      "RelativeMoniker": "D:0:0:{CAE10438-8383-4F56-8B7F-A1E818F49CC1}|TP_Turnos_Clinica\\TP_Turnos_Clinica.csproj|solutionrelative:tp_turnos_clinica\\login.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A4247CA4-6C23-4E1E-BA97-BB7297A41C2F}|Dominio\\Dominio.csproj|c:\\users\\matias pc\\desktop\\tp_turnos_clinica\\tp_turnos_clinica\\dominio\\pacientes.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A4247CA4-6C23-4E1E-BA97-BB7297A41C2F}|Dominio\\Dominio.csproj|solutionrelative:dominio\\pacientes.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{CAE10438-8383-4F56-8B7F-A1E818F49CC1}|TP_Turnos_Clinica\\TP_Turnos_Clinica.csproj|C:\\Users\\Matias PC\\Desktop\\TP_Turnos_Clinica\\TP_Turnos_Clinica\\tp_turnos_clinica\\site.master||{B30AFBFF-D992-43B7-B62D-2642580A2883}",
+      "RelativeMoniker": "D:0:0:{CAE10438-8383-4F56-8B7F-A1E818F49CC1}|TP_Turnos_Clinica\\TP_Turnos_Clinica.csproj|solutionrelative:tp_turnos_clinica\\site.master||{B30AFBFF-D992-43B7-B62D-2642580A2883}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{CAE10438-8383-4F56-8B7F-A1E818F49CC1}|TP_Turnos_Clinica\\TP_Turnos_Clinica.csproj|c:\\users\\matias pc\\desktop\\tp_turnos_clinica\\tp_turnos_clinica\\tp_turnos_clinica\\pacientes.aspx.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{CAE10438-8383-4F56-8B7F-A1E818F49CC1}|TP_Turnos_Clinica\\TP_Turnos_Clinica.csproj|solutionrelative:tp_turnos_clinica\\pacientes.aspx.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{F9B7F27D-8FF6-42D6-8630-9A0B2C1EAB3A}|ConexionesBD\\ConexionesBD.csproj|c:\\users\\matias pc\\desktop\\tp_turnos_clinica\\tp_turnos_clinica\\conexionesbd\\pacientesdatos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F9B7F27D-8FF6-42D6-8630-9A0B2C1EAB3A}|ConexionesBD\\ConexionesBD.csproj|solutionrelative:conexionesbd\\pacientesdatos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{C2832B51-E340-4396-AD38-DC6FFF5D1306}|Negocio\\Negocio.csproj|c:\\users\\matias pc\\desktop\\tp_turnos_clinica\\tp_turnos_clinica\\negocio\\usuarionegocio.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C2832B51-E340-4396-AD38-DC6FFF5D1306}|Negocio\\Negocio.csproj|solutionrelative:negocio\\usuarionegocio.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{C2832B51-E340-4396-AD38-DC6FFF5D1306}|Negocio\\Negocio.csproj|c:\\users\\matias pc\\desktop\\tp_turnos_clinica\\tp_turnos_clinica\\negocio\\pacientesnegocio.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C2832B51-E340-4396-AD38-DC6FFF5D1306}|Negocio\\Negocio.csproj|solutionrelative:negocio\\pacientesnegocio.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{F9B7F27D-8FF6-42D6-8630-9A0B2C1EAB3A}|ConexionesBD\\ConexionesBD.csproj|c:\\users\\matias pc\\desktop\\tp_turnos_clinica\\tp_turnos_clinica\\conexionesbd\\accesodatos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F9B7F27D-8FF6-42D6-8630-9A0B2C1EAB3A}|ConexionesBD\\ConexionesBD.csproj|solutionrelative:conexionesbd\\accesodatos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{CAE10438-8383-4F56-8B7F-A1E818F49CC1}|TP_Turnos_Clinica\\TP_Turnos_Clinica.csproj|c:\\users\\matias pc\\desktop\\tp_turnos_clinica\\tp_turnos_clinica\\tp_turnos_clinica\\web.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
-      "RelativeMoniker": "D:0:0:{CAE10438-8383-4F56-8B7F-A1E818F49CC1}|TP_Turnos_Clinica\\TP_Turnos_Clinica.csproj|solutionrelative:tp_turnos_clinica\\web.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{CAE10438-8383-4F56-8B7F-A1E818F49CC1}|TP_Turnos_Clinica\\TP_Turnos_Clinica.csproj|c:\\users\\matias pc\\desktop\\tp_turnos_clinica\\tp_turnos_clinica\\tp_turnos_clinica\\medicos.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
-      "RelativeMoniker": "D:0:0:{CAE10438-8383-4F56-8B7F-A1E818F49CC1}|TP_Turnos_Clinica\\TP_Turnos_Clinica.csproj|solutionrelative:tp_turnos_clinica\\medicos.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{CAE10438-8383-4F56-8B7F-A1E818F49CC1}|TP_Turnos_Clinica\\TP_Turnos_Clinica.csproj|c:\\users\\matias pc\\desktop\\tp_turnos_clinica\\tp_turnos_clinica\\tp_turnos_clinica\\home.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
+      "AbsoluteMoniker": "D:0:0:{CAE10438-8383-4F56-8B7F-A1E818F49CC1}|TP_Turnos_Clinica\\TP_Turnos_Clinica.csproj|C:\\Users\\Matias PC\\Desktop\\TP_Turnos_Clinica\\TP_Turnos_Clinica\\tp_turnos_clinica\\home.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
       "RelativeMoniker": "D:0:0:{CAE10438-8383-4F56-8B7F-A1E818F49CC1}|TP_Turnos_Clinica\\TP_Turnos_Clinica.csproj|solutionrelative:tp_turnos_clinica\\home.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{CAE10438-8383-4F56-8B7F-A1E818F49CC1}|TP_Turnos_Clinica\\TP_Turnos_Clinica.csproj|c:\\users\\matias pc\\desktop\\tp_turnos_clinica\\tp_turnos_clinica\\tp_turnos_clinica\\home.aspx.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{CAE10438-8383-4F56-8B7F-A1E818F49CC1}|TP_Turnos_Clinica\\TP_Turnos_Clinica.csproj|c:\\users\\matias pc\\desktop\\tp_turnos_clinica\\tp_turnos_clinica\\tp_turnos_clinica\\pacienteform.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
+      "RelativeMoniker": "D:0:0:{CAE10438-8383-4F56-8B7F-A1E818F49CC1}|TP_Turnos_Clinica\\TP_Turnos_Clinica.csproj|solutionrelative:tp_turnos_clinica\\pacienteform.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CAE10438-8383-4F56-8B7F-A1E818F49CC1}|TP_Turnos_Clinica\\TP_Turnos_Clinica.csproj|c:\\users\\matias pc\\desktop\\tp_turnos_clinica\\tp_turnos_clinica\\tp_turnos_clinica\\global.asax.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CAE10438-8383-4F56-8B7F-A1E818F49CC1}|TP_Turnos_Clinica\\TP_Turnos_Clinica.csproj|solutionrelative:tp_turnos_clinica\\global.asax.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CAE10438-8383-4F56-8B7F-A1E818F49CC1}|TP_Turnos_Clinica\\TP_Turnos_Clinica.csproj|C:\\Users\\Matias PC\\Desktop\\TP_Turnos_Clinica\\TP_Turnos_Clinica\\tp_turnos_clinica\\pacienteform.aspx.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CAE10438-8383-4F56-8B7F-A1E818F49CC1}|TP_Turnos_Clinica\\TP_Turnos_Clinica.csproj|solutionrelative:tp_turnos_clinica\\pacienteform.aspx.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CAE10438-8383-4F56-8B7F-A1E818F49CC1}|TP_Turnos_Clinica\\TP_Turnos_Clinica.csproj|C:\\Users\\Matias PC\\Desktop\\TP_Turnos_Clinica\\TP_Turnos_Clinica\\tp_turnos_clinica\\pacientes.aspx.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CAE10438-8383-4F56-8B7F-A1E818F49CC1}|TP_Turnos_Clinica\\TP_Turnos_Clinica.csproj|solutionrelative:tp_turnos_clinica\\pacientes.aspx.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F9B7F27D-8FF6-42D6-8630-9A0B2C1EAB3A}|ConexionesBD\\ConexionesBD.csproj|c:\\users\\matias pc\\desktop\\tp_turnos_clinica\\tp_turnos_clinica\\conexionesbd\\pacientedatos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F9B7F27D-8FF6-42D6-8630-9A0B2C1EAB3A}|ConexionesBD\\ConexionesBD.csproj|solutionrelative:conexionesbd\\pacientedatos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C2832B51-E340-4396-AD38-DC6FFF5D1306}|Negocio\\Negocio.csproj|c:\\users\\matias pc\\desktop\\tp_turnos_clinica\\tp_turnos_clinica\\negocio\\pacientenegocio.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C2832B51-E340-4396-AD38-DC6FFF5D1306}|Negocio\\Negocio.csproj|solutionrelative:negocio\\pacientenegocio.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A4247CA4-6C23-4E1E-BA97-BB7297A41C2F}|Dominio\\Dominio.csproj|c:\\users\\matias pc\\desktop\\tp_turnos_clinica\\tp_turnos_clinica\\dominio\\paciente.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A4247CA4-6C23-4E1E-BA97-BB7297A41C2F}|Dominio\\Dominio.csproj|solutionrelative:dominio\\paciente.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F9B7F27D-8FF6-42D6-8630-9A0B2C1EAB3A}|ConexionesBD\\ConexionesBD.csproj|C:\\Users\\Matias PC\\Desktop\\TP_Turnos_Clinica\\TP_Turnos_Clinica\\conexionesbd\\accesodatos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F9B7F27D-8FF6-42D6-8630-9A0B2C1EAB3A}|ConexionesBD\\ConexionesBD.csproj|solutionrelative:conexionesbd\\accesodatos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CAE10438-8383-4F56-8B7F-A1E818F49CC1}|TP_Turnos_Clinica\\TP_Turnos_Clinica.csproj|C:\\Users\\Matias PC\\Desktop\\TP_Turnos_Clinica\\TP_Turnos_Clinica\\tp_turnos_clinica\\pacientes.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
+      "RelativeMoniker": "D:0:0:{CAE10438-8383-4F56-8B7F-A1E818F49CC1}|TP_Turnos_Clinica\\TP_Turnos_Clinica.csproj|solutionrelative:tp_turnos_clinica\\pacientes.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CAE10438-8383-4F56-8B7F-A1E818F49CC1}|TP_Turnos_Clinica\\TP_Turnos_Clinica.csproj|C:\\Users\\Matias PC\\Desktop\\TP_Turnos_Clinica\\TP_Turnos_Clinica\\tp_turnos_clinica\\medicos.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}",
+      "RelativeMoniker": "D:0:0:{CAE10438-8383-4F56-8B7F-A1E818F49CC1}|TP_Turnos_Clinica\\TP_Turnos_Clinica.csproj|solutionrelative:tp_turnos_clinica\\medicos.aspx||{57312C73-6202-49E9-B1E1-40EA1A6DC1F6}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C2832B51-E340-4396-AD38-DC6FFF5D1306}|Negocio\\Negocio.csproj|C:\\Users\\Matias PC\\Desktop\\TP_Turnos_Clinica\\TP_Turnos_Clinica\\negocio\\usuarionegocio.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C2832B51-E340-4396-AD38-DC6FFF5D1306}|Negocio\\Negocio.csproj|solutionrelative:negocio\\usuarionegocio.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CAE10438-8383-4F56-8B7F-A1E818F49CC1}|TP_Turnos_Clinica\\TP_Turnos_Clinica.csproj|C:\\Users\\Matias PC\\Desktop\\TP_Turnos_Clinica\\TP_Turnos_Clinica\\tp_turnos_clinica\\web.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{CAE10438-8383-4F56-8B7F-A1E818F49CC1}|TP_Turnos_Clinica\\TP_Turnos_Clinica.csproj|solutionrelative:tp_turnos_clinica\\web.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CAE10438-8383-4F56-8B7F-A1E818F49CC1}|TP_Turnos_Clinica\\TP_Turnos_Clinica.csproj|C:\\Users\\Matias PC\\Desktop\\TP_Turnos_Clinica\\TP_Turnos_Clinica\\tp_turnos_clinica\\home.aspx.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{CAE10438-8383-4F56-8B7F-A1E818F49CC1}|TP_Turnos_Clinica\\TP_Turnos_Clinica.csproj|solutionrelative:tp_turnos_clinica\\home.aspx.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
@@ -54,7 +74,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 12,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Bookmark",
@@ -74,7 +94,72 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Login.aspx",
+              "DocumentMoniker": "C:\\Users\\Matias PC\\Desktop\\TP_Turnos_Clinica\\TP_Turnos_Clinica\\TP_Turnos_Clinica\\Login.aspx",
+              "RelativeDocumentMoniker": "TP_Turnos_Clinica\\Login.aspx",
+              "ToolTip": "C:\\Users\\Matias PC\\Desktop\\TP_Turnos_Clinica\\TP_Turnos_Clinica\\TP_Turnos_Clinica\\Login.aspx",
+              "RelativeToolTip": "TP_Turnos_Clinica\\Login.aspx",
+              "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000195|",
+              "WhenOpened": "2026-01-17T16:55:07.813Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 4,
+              "Title": "Global.asax.cs",
+              "DocumentMoniker": "C:\\Users\\Matias PC\\Desktop\\TP_Turnos_Clinica\\TP_Turnos_Clinica\\TP_Turnos_Clinica\\Global.asax.cs",
+              "RelativeDocumentMoniker": "TP_Turnos_Clinica\\Global.asax.cs",
+              "ToolTip": "C:\\Users\\Matias PC\\Desktop\\TP_Turnos_Clinica\\TP_Turnos_Clinica\\TP_Turnos_Clinica\\Global.asax.cs",
+              "RelativeToolTip": "TP_Turnos_Clinica\\Global.asax.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-17T16:44:48.176Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "PacienteForm.aspx.cs",
+              "DocumentMoniker": "C:\\Users\\Matias PC\\Desktop\\TP_Turnos_Clinica\\TP_Turnos_Clinica\\TP_Turnos_Clinica\\PacienteForm.aspx.cs",
+              "RelativeDocumentMoniker": "TP_Turnos_Clinica\\PacienteForm.aspx.cs",
+              "ToolTip": "C:\\Users\\Matias PC\\Desktop\\TP_Turnos_Clinica\\TP_Turnos_Clinica\\TP_Turnos_Clinica\\PacienteForm.aspx.cs",
+              "RelativeToolTip": "TP_Turnos_Clinica\\PacienteForm.aspx.cs",
+              "ViewState": "AgIAAKIAAAAAAAAAAAAmwKwAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-16T23:48:05.223Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "PacienteForm.aspx",
+              "DocumentMoniker": "C:\\Users\\Matias PC\\Desktop\\TP_Turnos_Clinica\\TP_Turnos_Clinica\\TP_Turnos_Clinica\\PacienteForm.aspx",
+              "RelativeDocumentMoniker": "TP_Turnos_Clinica\\PacienteForm.aspx",
+              "ToolTip": "C:\\Users\\Matias PC\\Desktop\\TP_Turnos_Clinica\\TP_Turnos_Clinica\\TP_Turnos_Clinica\\PacienteForm.aspx",
+              "RelativeToolTip": "TP_Turnos_Clinica\\PacienteForm.aspx",
+              "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000195|",
+              "WhenOpened": "2026-01-16T23:47:34.777Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Site.Master",
+              "DocumentMoniker": "C:\\Users\\Matias PC\\Desktop\\TP_Turnos_Clinica\\TP_Turnos_Clinica\\TP_Turnos_Clinica\\Site.Master",
+              "RelativeDocumentMoniker": "TP_Turnos_Clinica\\Site.Master",
+              "ToolTip": "C:\\Users\\Matias PC\\Desktop\\TP_Turnos_Clinica\\TP_Turnos_Clinica\\TP_Turnos_Clinica\\Site.Master",
+              "RelativeToolTip": "TP_Turnos_Clinica\\Site.Master",
+              "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000195|",
+              "WhenOpened": "2026-01-16T23:43:15.995Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
               "Title": "UsuarioNegocio.cs",
               "DocumentMoniker": "C:\\Users\\Matias PC\\Desktop\\TP_Turnos_Clinica\\TP_Turnos_Clinica\\Negocio\\UsuarioNegocio.cs",
               "RelativeDocumentMoniker": "Negocio\\UsuarioNegocio.cs",
@@ -82,12 +167,11 @@
               "RelativeToolTip": "Negocio\\UsuarioNegocio.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-14T23:58:41.53Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-01-14T23:58:41.53Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 14,
               "Title": "Web.config",
               "DocumentMoniker": "C:\\Users\\Matias PC\\Desktop\\TP_Turnos_Clinica\\TP_Turnos_Clinica\\TP_Turnos_Clinica\\Web.config",
               "RelativeDocumentMoniker": "TP_Turnos_Clinica\\Web.config",
@@ -100,72 +184,72 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 10,
               "Title": "AccesoDatos.cs",
               "DocumentMoniker": "C:\\Users\\Matias PC\\Desktop\\TP_Turnos_Clinica\\TP_Turnos_Clinica\\ConexionesBD\\AccesoDatos.cs",
               "RelativeDocumentMoniker": "ConexionesBD\\AccesoDatos.cs",
               "ToolTip": "C:\\Users\\Matias PC\\Desktop\\TP_Turnos_Clinica\\TP_Turnos_Clinica\\ConexionesBD\\AccesoDatos.cs",
               "RelativeToolTip": "ConexionesBD\\AccesoDatos.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAhAAAAAAAAAA==",
+              "ViewState": "AgIAADwAAAAAAAAAAAAmwDAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-01-14T23:15:34.179Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "PacientesNegocio.cs",
-              "DocumentMoniker": "C:\\Users\\Matias PC\\Desktop\\TP_Turnos_Clinica\\TP_Turnos_Clinica\\Negocio\\PacientesNegocio.cs",
-              "RelativeDocumentMoniker": "Negocio\\PacientesNegocio.cs",
-              "ToolTip": "C:\\Users\\Matias PC\\Desktop\\TP_Turnos_Clinica\\TP_Turnos_Clinica\\Negocio\\PacientesNegocio.cs",
-              "RelativeToolTip": "Negocio\\PacientesNegocio.cs",
-              "ViewState": "AgIAAAQAAAAAAAAAAAASwBEAAAAJAAAAAAAAAA==",
+              "DocumentIndex": 8,
+              "Title": "PacienteNegocio.cs",
+              "DocumentMoniker": "C:\\Users\\Matias PC\\Desktop\\TP_Turnos_Clinica\\TP_Turnos_Clinica\\Negocio\\PacienteNegocio.cs",
+              "RelativeDocumentMoniker": "Negocio\\PacienteNegocio.cs",
+              "ToolTip": "C:\\Users\\Matias PC\\Desktop\\TP_Turnos_Clinica\\TP_Turnos_Clinica\\Negocio\\PacienteNegocio.cs",
+              "RelativeToolTip": "Negocio\\PacienteNegocio.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-01-14T23:14:42.802Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "PacientesDatos.cs",
-              "DocumentMoniker": "C:\\Users\\Matias PC\\Desktop\\TP_Turnos_Clinica\\TP_Turnos_Clinica\\ConexionesBD\\PacientesDatos.cs",
-              "RelativeDocumentMoniker": "ConexionesBD\\PacientesDatos.cs",
-              "ToolTip": "C:\\Users\\Matias PC\\Desktop\\TP_Turnos_Clinica\\TP_Turnos_Clinica\\ConexionesBD\\PacientesDatos.cs",
-              "RelativeToolTip": "ConexionesBD\\PacientesDatos.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAEgAAAAJAAAAAAAAAA==",
+              "DocumentIndex": 7,
+              "Title": "PacienteDatos.cs",
+              "DocumentMoniker": "C:\\Users\\Matias PC\\Desktop\\TP_Turnos_Clinica\\TP_Turnos_Clinica\\ConexionesBD\\PacienteDatos.cs",
+              "RelativeDocumentMoniker": "ConexionesBD\\PacienteDatos.cs",
+              "ToolTip": "C:\\Users\\Matias PC\\Desktop\\TP_Turnos_Clinica\\TP_Turnos_Clinica\\ConexionesBD\\PacienteDatos.cs",
+              "RelativeToolTip": "ConexionesBD\\PacienteDatos.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-01-14T23:03:40.322Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Pacientes.cs",
-              "DocumentMoniker": "C:\\Users\\Matias PC\\Desktop\\TP_Turnos_Clinica\\TP_Turnos_Clinica\\Dominio\\Pacientes.cs",
-              "RelativeDocumentMoniker": "Dominio\\Pacientes.cs",
-              "ToolTip": "C:\\Users\\Matias PC\\Desktop\\TP_Turnos_Clinica\\TP_Turnos_Clinica\\Dominio\\Pacientes.cs",
-              "RelativeToolTip": "Dominio\\Pacientes.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAZAAAAAAAAAA==",
+              "DocumentIndex": 9,
+              "Title": "Paciente.cs",
+              "DocumentMoniker": "C:\\Users\\Matias PC\\Desktop\\TP_Turnos_Clinica\\TP_Turnos_Clinica\\Dominio\\Paciente.cs",
+              "RelativeDocumentMoniker": "Dominio\\Paciente.cs",
+              "ToolTip": "C:\\Users\\Matias PC\\Desktop\\TP_Turnos_Clinica\\TP_Turnos_Clinica\\Dominio\\Paciente.cs",
+              "RelativeToolTip": "Dominio\\Paciente.cs",
+              "ViewState": "AgIAAAIAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-01-14T22:59:10.358Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 6,
               "Title": "Pacientes.aspx.cs",
               "DocumentMoniker": "C:\\Users\\Matias PC\\Desktop\\TP_Turnos_Clinica\\TP_Turnos_Clinica\\TP_Turnos_Clinica\\Pacientes.aspx.cs",
               "RelativeDocumentMoniker": "TP_Turnos_Clinica\\Pacientes.aspx.cs",
               "ToolTip": "C:\\Users\\Matias PC\\Desktop\\TP_Turnos_Clinica\\TP_Turnos_Clinica\\TP_Turnos_Clinica\\Pacientes.aspx.cs",
               "RelativeToolTip": "TP_Turnos_Clinica\\Pacientes.aspx.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAAACIAAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-01-14T22:53:26.005Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 12,
               "Title": "Medicos.aspx",
               "DocumentMoniker": "C:\\Users\\Matias PC\\Desktop\\TP_Turnos_Clinica\\TP_Turnos_Clinica\\TP_Turnos_Clinica\\Medicos.aspx",
               "RelativeDocumentMoniker": "TP_Turnos_Clinica\\Medicos.aspx",
@@ -173,17 +257,16 @@
               "RelativeToolTip": "TP_Turnos_Clinica\\Medicos.aspx",
               "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000195|",
-              "WhenOpened": "2026-01-14T22:34:52.427Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-01-14T22:34:52.427Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 11,
               "Title": "Pacientes.aspx",
               "DocumentMoniker": "C:\\Users\\Matias PC\\Desktop\\TP_Turnos_Clinica\\TP_Turnos_Clinica\\TP_Turnos_Clinica\\Pacientes.aspx",
               "RelativeDocumentMoniker": "TP_Turnos_Clinica\\Pacientes.aspx",
-              "ToolTip": "C:\\Users\\Matias PC\\Desktop\\TP_Turnos_Clinica\\TP_Turnos_Clinica\\TP_Turnos_Clinica\\Pacientes.aspx*",
-              "RelativeToolTip": "TP_Turnos_Clinica\\Pacientes.aspx*",
+              "ToolTip": "C:\\Users\\Matias PC\\Desktop\\TP_Turnos_Clinica\\TP_Turnos_Clinica\\TP_Turnos_Clinica\\Pacientes.aspx",
+              "RelativeToolTip": "TP_Turnos_Clinica\\Pacientes.aspx",
               "LogicalView": "7651a703-06e5-11d1-8ebd-00a0c90f26ea",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000195|",
               "WhenOpened": "2026-01-14T22:34:26.228Z",
@@ -191,7 +274,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 2,
               "Title": "Home.aspx",
               "DocumentMoniker": "C:\\Users\\Matias PC\\Desktop\\TP_Turnos_Clinica\\TP_Turnos_Clinica\\TP_Turnos_Clinica\\Home.aspx",
               "RelativeDocumentMoniker": "TP_Turnos_Clinica\\Home.aspx",
@@ -204,7 +287,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 15,
               "Title": "Home.aspx.cs",
               "DocumentMoniker": "C:\\Users\\Matias PC\\Desktop\\TP_Turnos_Clinica\\TP_Turnos_Clinica\\TP_Turnos_Clinica\\Home.aspx.cs",
               "RelativeDocumentMoniker": "TP_Turnos_Clinica\\Home.aspx.cs",
@@ -212,8 +295,7 @@
               "RelativeToolTip": "TP_Turnos_Clinica\\Home.aspx.cs",
               "ViewState": "AgIAABwAAAAAAAAAAAAgwFgAAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-14T22:21:25.261Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-01-14T22:21:25.261Z"
             }
           ]
         }
