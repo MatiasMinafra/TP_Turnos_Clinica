@@ -12,9 +12,9 @@ namespace Negocio
     {
         private readonly PacienteDatos datos = new PacienteDatos();
 
-        public List<Paciente> Listar(string filtro = "")
+        public List<Paciente> Listar(string filtro = "", bool soloActivos = true)
         {
-            return datos.Listar(filtro);
+            return datos.Listar(filtro, soloActivos);
         }
 
         public void Desactivar(int idPaciente)
@@ -32,12 +32,28 @@ namespace Negocio
         public void Agregar(Paciente p)
         {
             Validar(p);
+
+            if (datos.ExisteDni(p.DNI))
+                throw new Exception("Ya existe un paciente con ese DNI.");
+
+            if (datos.ExisteEmail(p.Email))
+                throw new Exception("Ya existe un paciente con ese Email.");
+
             datos.Agregar(p);
         }
         public void Modificar(Paciente p)
         {
-            if (p.PacienteID <= 0) throw new Exception("Id inválido.");
+            if (p.PacienteID <= 0)
+                throw new Exception("Id inválido.");
+
             Validar(p);
+
+            if (datos.ExisteDni(p.DNI, p.PacienteID))
+                throw new Exception("Ya existe otro paciente con ese DNI.");
+
+            if (datos.ExisteEmail(p.Email, p.PacienteID))
+                throw new Exception("Ya existe otro paciente con ese Email.");
+
             datos.Modificar(p);
         }
         private void Validar(Paciente p)

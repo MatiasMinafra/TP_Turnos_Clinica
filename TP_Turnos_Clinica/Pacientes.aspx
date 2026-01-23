@@ -7,28 +7,47 @@
 
     <h3 class="mb-3">Pacientes</h3>
 
-    <div class="row mb-3">
-        <div class="col-md-4">
-            <asp:TextBox ID="txtBuscar" runat="server" CssClass="form-control"
-                placeholder="Buscar por DNI o Nombre"></asp:TextBox>
+    <!-- BUSCADOR + CHECKBOX + NUEVO -->
+    <div class="row mb-3 align-items-end">
+
+        <div class="col-md-5">
+            <asp:TextBox ID="txtBuscar" runat="server"
+                CssClass="form-control"
+                placeholder="Buscar por DNI, Nombre, Apellido o Email">
+            </asp:TextBox>
         </div>
 
         <div class="col-md-2">
-            <asp:Button ID="btnBuscar" runat="server" Text="Buscar"
+            <asp:Button ID="btnBuscar" runat="server"
+                Text="Buscar"
                 CssClass="btn btn-primary w-100"
                 OnClick="btnBuscar_Click" />
         </div>
 
-        <div class="col-md-3 offset-md-3 text-end">
-            <!-- NUEVO: va al formulario real -->
-            <a class="btn btn-success" href="<%= ResolveUrl("~/PacienteForm.aspx") %>">
+        <div class="col-md-3">
+            <div class="form-check mt-2">
+                <asp:CheckBox ID="chkInactivos" runat="server"
+                    CssClass="form-check-input"
+                    AutoPostBack="true"
+                    OnCheckedChanged="chkInactivos_CheckedChanged" />
+                <label class="form-check-label" for="<%= chkInactivos.ClientID %>">
+                    Mostrar inactivos
+                </label>
+            </div>
+        </div>
+
+        <div class="col-md-2 text-end">
+            <a class="btn btn-success w-100"
+               href="<%= ResolveUrl("~/PacienteForm.aspx") %>">
                 Nuevo Paciente
             </a>
         </div>
+
     </div>
 
+    <!-- GRILLA -->
     <asp:GridView ID="gvPacientes" runat="server"
-        CssClass="table table-striped table-bordered"
+        CssClass="table table-striped table-bordered table-sm"
         AutoGenerateColumns="false"
         DataKeyNames="PacienteID"
         OnRowCommand="Pacientes_ComandoPorFila">
@@ -42,13 +61,11 @@
 
             <asp:TemplateField HeaderText="Acciones">
                 <ItemTemplate>
-                    <!-- EDITAR: va al formulario real con id -->
                     <asp:HyperLink ID="hlEditar" runat="server"
                         Text="Editar"
                         NavigateUrl='<%# ResolveUrl("~/PacienteForm.aspx?id=" + Eval("PacienteID")) %>'
                         CssClass="btn btn-warning btn-sm me-1" />
 
-                    <!-- DESACTIVAR: sigue usando RowCommand -->
                     <asp:LinkButton ID="btnDesactivar" runat="server"
                         Text="Desactivar"
                         CommandName="Desactivar"

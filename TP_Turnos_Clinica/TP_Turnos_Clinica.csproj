@@ -120,6 +120,7 @@
     <Content Include="Global.asax" />
     <Content Include="Home.aspx" />
     <Content Include="Login.aspx" />
+    <Content Include="MedicoForm.aspx" />
     <Content Include="Medicos.aspx" />
     <Content Include="PacienteForm.aspx" />
     <Content Include="Pacientes.aspx" />
@@ -203,6 +204,13 @@
     </Compile>
     <Compile Include="Login.aspx.designer.cs">
       <DependentUpon>Login.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MedicoForm.aspx.cs">
+      <DependentUpon>MedicoForm.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MedicoForm.aspx.designer.cs">
+      <DependentUpon>MedicoForm.aspx</DependentUpon>
     </Compile>
     <Compile Include="Medicos.aspx.cs">
       <DependentUpon>Medicos.aspx</DependentUpon>

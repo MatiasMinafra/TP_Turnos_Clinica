@@ -29,15 +29,25 @@ namespace TP_Turnos_Clinica
 
         private void CargarGrilla(string filtro = "")
         {
-            List<Paciente> lista = negocio.Listar(filtro);
+            filtro = (filtro ?? "").Trim();     
+            bool soloActivos = !chkInactivos.Checked;
+
+            List<Paciente> lista = negocio.Listar(filtro, soloActivos);
             gvPacientes.DataSource = lista;
             gvPacientes.DataBind();
+
         }
 
         protected void btnBuscar_Click(object sender, EventArgs e)
         {
             CargarGrilla(txtBuscar.Text.Trim());
         }
+
+        protected void chkInactivos_CheckedChanged(object sender, EventArgs e)
+        {
+            CargarGrilla();
+        }
+
 
         protected void Pacientes_ComandoPorFila(object sender, System.Web.UI.WebControls.GridViewCommandEventArgs e)
         {

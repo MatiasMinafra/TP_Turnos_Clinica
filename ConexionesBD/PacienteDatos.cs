@@ -11,50 +11,53 @@ namespace ConexionesBD
 {
     public class PacienteDatos
     {
-      
-            public List<Paciente> Listar(string filtro = "")
-            {
-                List<Paciente> lista = new List<Paciente>();
-                AccesoDatos datos = new AccesoDatos();
 
-                filtro = (filtro ?? "").Trim();
+        public List<Paciente> Listar(string filtro = "", bool soloActivos = true)
+        {
+            List<Paciente> lista = new List<Paciente>();
+            AccesoDatos datos = new AccesoDatos();
 
-                datos.setearConsulta(@"
+            filtro = (filtro ?? "").Trim();
+
+            datos.setearConsulta(@"
 SELECT PacienteID, DNI, Nombre, Apellido, Email, Telefono, Activo
 FROM dbo.Pacientes
-WHERE (@filtro = '' OR DNI LIKE @like OR Nombre LIKE @like OR Apellido LIKE @like)
+WHERE
+    (@filtro = '' OR DNI LIKE @like OR Nombre LIKE @like OR Apellido LIKE @like OR Email LIKE @like)
+    AND (@soloActivos = 0 OR Activo = 1)
 ORDER BY Apellido, Nombre;");
 
-                datos.setearParametro("@filtro", filtro);
-                datos.setearParametro("@like", "%" + filtro + "%");
+            datos.setearParametro("@filtro", filtro);
+            datos.setearParametro("@like", "%" + filtro + "%");
+            datos.setearParametro("@soloActivos", soloActivos ? 1 : 0);
 
-                try
+            try
+            {
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
                 {
-                    datos.ejecutarLectura();
-
-                    while (datos.Lector.Read())
+                    Paciente p = new Paciente
                     {
-                        Paciente p = new Paciente();
-                        p.PacienteID = (int)datos.Lector["PacienteID"];
-                        p.DNI = datos.Lector["DNI"].ToString();
-                        p.Nombre = datos.Lector["Nombre"].ToString();
-                        p.Apellido = datos.Lector["Apellido"].ToString();
-                        p.Email = datos.Lector["Email"].ToString();
-                        p.Telefono = datos.Lector["Telefono"] == DBNull.Value
-                            ? null
-                            : datos.Lector["Telefono"].ToString();
-                        p.Activo = (bool)datos.Lector["Activo"];
+                        PacienteID = (int)datos.Lector["PacienteID"],
+                        DNI = datos.Lector["DNI"].ToString(),
+                        Nombre = datos.Lector["Nombre"].ToString(),
+                        Apellido = datos.Lector["Apellido"].ToString(),
+                        Email = datos.Lector["Email"].ToString(),
+                        Telefono = datos.Lector["Telefono"] == DBNull.Value ? null : datos.Lector["Telefono"].ToString(),
+                        Activo = (bool)datos.Lector["Activo"]
+                    };
 
-                        lista.Add(p);
-                    }
+                    lista.Add(p);
+                }
 
-                    return lista;
-                }
-                finally
-                {
-                    datos.cerrarConexion();
-                }
+                return lista;
             }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
 
         public void Desactivar(int pacienteId)
         {
