@@ -1,0 +1,14 @@
+# Visual Studio
+.vs/
+*.suo
+
+# Build outputs
+**/bin/
+**/obj/
+*.dll
+*.pdb
+
+# VS cache
+*.dtbcache.json
+*.cache
+*.vsidx
