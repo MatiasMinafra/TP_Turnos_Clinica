@@ -1,9 +1,0 @@
-C:\Users\Matias PC\Desktop\TP_Turnos_Clinica\TP_Turnos_Clinica\ConexionesBD\bin\Debug\ConexionesBD.dll
-C:\Users\Matias PC\Desktop\TP_Turnos_Clinica\TP_Turnos_Clinica\ConexionesBD\bin\Debug\ConexionesBD.pdb
-C:\Users\Matias PC\Desktop\TP_Turnos_Clinica\TP_Turnos_Clinica\ConexionesBD\bin\Debug\Dominio.dll
-C:\Users\Matias PC\Desktop\TP_Turnos_Clinica\TP_Turnos_Clinica\ConexionesBD\bin\Debug\Dominio.pdb
-C:\Users\Matias PC\Desktop\TP_Turnos_Clinica\TP_Turnos_Clinica\ConexionesBD\obj\Debug\ConexionesBD.csproj.AssemblyReference.cache
-C:\Users\Matias PC\Desktop\TP_Turnos_Clinica\TP_Turnos_Clinica\ConexionesBD\obj\Debug\ConexionesBD.csproj.CoreCompileInputs.cache
-C:\Users\Matias PC\Desktop\TP_Turnos_Clinica\TP_Turnos_Clinica\ConexionesBD\obj\Debug\Conexion.5626E675.Up2Date
-C:\Users\Matias PC\Desktop\TP_Turnos_Clinica\TP_Turnos_Clinica\ConexionesBD\obj\Debug\ConexionesBD.dll
-C:\Users\Matias PC\Desktop\TP_Turnos_Clinica\TP_Turnos_Clinica\ConexionesBD\obj\Debug\ConexionesBD.pdb
