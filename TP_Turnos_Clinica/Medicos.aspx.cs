@@ -38,15 +38,21 @@ namespace TP_Turnos_Clinica
             CargarGrilla(txtBuscar.Text.Trim());
         }
 
-        protected void Medicos_ComandoPorFila(object sender, System.Web.UI.WebControls.GridViewCommandEventArgs e)
+        protected void Medicos_ComandoPorFila(object sender, GridViewCommandEventArgs e)
         {
-            if (e.CommandName != "Desactivar")
+            if (e.CommandName != "ToggleActivo")
                 return;
 
             int index = Convert.ToInt32(e.CommandArgument);
             int idMedico = Convert.ToInt32(gvMedicos.DataKeys[index].Value);
 
-            negocio.Desactivar(idMedico);
+         
+            Medico m = negocio.ObtenerPorId(idMedico);
+            if (m == null) return;
+
+            if (m.Activo) negocio.Desactivar(idMedico);
+            else negocio.Activar(idMedico);
+
             CargarGrilla(txtBuscar.Text.Trim());
         }
 

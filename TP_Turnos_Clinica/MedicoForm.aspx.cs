@@ -104,16 +104,31 @@ namespace TP_Turnos_Clinica
 
                 if (MedicoId.HasValue)
                 {
+                    
                     m.MedicoID = MedicoId.Value;
                     negocio.Modificar(m);
+
+                    Response.Redirect("~/Medicos.aspx", false);
+                    Context.ApplicationInstance.CompleteRequest();
+                    return;
                 }
                 else
                 {
-                    negocio.Agregar(m);
-                }
+                    
+                    int nuevoId = negocio.Agregar(m);
+                    m.MedicoID = nuevoId;
 
-                Response.Redirect("~/Medicos.aspx", false);
-                Context.ApplicationInstance.CompleteRequest();
+                    lblMensaje.Visible = true;
+                    lblMensaje.CssClass = "alert alert-success d-block mb-3";
+                    lblMensaje.Text = "Médico guardado. Ahora asignale sus especialidades.";
+
+                    lnkVolverLista.Visible = true;
+                    lnkAsignarEspecialidades.Visible = true;
+                    lnkAsignarEspecialidades.NavigateUrl = "~/MedicoEspecialidades.aspx?id=" + nuevoId;
+
+                    
+                    btnGuardar.Enabled = false;
+                }
             }
             catch (Exception ex)
             {

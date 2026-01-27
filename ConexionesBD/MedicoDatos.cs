@@ -18,12 +18,16 @@ namespace ConexionesBD
             filtro = (filtro ?? "").Trim();
 
             datos.setearConsulta(@"
-SELECT MedicoID, DNI, Matricula, Nombre, Apellido, Email, Telefono, Activo
-FROM Medicos
+SELECT 
+    m.MedicoID, m.DNI, m.Matricula, m.Nombre, m.Apellido, m.Email, m.Telefono, m.Activo,
+    (SELECT COUNT(*) 
+     FROM dbo.MedicosEspecialidades me
+     WHERE me.MedicoID = m.MedicoID) AS CantidadEspecialidades
+FROM dbo.Medicos m
 WHERE
-    (@filtro = '' OR DNI LIKE @like OR Matricula LIKE @like OR Nombre LIKE @like OR Apellido LIKE @like)
-    AND (@soloActivos = 0 OR Activo = 1)
-ORDER BY Apellido, Nombre;
+    (@filtro = '' OR m.DNI LIKE @like OR m.Matricula LIKE @like OR m.Nombre LIKE @like OR m.Apellido LIKE @like)
+    AND (@soloActivos = 0 OR m.Activo = 1)
+ORDER BY m.Apellido, m.Nombre;
 ");
 
             datos.setearParametro("@filtro", filtro);
@@ -45,6 +49,7 @@ ORDER BY Apellido, Nombre;
                     m.Email = datos.Lector["Email"].ToString();
                     m.Telefono = datos.Lector["Telefono"] == DBNull.Value ? null : datos.Lector["Telefono"].ToString();
                     m.Activo = (bool)datos.Lector["Activo"];
+                    m.CantidadEspecialidades = (int)datos.Lector["CantidadEspecialidades"];
 
                     lista.Add(m);
                 }
@@ -99,38 +104,42 @@ WHERE MedicoID = @id;");
             }
         }
 
-        public void Agregar(Medico m)
-            {
-                AccesoDatos datos = new AccesoDatos();
+        public int Agregar(Medico m)
+        {
+            AccesoDatos datos = new AccesoDatos();
 
-                try
-                {
-                    datos.setearConsulta(@"
+            try
+            {
+                datos.setearConsulta(@"
 INSERT INTO Medicos
 (DNI, Matricula, Nombre, Apellido, Sexo, Nacionalidad, Email, Telefono, Ciudad, Direccion, Activo, FechaAlta)
 VALUES
-(@dni, @matricula, @nombre, @apellido, @sexo, @nacionalidad, @email, @telefono, @ciudad, @direccion, 1, GETDATE());");
+(@dni, @matricula, @nombre, @apellido, @sexo, @nacionalidad, @email, @telefono, @ciudad, @direccion, 1, GETDATE());
 
-                    datos.setearParametro("@dni", m.DNI);
-                    datos.setearParametro("@matricula", m.Matricula);
-                    datos.setearParametro("@nombre", m.Nombre);
-                    datos.setearParametro("@apellido", m.Apellido);
-                    datos.setearParametro("@sexo", m.Sexo.HasValue ? (object)m.Sexo.Value.ToString() : DBNull.Value);
-                    datos.setearParametro("@nacionalidad", m.Nacionalidad);
-                    datos.setearParametro("@email", m.Email);
-                    datos.setearParametro("@telefono", m.Telefono);
-                    datos.setearParametro("@ciudad", m.Ciudad);
-                    datos.setearParametro("@direccion", m.Direccion);
+SELECT SCOPE_IDENTITY();
+");
 
-                    datos.ejecutarAccion();
-                }
-                finally
-                {
-                    datos.cerrarConexion();
-                }
+                datos.setearParametro("@dni", m.DNI);
+                datos.setearParametro("@matricula", m.Matricula);
+                datos.setearParametro("@nombre", m.Nombre);
+                datos.setearParametro("@apellido", m.Apellido);
+                datos.setearParametro("@sexo", m.Sexo.HasValue ? (object)m.Sexo.Value.ToString() : DBNull.Value);
+                datos.setearParametro("@nacionalidad", m.Nacionalidad);
+                datos.setearParametro("@email", m.Email);
+                datos.setearParametro("@telefono", m.Telefono);
+                datos.setearParametro("@ciudad", m.Ciudad);
+                datos.setearParametro("@direccion", m.Direccion);
+
+                object result = datos.ejecutarScalar();
+                return Convert.ToInt32(result);
             }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
 
-            public void Modificar(Medico m)
+        public void Modificar(Medico m)
             {
                 AccesoDatos datos = new AccesoDatos();
 
@@ -170,7 +179,23 @@ WHERE MedicoID = @id;");
                 }
             }
 
-            public void Desactivar(int id)
+        public void Activar(int id)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta("UPDATE dbo.Medicos SET Activo = 1 WHERE MedicoID = @id");
+                datos.setearParametro("@id", id);
+                datos.ejecutarAccion();
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+        public void Desactivar(int id)
             {
                 AccesoDatos datos = new AccesoDatos();
 

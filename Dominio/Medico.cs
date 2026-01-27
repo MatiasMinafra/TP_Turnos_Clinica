@@ -25,5 +25,6 @@ namespace Dominio
 
         public bool Activo { get; set; }
         public DateTime FechaAlta { get; set; }
+        public int CantidadEspecialidades { get; set; }
     }
 }

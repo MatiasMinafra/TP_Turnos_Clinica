@@ -16,6 +16,22 @@
                     CssClass="alert alert-danger d-block mb-3"
                     Visible="false"></asp:Label>
 
+                <!-- Botones post-alta (solo aparecen cuando guardás un médico nuevo) -->
+                <div class="d-flex gap-2 mb-3">
+                    <asp:HyperLink ID="lnkVolverLista" runat="server"
+                        NavigateUrl="~/Medicos.aspx"
+                        CssClass="btn btn-secondary"
+                        Visible="false">
+                        Ir a lista
+                    </asp:HyperLink>
+
+                    <asp:HyperLink ID="lnkAsignarEspecialidades" runat="server"
+                        CssClass="btn btn-primary"
+                        Visible="false">
+                        Asignar especialidades
+                    </asp:HyperLink>
+                </div>
+
                 <div class="mb-3">
                     <label class="form-label fw-bold">DNI *</label>
                     <asp:TextBox ID="txtDNI" runat="server" CssClass="form-control" placeholder="Ingrese DNI" />

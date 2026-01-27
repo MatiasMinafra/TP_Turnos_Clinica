@@ -24,20 +24,26 @@ namespace Negocio
                 return datos.ObtenerPorId(id);
             }
 
-            public void Agregar(Medico m)
-            {
-                Validar(m);
-                datos.Agregar(m);
-            }
+        public int Agregar(Medico m)
+        {
+            Validar(m);
+            return datos.Agregar(m);
+        }
 
-            public void Modificar(Medico m)
+        public void Modificar(Medico m)
             {
                 if (m.MedicoID <= 0) throw new Exception("Id inválido.");
                 Validar(m);
                 datos.Modificar(m);
             }
 
-            public void Desactivar(int id)
+        public void Activar(int id)
+        {
+            if (id <= 0) throw new Exception("Id inválido.");
+            datos.Activar(id);
+        }
+
+        public void Desactivar(int id)
             {
                 if (id <= 0) throw new Exception("Id inválido.");
                 datos.Desactivar(id);

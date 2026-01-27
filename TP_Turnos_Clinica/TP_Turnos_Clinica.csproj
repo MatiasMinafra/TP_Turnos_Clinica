@@ -116,10 +116,13 @@
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
     <Content Include="Content\Site.css" />
+    <Content Include="Especialidades.aspx" />
+    <Content Include="EspecialidadesForm.aspx" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Home.aspx" />
     <Content Include="Login.aspx" />
+    <Content Include="MedicoEspecialidades.aspx" />
     <Content Include="MedicoForm.aspx" />
     <Content Include="Medicos.aspx" />
     <Content Include="PacienteForm.aspx" />
@@ -188,6 +191,20 @@
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Especialidades.aspx.cs">
+      <DependentUpon>Especialidades.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Especialidades.aspx.designer.cs">
+      <DependentUpon>Especialidades.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="EspecialidadesForm.aspx.cs">
+      <DependentUpon>EspecialidadesForm.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="EspecialidadesForm.aspx.designer.cs">
+      <DependentUpon>EspecialidadesForm.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -204,6 +221,13 @@
     </Compile>
     <Compile Include="Login.aspx.designer.cs">
       <DependentUpon>Login.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MedicoEspecialidades.aspx.cs">
+      <DependentUpon>MedicoEspecialidades.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MedicoEspecialidades.aspx.designer.cs">
+      <DependentUpon>MedicoEspecialidades.aspx</DependentUpon>
     </Compile>
     <Compile Include="MedicoForm.aspx.cs">
       <DependentUpon>MedicoForm.aspx</DependentUpon>

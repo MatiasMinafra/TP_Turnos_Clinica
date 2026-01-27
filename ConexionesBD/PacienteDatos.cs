@@ -197,5 +197,53 @@ WHERE PacienteID = @id;");
                 datos.cerrarConexion();
             }
         }
+
+        public bool ExisteDni(string dni, int? idExcluido = null)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta(@"
+SELECT COUNT(1)
+FROM Pacientes
+WHERE DNI = @dni
+  AND (@idExcluido IS NULL OR PacienteID <> @idExcluido);");
+
+                datos.setearParametro("@dni", dni);
+                datos.setearParametro("@idExcluido",
+                    idExcluido.HasValue ? (object)idExcluido.Value : DBNull.Value);
+
+                return Convert.ToInt32(datos.ejecutarScalar()) > 0;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+        public bool ExisteEmail(string email, int? idExcluido = null)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta(@"
+SELECT COUNT(1)
+FROM Pacientes
+WHERE Email = @email
+  AND (@idExcluido IS NULL OR PacienteID <> @idExcluido);");
+
+                datos.setearParametro("@email", email);
+                datos.setearParametro("@idExcluido",
+                    idExcluido.HasValue ? (object)idExcluido.Value : DBNull.Value);
+
+                return Convert.ToInt32(datos.ejecutarScalar()) > 0;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
     }
 }
