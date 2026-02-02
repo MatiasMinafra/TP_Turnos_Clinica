@@ -43,9 +43,12 @@
   <ItemGroup>
     <Compile Include="Especialidad.cs" />
     <Compile Include="Medico.cs" />
+    <Compile Include="OpcionTurno.cs" />
     <Compile Include="Paciente.cs" />
     <Compile Include="Rol.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Turno.cs" />
+    <Compile Include="TurnoTrabajo.cs" />
     <Compile Include="Usuario.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

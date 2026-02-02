@@ -47,6 +47,8 @@
     <Compile Include="MedicoDatos.cs" />
     <Compile Include="PacienteDatos.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TurnosDatos.cs" />
+    <Compile Include="TurnoTrabajoDatos.cs" />
     <Compile Include="UsuarioDatos.cs" />
   </ItemGroup>
   <ItemGroup>
