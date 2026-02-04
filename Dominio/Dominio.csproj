@@ -41,8 +41,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dto_MedicosTurnosTrabajo.cs" />
     <Compile Include="Especialidad.cs" />
     <Compile Include="Medico.cs" />
+    <Compile Include="MedicosTurnosTrabajo.cs" />
     <Compile Include="OpcionTurno.cs" />
     <Compile Include="Paciente.cs" />
     <Compile Include="Rol.cs" />

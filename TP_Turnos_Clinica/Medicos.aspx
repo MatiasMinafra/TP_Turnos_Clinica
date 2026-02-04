@@ -9,12 +9,14 @@
     <div class="row mb-3 align-items-end">
 
         <div class="col-md-5">
-            <asp:TextBox ID="txtBuscar" runat="server" CssClass="form-control"
-                placeholder="Buscar por DNI, Matrícula, Nombre o Apellido"></asp:TextBox>
+            <asp:TextBox ID="txtBuscar" runat="server"
+                CssClass="form-control"
+                placeholder="Buscar por DNI, Matrícula, Nombre o Apellido" />
         </div>
 
         <div class="col-md-2">
-            <asp:Button ID="btnBuscar" runat="server" Text="Buscar"
+            <asp:Button ID="btnBuscar" runat="server"
+                Text="Buscar"
                 CssClass="btn btn-primary w-100"
                 OnClick="btnBuscar_Click" />
         </div>
@@ -32,7 +34,8 @@
         </div>
 
         <div class="col-md-2 text-end">
-            <a class="btn btn-success w-100" href="<%= ResolveUrl("~/MedicoForm.aspx") %>">
+            <a class="btn btn-success w-100"
+               href="<%= ResolveUrl("~/MedicoForm.aspx") %>">
                 Nuevo Médico
             </a>
         </div>
@@ -45,19 +48,21 @@
         OnRowCommand="Medicos_ComandoPorFila">
 
         <Columns>
+
             <asp:BoundField DataField="DNI" HeaderText="DNI" />
             <asp:BoundField DataField="Matricula" HeaderText="Matrícula" />
             <asp:BoundField DataField="Nombre" HeaderText="Nombre" />
             <asp:BoundField DataField="Apellido" HeaderText="Apellido" />
             <asp:BoundField DataField="Telefono" HeaderText="Teléfono" />
 
-            <%-- NUEVO: Cantidad especialidades --%>
-<asp:BoundField DataField="CantidadEspecialidades" HeaderText="# Esp." />
+            
+            <asp:BoundField DataField="CantidadEspecialidades" HeaderText="# Esp." />
 
             <asp:CheckBoxField DataField="Activo" HeaderText="Activo" />
 
             <asp:TemplateField HeaderText="Acciones">
                 <ItemTemplate>
+
 
                     <asp:HyperLink ID="hlEditar" runat="server"
                         Text="Editar"
@@ -69,13 +74,25 @@
                         NavigateUrl='<%# ResolveUrl("~/MedicoEspecialidades.aspx?id=" + Eval("MedicoID")) %>'
                         CssClass="btn btn-info btn-sm me-1" />
 
+                  
+                    <asp:HyperLink ID="hlHorarios" runat="server"
+                        Text="Horarios"
+                        NavigateUrl='<%# ResolveUrl("~/AsignacionTurnoMedico.aspx?id=" + Eval("MedicoID")) %>'
+                        CssClass="btn btn-primary btn-sm me-1" />
+
+                    
                     <asp:LinkButton ID="btnToggleActivo" runat="server"
                         Text='<%# (Convert.ToBoolean(Eval("Activo")) ? "Desactivar" : "Activar") %>'
                         CommandName="ToggleActivo"
                         CommandArgument="<%# Container.DataItemIndex %>"
-                        CssClass='<%# (Convert.ToBoolean(Eval("Activo")) ? "btn btn-danger btn-sm" : "btn btn-success btn-sm") %>'
+                        CssClass='<%# (Convert.ToBoolean(Eval("Activo"))
+                            ? "btn btn-danger btn-sm"
+                            : "btn btn-success btn-sm") %>'
                         CausesValidation="false"
-                        OnClientClick='<%# (Convert.ToBoolean(Eval("Activo")) ? "return confirm(\"¿Seguro que querés desactivar este médico?\");" : "return confirm(\"¿Seguro que querés activar este médico?\");") %>' />
+                        OnClientClick='<%# (Convert.ToBoolean(Eval("Activo"))
+                            ? "return confirm(\"¿Seguro que querés desactivar este médico?\");"
+                            : "return confirm(\"¿Seguro que querés activar este médico?\");") %>' />
+
                 </ItemTemplate>
             </asp:TemplateField>
 

@@ -109,13 +109,14 @@ namespace TP_Turnos_Clinica
             {
                 var sugerencias = turnosNegocio.SugerirTurnos(especialidadId, fechaDesde, 3);
 
-                if (sugerencias.Count == 0)
+                if (sugerencias == null || sugerencias.Count == 0)
                 {
                     MostrarError("No se encontraron horarios disponibles para esa especialidad.");
                     return;
                 }
 
-                ViewState["Sugerencias"] = sugerencias;
+                
+                Session["Sugerencias"] = sugerencias;
 
                 gvSugerencias.DataSource = sugerencias;
                 gvSugerencias.DataBind();
@@ -127,12 +128,12 @@ namespace TP_Turnos_Clinica
             }
         }
 
-        protected void gvSugerencias_RowCommand(object sender, GridViewCommandEventArgs e)
+        protected void gvSugerencias_ComandoPorFila(object sender, GridViewCommandEventArgs e)
         {
             if (e.CommandName != "Elegir")
                 return;
 
-            var sugerencias = ViewState["Sugerencias"] as List<OpcionTurno>;
+            var sugerencias = Session["Sugerencias"] as List<OpcionTurno>;
             if (sugerencias == null || sugerencias.Count == 0)
                 return;
 
@@ -151,7 +152,6 @@ namespace TP_Turnos_Clinica
                 return;
             }
 
-            // Importe: soporta punto o coma
             decimal importe;
             string impTxt = (txtImporte.Text ?? "").Trim();
 
@@ -175,11 +175,13 @@ namespace TP_Turnos_Clinica
                     ddlMedioPago.SelectedValue
                 );
 
+                
+                LimpiarFormulario();
+
+                
                 lblMensaje.CssClass = "alert alert-success d-block mb-3";
                 lblMensaje.Text = $"Turno creado correctamente. N° {turnoId}";
                 lblMensaje.Visible = true;
-
-                pnlSugerencias.Visible = false;
             }
             catch (Exception ex)
             {
@@ -192,6 +194,23 @@ namespace TP_Turnos_Clinica
             lblMensaje.CssClass = "alert alert-danger d-block mb-3";
             lblMensaje.Text = msg;
             lblMensaje.Visible = true;
+        }
+
+        private void LimpiarFormulario()
+        {
+            ddlPacientes.SelectedIndex = 0;
+            ddlEspecialidades.SelectedIndex = 0;
+
+            txtMotivo.Text = string.Empty;
+            txtImporte.Text = string.Empty;
+            txtFechaDesde.Text = string.Empty;
+
+            pnlSugerencias.Visible = false;
+
+            gvSugerencias.DataSource = null;
+            gvSugerencias.DataBind();
+
+            Session.Remove("Sugerencias");
         }
     }
 }

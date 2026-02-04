@@ -97,7 +97,7 @@
             <asp:GridView ID="gvSugerencias" runat="server"
                 CssClass="table table-striped table-bordered"
                 AutoGenerateColumns="false"
-                OnRowCommand="gvSugerencias_RowCommand">
+                OnRowCommand="gvSugerencias_ComandoPorFila">
                 <Columns>
 
                     <asp:BoundField DataField="Medico" HeaderText="Médico" />

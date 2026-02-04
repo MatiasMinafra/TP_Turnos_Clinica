@@ -93,22 +93,27 @@ ORDER BY t.HoraInicio;
             finally { datos.cerrarConexion(); }
         }
 
-        // ✅ médicos por especialidad
+
         public List<MedicoBasico> MedicosPorEspecialidad(int especialidadId)
         {
             var lista = new List<MedicoBasico>();
             AccesoDatos datos = new AccesoDatos();
 
             datos.setearConsulta(@"
-SELECT DISTINCT 
-    m.MedicoID,
-    (m.Apellido + ', ' + m.Nombre) AS Medico,
-    m.Matricula
-FROM dbo.Medicos m
-INNER JOIN dbo.MedicosEspecialidades me ON me.MedicoID = m.MedicoID
-WHERE m.Activo = 1
-  AND me.EspecialidadID = @esp
-ORDER BY m.Apellido, m.Nombre;
+SELECT MedicoID, Medico, Matricula
+FROM (
+    SELECT DISTINCT
+        m.MedicoID,
+        (m.Apellido + ', ' + m.Nombre) AS Medico,
+        m.Matricula,
+        m.Apellido,
+        m.Nombre
+    FROM dbo.Medicos m
+    INNER JOIN dbo.MedicosEspecialidades me ON me.MedicoID = m.MedicoID
+    WHERE m.Activo = 1
+      AND me.EspecialidadID = @esp
+) x
+ORDER BY x.Apellido, x.Nombre;
 ");
 
             datos.setearParametro("@esp", especialidadId);
@@ -130,7 +135,7 @@ ORDER BY m.Apellido, m.Nombre;
             finally { datos.cerrarConexion(); }
         }
 
-        // ✅ rangos laborales del médico ese día
+
         public List<RangoHorario> RangosLaborales(int medicoId, byte diaSemana)
         {
             var lista = new List<RangoHorario>();
@@ -164,7 +169,7 @@ WHERE mtt.MedicoID = @med
             finally { datos.cerrarConexion(); }
         }
 
-        // ✅ horas ocupadas por turnos del médico en esa fecha
+        
         public HashSet<TimeSpan> HorasOcupadas(int medicoId, DateTime fecha)
         {
             var set = new HashSet<TimeSpan>();
@@ -192,7 +197,7 @@ WHERE MedicoID = @med
         }
     }
 
-    // 👇 clases “humanas” para que el foreach sea m.MedicoID, etc.
+   
     public class MedicoBasico
     {
         public int MedicoID { get; set; }

@@ -100,6 +100,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="AgendaTurnos.aspx" />
+    <Content Include="AsignacionTurnoMedico.aspx" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
     <Content Include="Content\bootstrap-grid.rtl.css" />
@@ -125,6 +126,7 @@
     <Content Include="Login.aspx" />
     <Content Include="MedicoEspecialidades.aspx" />
     <Content Include="MedicoForm.aspx" />
+    <Content Include="MedicoHorarios.aspx" />
     <Content Include="Medicos.aspx" />
     <Content Include="PacienteForm.aspx" />
     <Content Include="Pacientes.aspx" />
@@ -201,6 +203,13 @@
     </Compile>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="AsignacionTurnoMedico.aspx.cs">
+      <DependentUpon>AsignacionTurnoMedico.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AsignacionTurnoMedico.aspx.designer.cs">
+      <DependentUpon>AsignacionTurnoMedico.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Especialidades.aspx.cs">
       <DependentUpon>Especialidades.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -245,6 +254,13 @@
     </Compile>
     <Compile Include="MedicoForm.aspx.designer.cs">
       <DependentUpon>MedicoForm.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MedicoHorarios.aspx.cs">
+      <DependentUpon>MedicoHorarios.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MedicoHorarios.aspx.designer.cs">
+      <DependentUpon>MedicoHorarios.aspx</DependentUpon>
     </Compile>
     <Compile Include="Medicos.aspx.cs">
       <DependentUpon>Medicos.aspx</DependentUpon>

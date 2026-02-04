@@ -7,7 +7,7 @@
     <div class="container-fluid p-0">
         <div class="row g-0">
 
-            <!-- SIDEBAR -->
+            
             <aside class="col-12 col-md-3 col-lg-2 bg-dark text-white min-vh-100 p-3">
 
                 <div class="fw-bold mb-3">CLÍNICA</div>
@@ -26,7 +26,7 @@
 
                 <div class="d-grid gap-2">
 
-                    <!-- Operación (Admin/Recep) -->
+                  
                     <asp:HyperLink ID="lnkAsignarTurno" runat="server"
                         NavigateUrl="~/AgendaTurnos.aspx"
                         CssClass="btn btn-warning text-dark fw-semibold">
@@ -63,7 +63,7 @@
                         Turnos de trabajo
                     </asp:HyperLink>
 
-                    <!-- Médico -->
+                  
                     <asp:HyperLink ID="lnkMisTurnos" runat="server"
                         NavigateUrl="~/MisTurnos.aspx"
                         CssClass="btn btn-outline-info">
@@ -76,7 +76,7 @@
                         Diagnóstico / Evoluciones
                     </asp:HyperLink>
 
-                    <!-- Admin -->
+                  
                     <asp:HyperLink ID="lnkUsuarios" runat="server"
                         NavigateUrl="~/Usuarios.aspx"
                         CssClass="btn btn-outline-secondary">
@@ -92,7 +92,7 @@
                 </div>
             </aside>
 
-            <!-- CONTENIDO -->
+           
             <main class="col-12 col-md-9 col-lg-10 p-4">
                 <h3 class="mb-2">Panel principal</h3>
                 <p class="text-muted mb-4">
