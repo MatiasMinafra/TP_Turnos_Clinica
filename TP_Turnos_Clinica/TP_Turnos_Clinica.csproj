@@ -128,6 +128,7 @@
     <Content Include="MedicoForm.aspx" />
     <Content Include="MedicoHorarios.aspx" />
     <Content Include="Medicos.aspx" />
+    <Content Include="MisTurnos.aspx" />
     <Content Include="PacienteForm.aspx" />
     <Content Include="Pacientes.aspx" />
     <Content Include="Scripts\bootstrap.bundle.js" />
@@ -188,6 +189,8 @@
     <Content Include="Site.Master" />
     <Content Include="TurnosTrabajo.aspx" />
     <Content Include="TurnoTrabajoForm.aspx" />
+    <Content Include="Usuarios.aspx" />
+    <Content Include="UsuariosForm.aspx" />
     <Content Include="ViewSwitcher.ascx" />
     <Content Include="Web.config" />
     <Content Include="Bundle.config" />
@@ -269,6 +272,13 @@
     <Compile Include="Medicos.aspx.designer.cs">
       <DependentUpon>Medicos.aspx</DependentUpon>
     </Compile>
+    <Compile Include="MisTurnos.aspx.cs">
+      <DependentUpon>MisTurnos.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MisTurnos.aspx.designer.cs">
+      <DependentUpon>MisTurnos.aspx</DependentUpon>
+    </Compile>
     <Compile Include="PacienteForm.aspx.cs">
       <DependentUpon>PacienteForm.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -311,6 +321,20 @@
     </Compile>
     <Compile Include="TurnoTrabajoForm.aspx.designer.cs">
       <DependentUpon>TurnoTrabajoForm.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Usuarios.aspx.cs">
+      <DependentUpon>Usuarios.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Usuarios.aspx.designer.cs">
+      <DependentUpon>Usuarios.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="UsuariosForm.aspx.cs">
+      <DependentUpon>UsuariosForm.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UsuariosForm.aspx.designer.cs">
+      <DependentUpon>UsuariosForm.aspx</DependentUpon>
     </Compile>
     <Compile Include="ViewSwitcher.ascx.cs">
       <DependentUpon>ViewSwitcher.ascx</DependentUpon>

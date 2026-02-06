@@ -93,7 +93,6 @@ ORDER BY t.HoraInicio;
             finally { datos.cerrarConexion(); }
         }
 
-
         public List<MedicoBasico> MedicosPorEspecialidad(int especialidadId)
         {
             var lista = new List<MedicoBasico>();
@@ -135,7 +134,6 @@ ORDER BY x.Apellido, x.Nombre;
             finally { datos.cerrarConexion(); }
         }
 
-
         public List<RangoHorario> RangosLaborales(int medicoId, byte diaSemana)
         {
             var lista = new List<RangoHorario>();
@@ -169,7 +167,6 @@ WHERE mtt.MedicoID = @med
             finally { datos.cerrarConexion(); }
         }
 
-        
         public HashSet<TimeSpan> HorasOcupadas(int medicoId, DateTime fecha)
         {
             var set = new HashSet<TimeSpan>();
@@ -195,6 +192,64 @@ WHERE MedicoID = @med
             }
             finally { datos.cerrarConexion(); }
         }
+
+       
+        public List<Turno> ListarPorMedico(int medicoId, DateTime desde, DateTime hasta)
+        {
+            List<Turno> lista = new List<Turno>();
+            AccesoDatos datos = new AccesoDatos();
+
+            datos.setearConsulta(@"
+SELECT 
+    t.TurnoID,
+    t.Fecha,
+    t.HoraInicio,
+    t.HoraFin,
+    t.MotivoConsulta,
+    t.Diagnostico,
+    t.Activo,
+    p.Nombre + ' ' + p.Apellido AS Paciente,
+    e.Nombre AS Especialidad,
+    et.Nombre AS Estado
+FROM Turnos t
+INNER JOIN Pacientes p ON p.PacienteID = t.PacienteID
+INNER JOIN Especialidades e ON e.EspecialidadID = t.EspecialidadID
+INNER JOIN EstadosTurno et ON et.EstadoTurnoID = t.EstadoTurnoID
+WHERE t.MedicoID = @medicoId
+  AND t.Fecha BETWEEN @desde AND @hasta
+ORDER BY t.Fecha, t.HoraInicio;
+");
+
+            datos.setearParametro("@medicoId", medicoId);
+            datos.setearParametro("@desde", desde.Date);
+            datos.setearParametro("@hasta", hasta.Date);
+
+            try
+            {
+                datos.ejecutarLectura();
+                while (datos.Lector.Read())
+                {
+                    Turno t = new Turno
+                    {
+                        TurnoID = (int)datos.Lector["TurnoID"],
+                        Fecha = (DateTime)datos.Lector["Fecha"],
+                        HoraInicio = (TimeSpan)datos.Lector["HoraInicio"],
+                        HoraFin = (TimeSpan)datos.Lector["HoraFin"],
+                        MotivoConsulta = datos.Lector["MotivoConsulta"].ToString(),
+                        Diagnostico = datos.Lector["Diagnostico"] == DBNull.Value ? null : datos.Lector["Diagnostico"].ToString(),
+                        PacienteNombre = datos.Lector["Paciente"].ToString(),
+                        EspecialidadNombre = datos.Lector["Especialidad"].ToString(),
+                        EstadoTurno = datos.Lector["Estado"].ToString(),
+                        Activo = (bool)datos.Lector["Activo"]
+                    };
+
+                    lista.Add(t);
+                }
+
+                return lista;
+            }
+            finally { datos.cerrarConexion(); }
+        }
     }
 
    
@@ -211,5 +266,3 @@ WHERE MedicoID = @med
         public TimeSpan Fin { get; set; }
     }
 }
-
-

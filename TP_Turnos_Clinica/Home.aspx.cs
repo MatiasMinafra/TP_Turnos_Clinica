@@ -12,7 +12,7 @@ namespace TP_Turnos_Clinica
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            // 1) Si no hay sesión, afuera
+            
             if (Session["usuario"] == null)
             {
                 Response.Redirect("~/Login.aspx");
@@ -23,23 +23,20 @@ namespace TP_Turnos_Clinica
 
             if (!IsPostBack)
             {
-                lblUsuario.Text = u.UsuarioNombre; // ajustá propiedad
+                lblUsuario.Text = u.UsuarioNombre;
                 lblRol.Text = u.rol?.Nombre ?? "Sin rol";
 
-                AplicarPermisos(u.rol?.Nombre);
+                AplicarPermisos(u);
             }
         }
 
-        private void AplicarPermisos(string rol)
+        private void AplicarPermisos(Usuario u)
         {
-            // Normalizá por las dudas
-            rol = (rol ?? "").Trim().ToLower();
+            bool esAdmin = (u.RolID == RolesIds.ADMIN);
+            bool esRecep = (u.RolID == RolesIds.RECEPCIONISTA);
+            bool esMedico = (u.RolID == RolesIds.MEDICO);
 
-            bool esAdmin = rol == "administrador" || rol == "admin";
-            bool esRecep = rol == "recepcionista" || rol == "recep";
-            bool esMedico = rol == "médico" || rol == "medico";
-
-            // Por defecto, oculto todo "específico"
+           
             lnkAsignarTurno.Visible = false;
             lnkTurnosDia.Visible = false;
             lnkPacientes.Visible = false;
@@ -51,7 +48,7 @@ namespace TP_Turnos_Clinica
             lnkMisTurnos.Visible = false;
             lnkEvoluciones.Visible = false;
 
-            // Admin ve todo
+            
             if (esAdmin)
             {
                 lnkAsignarTurno.Visible = true;
@@ -60,13 +57,11 @@ namespace TP_Turnos_Clinica
                 lnkMedicos.Visible = true;
                 lnkEspecialidades.Visible = true;
                 lnkAgenda.Visible = true;
-
-                // opcional
-                lnkUsuarios.Visible = true;
+                lnkUsuarios.Visible = true; 
                 return;
             }
 
-            // Recepcionista: operación + ABMs
+            
             if (esRecep)
             {
                 lnkAsignarTurno.Visible = true;
@@ -78,15 +73,21 @@ namespace TP_Turnos_Clinica
                 return;
             }
 
-            // Médico: solo lo suyo
+           
             if (esMedico)
             {
+               
+                if (!u.MedicoID.HasValue)
+                {
+                    Response.Redirect("~/Login.aspx");
+                    return;
+                }
+
                 lnkMisTurnos.Visible = true;
                 lnkEvoluciones.Visible = true;
                 return;
             }
 
-            // Si llega un rol raro, lo mando al login (o mostrás mensaje)
             Response.Redirect("~/Login.aspx");
         }
 

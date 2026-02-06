@@ -45,6 +45,7 @@
     <Compile Include="MedicoNegocio.cs" />
     <Compile Include="MedicoTurnoTrabajoNegocio.cs" />
     <Compile Include="PacienteNegocio.cs" />
+    <Compile Include="RolesNegocio.cs" />
     <Compile Include="TurnoNegocio.cs" />
     <Compile Include="TurnoTrabajoNegocio.cs" />
     <Compile Include="UsuarioNegocio.cs" />

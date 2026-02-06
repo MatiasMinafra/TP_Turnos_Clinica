@@ -112,5 +112,13 @@ namespace Negocio
 
             return sugerencias;
         }
+
+        public List<Turno> ListarMisTurnos(int medicoId, DateTime desde, DateTime hasta)
+        {
+            if (medicoId <= 0)
+                throw new Exception("Médico inválido.");
+
+            return datos.ListarPorMedico(medicoId, desde, hasta);
+        }
     }
 }
