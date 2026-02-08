@@ -187,6 +187,7 @@
     <Content Include="Scripts\WebForms\WebParts.js" />
     <Content Include="Scripts\WebForms\WebUIValidation.js" />
     <Content Include="Site.Master" />
+    <Content Include="TurnosDelDia.aspx" />
     <Content Include="TurnosTrabajo.aspx" />
     <Content Include="TurnoTrabajoForm.aspx" />
     <Content Include="Usuarios.aspx" />
@@ -307,6 +308,13 @@
     </Compile>
     <Compile Include="Site.Mobile.Master.designer.cs">
       <DependentUpon>Site.Mobile.Master</DependentUpon>
+    </Compile>
+    <Compile Include="TurnosDelDia.aspx.cs">
+      <DependentUpon>TurnosDelDia.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="TurnosDelDia.aspx.designer.cs">
+      <DependentUpon>TurnosDelDia.aspx</DependentUpon>
     </Compile>
     <Compile Include="TurnosTrabajo.aspx.cs">
       <DependentUpon>TurnosTrabajo.aspx</DependentUpon>

@@ -15,7 +15,6 @@
 
     <div class="card mb-3">
         <div class="card-body">
-
             <div class="row g-3">
 
                 <div class="col-md-6">
@@ -40,8 +39,7 @@
                         CssClass="form-control"
                         TextMode="MultiLine"
                         Rows="3"
-                        MaxLength="400"
-                        placeholder="Ej: Dolor, control, etc." />
+                        MaxLength="400" />
                 </div>
 
                 <div class="col-md-4">
@@ -61,48 +59,47 @@
                 </div>
 
                 <div class="col-md-4">
-                    <label class="form-label">Buscar desde</label>
+                    <label class="form-label">Fecha</label>
                     <asp:TextBox ID="txtFechaDesde" runat="server"
                         CssClass="form-control"
                         TextMode="Date" />
                 </div>
 
-            </div>
-
-            <hr class="my-4" />
-
-            <div class="d-flex justify-content-between align-items-center">
-                <div>
-                    <asp:Button ID="btnSugerir" runat="server"
-                        Text="Sugerir 3 opciones"
-                        CssClass="btn btn-primary"
-                        OnClick="btnSugerir_Click" />
-
-                    <a class="btn btn-outline-secondary ms-2"
-                       href="<%= ResolveUrl("~/TurnoForm.aspx") %>">
-                        Cargar manual
-                    </a>
+                <div class="col-md-4">
+                    <label class="form-label">Disponibilidad del paciente</label>
+                   <asp:DropDownList ID="ddlFranja" runat="server" CssClass="form-select">
+    <asp:ListItem Text="Mañana (08 a 12)" Value="MANIANA" Selected="True" />
+    <asp:ListItem Text="Tarde (14 a 18)" Value="TARDE" />
+    <asp:ListItem Text="Noche (19 a 22)" Value="NOCHE" />
+</asp:DropDownList>
                 </div>
 
-                <a class="btn btn-link" href="<%= ResolveUrl("~/Home.aspx") %>">Volver</a>
             </div>
+
+            <hr class="my-3" />
+
+            <asp:Button ID="btnSugerir" runat="server"
+                Text="Ver disponibilidad"
+                CssClass="btn btn-primary"
+                OnClick="btnSugerir_Click" />
+
+            <a class="btn btn-link ms-2" href="<%= ResolveUrl("~/Home.aspx") %>">Volver</a>
 
         </div>
     </div>
 
     <asp:Panel ID="pnlSugerencias" runat="server" Visible="false" CssClass="card">
         <div class="card-body">
-            <h5 class="mb-3">Opciones sugeridas</h5>
+            <h5>Disponibilidad</h5>
 
             <asp:GridView ID="gvSugerencias" runat="server"
                 CssClass="table table-striped table-bordered"
                 AutoGenerateColumns="false"
                 OnRowCommand="gvSugerencias_ComandoPorFila">
-                <Columns>
 
+                <Columns>
                     <asp:BoundField DataField="Medico" HeaderText="Médico" />
                     <asp:BoundField DataField="Matricula" HeaderText="Matrícula" />
-                    <asp:BoundField DataField="Fecha" HeaderText="Fecha" DataFormatString="{0:dd/MM/yyyy}" />
 
                     <asp:TemplateField HeaderText="Hora">
                         <ItemTemplate>
@@ -111,14 +108,22 @@
                         </ItemTemplate>
                     </asp:TemplateField>
 
+                    <asp:TemplateField HeaderText="Estado">
+                        <ItemTemplate>
+                            <span class='<%# (bool)Eval("Ocupado") ? "badge bg-danger" : "badge bg-success" %>'>
+                                <%# Eval("Estado") %>
+                            </span>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+
                     <asp:TemplateField HeaderText="Acción">
                         <ItemTemplate>
-                            <asp:LinkButton ID="btnElegir" runat="server"
+                            <asp:LinkButton runat="server"
                                 Text="Elegir"
                                 CommandName="Elegir"
                                 CommandArgument='<%# Container.DataItemIndex %>'
                                 CssClass="btn btn-success btn-sm"
-                                CausesValidation="false" />
+                                Enabled='<%# !(bool)Eval("Ocupado") %>' />
                         </ItemTemplate>
                     </asp:TemplateField>
 

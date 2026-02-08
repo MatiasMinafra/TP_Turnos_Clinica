@@ -150,6 +150,65 @@ VALUES (@med, @tt, @dia, 1);
             finally { datos.cerrarConexion(); }
         }
 
+        public TurnoTrabajo ObtenerTurnoTrabajo(int turnoTrabajoId)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            datos.setearConsulta(@"
+SELECT TurnoTrabajoID, Nombre, HoraInicio, HoraFin, Activo
+FROM dbo.TurnosTrabajo
+WHERE TurnoTrabajoID = @id;
+");
+            datos.setearParametro("@id", turnoTrabajoId);
+
+            try
+            {
+                datos.ejecutarLectura();
+                if (datos.Lector.Read())
+                {
+                    return new TurnoTrabajo
+                    {
+                        TurnoTrabajoID = (int)datos.Lector["TurnoTrabajoID"],
+                        Nombre = datos.Lector["Nombre"].ToString(),
+                        HoraInicio = (TimeSpan)datos.Lector["HoraInicio"],
+                        HoraFin = (TimeSpan)datos.Lector["HoraFin"],
+                        Activo = (bool)datos.Lector["Activo"]
+                    };
+                }
+
+                return null;
+            }
+            finally { datos.cerrarConexion(); }
+        }
+
+        public bool ExisteSolapado(int medicoId, byte diaSemana, TimeSpan inicio, TimeSpan fin)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+           
+            datos.setearConsulta(@"
+SELECT COUNT(1)
+FROM dbo.MedicosTurnosTrabajo mtt
+INNER JOIN dbo.TurnosTrabajo tt ON tt.TurnoTrabajoID = mtt.TurnoTrabajoID
+WHERE mtt.MedicoID = @med
+  AND mtt.DiaSemana = @dia
+  AND mtt.Activo = 1
+  AND tt.Activo = 1
+  AND (@inicio < tt.HoraFin AND @fin > tt.HoraInicio);
+");
+            datos.setearParametro("@med", medicoId);
+            datos.setearParametro("@dia", diaSemana);
+            datos.setearParametro("@inicio", inicio);
+            datos.setearParametro("@fin", fin);
+
+            try
+            {
+                return Convert.ToInt32(datos.ejecutarScalar()) > 0;
+            }
+            finally { datos.cerrarConexion(); }
+        }
+
+
         private string DiaNombre(byte dia)
         {
             switch (dia)

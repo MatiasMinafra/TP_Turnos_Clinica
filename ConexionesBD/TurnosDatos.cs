@@ -1,69 +1,12 @@
 ﻿using Dominio;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ConexionesBD
 {
     public class TurnosDatos
     {
-        public List<Turno> ListarDelDia(DateTime fecha)
-        {
-            List<Turno> lista = new List<Turno>();
-            AccesoDatos datos = new AccesoDatos();
-
-            datos.setearConsulta(@"
-SELECT 
-    t.TurnoID,
-    t.Fecha,
-    t.HoraInicio,
-    t.HoraFin,
-    t.MotivoConsulta,
-    t.Activo,
-    p.Nombre + ' ' + p.Apellido AS Paciente,
-    m.Nombre + ' ' + m.Apellido AS Medico,
-    e.Nombre AS Especialidad,
-    et.Nombre AS Estado
-FROM Turnos t
-INNER JOIN Pacientes p ON p.PacienteID = t.PacienteID
-INNER JOIN Medicos m ON m.MedicoID = t.MedicoID
-INNER JOIN Especialidades e ON e.EspecialidadID = t.EspecialidadID
-INNER JOIN EstadosTurno et ON et.EstadoTurnoID = t.EstadoTurnoID
-WHERE t.Fecha = @fecha
-ORDER BY t.HoraInicio;
-");
-
-            datos.setearParametro("@fecha", fecha.Date);
-
-            try
-            {
-                datos.ejecutarLectura();
-                while (datos.Lector.Read())
-                {
-                    Turno t = new Turno
-                    {
-                        TurnoID = (int)datos.Lector["TurnoID"],
-                        Fecha = (DateTime)datos.Lector["Fecha"],
-                        HoraInicio = (TimeSpan)datos.Lector["HoraInicio"],
-                        HoraFin = (TimeSpan)datos.Lector["HoraFin"],
-                        MotivoConsulta = datos.Lector["MotivoConsulta"].ToString(),
-                        PacienteNombre = datos.Lector["Paciente"].ToString(),
-                        MedicoNombre = datos.Lector["Medico"].ToString(),
-                        EspecialidadNombre = datos.Lector["Especialidad"].ToString(),
-                        EstadoTurno = datos.Lector["Estado"].ToString(),
-                        Activo = (bool)datos.Lector["Activo"]
-                    };
-
-                    lista.Add(t);
-                }
-
-                return lista;
-            }
-            finally { datos.cerrarConexion(); }
-        }
-
+    
         public int AltaConSP(
             int pacienteId,
             int especialidadId,
@@ -93,6 +36,7 @@ ORDER BY t.HoraInicio;
             finally { datos.cerrarConexion(); }
         }
 
+    
         public List<MedicoBasico> MedicosPorEspecialidad(int especialidadId)
         {
             var lista = new List<MedicoBasico>();
@@ -114,7 +58,6 @@ FROM (
 ) x
 ORDER BY x.Apellido, x.Nombre;
 ");
-
             datos.setearParametro("@esp", especialidadId);
 
             try
@@ -134,6 +77,7 @@ ORDER BY x.Apellido, x.Nombre;
             finally { datos.cerrarConexion(); }
         }
 
+     
         public List<RangoHorario> RangosLaborales(int medicoId, byte diaSemana)
         {
             var lista = new List<RangoHorario>();
@@ -167,6 +111,7 @@ WHERE mtt.MedicoID = @med
             finally { datos.cerrarConexion(); }
         }
 
+        
         public HashSet<TimeSpan> HorasOcupadas(int medicoId, DateTime fecha)
         {
             var set = new HashSet<TimeSpan>();
@@ -193,13 +138,14 @@ WHERE MedicoID = @med
             finally { datos.cerrarConexion(); }
         }
 
-       
         public List<Turno> ListarPorMedico(int medicoId, DateTime desde, DateTime hasta)
         {
             List<Turno> lista = new List<Turno>();
             AccesoDatos datos = new AccesoDatos();
 
-            datos.setearConsulta(@"
+            try
+            {
+                datos.setearConsulta(@"
 SELECT 
     t.TurnoID,
     t.Fecha,
@@ -207,10 +153,10 @@ SELECT
     t.HoraFin,
     t.MotivoConsulta,
     t.Diagnostico,
-    t.Activo,
-    p.Nombre + ' ' + p.Apellido AS Paciente,
+    p.Apellido + ' ' + p.Nombre AS Paciente,
     e.Nombre AS Especialidad,
-    et.Nombre AS Estado
+    et.Nombre AS EstadoTurno,
+    t.Activo
 FROM Turnos t
 INNER JOIN Pacientes p ON p.PacienteID = t.PacienteID
 INNER JOIN Especialidades e ON e.EspecialidadID = t.EspecialidadID
@@ -219,14 +165,12 @@ WHERE t.MedicoID = @medicoId
   AND t.Fecha BETWEEN @desde AND @hasta
 ORDER BY t.Fecha, t.HoraInicio;
 ");
+                datos.setearParametro("@medicoId", medicoId);
+                datos.setearParametro("@desde", desde.Date);
+                datos.setearParametro("@hasta", hasta.Date);
 
-            datos.setearParametro("@medicoId", medicoId);
-            datos.setearParametro("@desde", desde.Date);
-            datos.setearParametro("@hasta", hasta.Date);
-
-            try
-            {
                 datos.ejecutarLectura();
+
                 while (datos.Lector.Read())
                 {
                     Turno t = new Turno
@@ -239,7 +183,7 @@ ORDER BY t.Fecha, t.HoraInicio;
                         Diagnostico = datos.Lector["Diagnostico"] == DBNull.Value ? null : datos.Lector["Diagnostico"].ToString(),
                         PacienteNombre = datos.Lector["Paciente"].ToString(),
                         EspecialidadNombre = datos.Lector["Especialidad"].ToString(),
-                        EstadoTurno = datos.Lector["Estado"].ToString(),
+                        EstadoTurno = datos.Lector["EstadoTurno"].ToString(),
                         Activo = (bool)datos.Lector["Activo"]
                     };
 
@@ -248,11 +192,143 @@ ORDER BY t.Fecha, t.HoraInicio;
 
                 return lista;
             }
-            finally { datos.cerrarConexion(); }
+            finally
+            {
+                datos.cerrarConexion();
+            }
         }
+
+ 
+        public List<DtoTurnoDia> ListarDelDia(DateTime fecha)
+        {
+            List<DtoTurnoDia> lista = new List<DtoTurnoDia>();
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta(@"
+SELECT 
+    t.TurnoID,
+    t.Fecha,
+    t.HoraInicio,
+    t.HoraFin,
+    (p.Apellido + ' ' + p.Nombre) as Paciente,
+    (m.Apellido + ' ' + m.Nombre) as Medico,
+    e.Nombre as Especialidad,
+    et.Nombre as EstadoTurno,
+    ep.Nombre as EstadoPago,
+    pa.Importe,
+    pa.MedioPago
+FROM Turnos t
+INNER JOIN Pacientes p ON p.PacienteID = t.PacienteID
+INNER JOIN Medicos m ON m.MedicoID = t.MedicoID
+INNER JOIN Especialidades e ON e.EspecialidadID = t.EspecialidadID
+INNER JOIN EstadosTurno et ON et.EstadoTurnoID = t.EstadoTurnoID
+LEFT JOIN Pagos pa ON pa.TurnoID = t.TurnoID
+LEFT JOIN EstadosPago ep ON ep.EstadoPagoID = pa.EstadoPagoID
+WHERE t.Activo = 1 AND t.Fecha = @fecha
+ORDER BY t.HoraInicio;
+");
+                datos.setearParametro("@fecha", fecha.Date);
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    var dto = new DtoTurnoDia();
+                    dto.TurnoID = (int)datos.Lector["TurnoID"];
+
+                    DateTime f = (DateTime)datos.Lector["Fecha"];
+                    dto.Fecha = f.ToString("dd/MM/yyyy");
+
+                    TimeSpan hi = (TimeSpan)datos.Lector["HoraInicio"];
+                    TimeSpan hf = (TimeSpan)datos.Lector["HoraFin"];
+                    dto.Hora = $"{hi:hh\\:mm} - {hf:hh\\:mm}";
+
+                    dto.Paciente = (string)datos.Lector["Paciente"];
+                    dto.Medico = (string)datos.Lector["Medico"];
+                    dto.Especialidad = (string)datos.Lector["Especialidad"];
+                    dto.EstadoTurno = (string)datos.Lector["EstadoTurno"];
+
+                    dto.EstadoPago = datos.Lector["EstadoPago"] != DBNull.Value ? (string)datos.Lector["EstadoPago"] : "Pendiente";
+                    dto.Importe = datos.Lector["Importe"] != DBNull.Value ? (decimal)datos.Lector["Importe"] : 0;
+                    dto.MedioPago = datos.Lector["MedioPago"] != DBNull.Value ? (string)datos.Lector["MedioPago"] : "-";
+
+                    lista.Add(dto);
+                }
+
+                return lista;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+
+        public void ConfirmarPago(int turnoId, string comprobante)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearProcedimiento("dbo.SP_ConfirmarPago");
+                datos.setearParametro("@TurnoID", turnoId);
+                datos.setearParametro("@Comprobante", (object)(comprobante ?? ""));
+                datos.ejecutarAccion();
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+
+        public void CancelarTurno(int turnoId)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta(@"
+DECLARE @EstadoCancelado INT = (SELECT EstadoTurnoID FROM EstadosTurno WHERE Nombre = 'Cancelado');
+IF (@EstadoCancelado IS NULL)
+    THROW 50021, 'Falta el estado Cancelado.', 1;
+
+UPDATE Turnos
+SET EstadoTurnoID = @EstadoCancelado
+WHERE TurnoID = @turnoId;
+");
+                datos.setearParametro("@turnoId", turnoId);
+                datos.ejecutarAccion();
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+        public void CerrarTurno(int turnoId, string diagnostico)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearProcedimiento("dbo.SP_CerrarTurno");
+                datos.setearParametro("@TurnoID", turnoId);
+                datos.setearParametro("@Diagnostico", (object)(diagnostico ?? ""));
+                datos.ejecutarAccion();
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+
     }
 
-   
+
+
+
     public class MedicoBasico
     {
         public int MedicoID { get; set; }

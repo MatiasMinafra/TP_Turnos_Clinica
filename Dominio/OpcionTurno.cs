@@ -15,5 +15,13 @@ namespace Dominio
         public DateTime Fecha { get; set; }
         public TimeSpan HoraInicio { get; set; }
         public TimeSpan HoraFin { get; set; }
+
+        public bool Ocupado { get; set; }
+
+        public string Estado
+        {
+            get { return Ocupado ? "Ocupado" : "Libre"; }
+        }
+
     }
 }

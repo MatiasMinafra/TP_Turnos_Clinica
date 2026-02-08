@@ -3,8 +3,6 @@ using Negocio;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -34,20 +32,24 @@ namespace TP_Turnos_Clinica
             {
                 txtFechaDesde.Text = DateTime.Today.ToString("yyyy-MM-dd");
                 CargarCombos();
+
+                pnlSugerencias.Visible = false;
+                lblMensaje.Visible = false;
             }
         }
+
         private void CargarCombos()
         {
-            // PACIENTES
-            // Ajuste: si tu Listar no tiene el bool soloActivos, dejalo como Listar("")
+            
             var pacientes = pacientesNegocio.Listar("", true);
 
-            var pacCombo = new List<ComboItem>();
-            pacCombo.Add(new ComboItem { Id = 0, Texto = "-- Seleccionar --" });
+            var pacCombo = new List<ComboItem>
+            {
+                new ComboItem { Id = 0, Texto = "-- Seleccionar --" }
+            };
 
             foreach (var p in pacientes)
             {
-                // Ajustá propiedades si tu entidad se llama distinto
                 string texto = $"{p.Apellido}, {p.Nombre} (DNI: {p.DNI})";
                 pacCombo.Add(new ComboItem { Id = p.PacienteID, Texto = texto });
             }
@@ -57,11 +59,13 @@ namespace TP_Turnos_Clinica
             ddlPacientes.DataValueField = "Id";
             ddlPacientes.DataBind();
 
-            // ESPECIALIDADES
+            
             var esp = especialidadesNegocio.Listar("", true);
 
-            var espCombo = new List<ComboItem>();
-            espCombo.Add(new ComboItem { Id = 0, Texto = "-- Seleccionar --" });
+            var espCombo = new List<ComboItem>
+            {
+                new ComboItem { Id = 0, Texto = "-- Seleccionar --" }
+            };
 
             foreach (var e in esp)
                 espCombo.Add(new ComboItem { Id = e.EspecialidadID, Texto = e.Nombre });
@@ -70,9 +74,6 @@ namespace TP_Turnos_Clinica
             ddlEspecialidades.DataTextField = "Texto";
             ddlEspecialidades.DataValueField = "Id";
             ddlEspecialidades.DataBind();
-
-            pnlSugerencias.Visible = false;
-            lblMensaje.Visible = false;
         }
 
         protected void ddlPacientes_SelectedIndexChanged(object sender, EventArgs e)
@@ -101,21 +102,24 @@ namespace TP_Turnos_Clinica
                 return;
             }
 
-            DateTime fechaDesde;
-            if (!DateTime.TryParse(txtFechaDesde.Text, out fechaDesde))
-                fechaDesde = DateTime.Today;
+            DateTime fecha;
+            if (!DateTime.TryParse(txtFechaDesde.Text, out fecha))
+                fecha = DateTime.Today;
 
             try
             {
-                var sugerencias = turnosNegocio.SugerirTurnos(especialidadId, fechaDesde, 3);
+                var sugerencias = turnosNegocio.SugerirTurnos(
+                    especialidadId,
+                    fecha.Date,
+                    ddlFranja.SelectedValue
+                );
 
                 if (sugerencias == null || sugerencias.Count == 0)
                 {
-                    MostrarError("No se encontraron horarios disponibles para esa especialidad.");
+                    MostrarError("No se encontraron horarios para esa fecha y franja.");
                     return;
                 }
 
-                
                 Session["Sugerencias"] = sugerencias;
 
                 gvSugerencias.DataSource = sugerencias;
@@ -133,22 +137,26 @@ namespace TP_Turnos_Clinica
             if (e.CommandName != "Elegir")
                 return;
 
-            var sugerencias = Session["Sugerencias"] as List<OpcionTurno>;
-            if (sugerencias == null || sugerencias.Count == 0)
+            var lista = Session["Sugerencias"] as List<OpcionTurno>;
+            if (lista == null || lista.Count == 0)
                 return;
 
             int index = Convert.ToInt32(e.CommandArgument);
-            if (index < 0 || index >= sugerencias.Count)
+            if (index < 0 || index >= lista.Count)
                 return;
 
-            int pacienteId = Convert.ToInt32(ddlPacientes.SelectedValue);
-            int especialidadId = Convert.ToInt32(ddlEspecialidades.SelectedValue);
+            var op = lista[index];
 
-            var op = sugerencias[index];
+            
+            if (op.Ocupado)
+            {
+                MostrarError("Ese horario está ocupado.");
+                return;
+            }
 
             if (string.IsNullOrWhiteSpace(txtMotivo.Text))
             {
-                MostrarError("Debés cargar el motivo de la consulta.");
+                MostrarError("Debés cargar el motivo.");
                 return;
             }
 
@@ -165,8 +173,8 @@ namespace TP_Turnos_Clinica
             try
             {
                 int turnoId = turnosNegocio.AltaTurno(
-                    pacienteId,
-                    especialidadId,
+                    Convert.ToInt32(ddlPacientes.SelectedValue),
+                    Convert.ToInt32(ddlEspecialidades.SelectedValue),
                     op.MedicoID,
                     op.Fecha,
                     op.HoraInicio,
@@ -175,10 +183,8 @@ namespace TP_Turnos_Clinica
                     ddlMedioPago.SelectedValue
                 );
 
-                
                 LimpiarFormulario();
 
-                
                 lblMensaje.CssClass = "alert alert-success d-block mb-3";
                 lblMensaje.Text = $"Turno creado correctamente. N° {turnoId}";
                 lblMensaje.Visible = true;
@@ -201,9 +207,9 @@ namespace TP_Turnos_Clinica
             ddlPacientes.SelectedIndex = 0;
             ddlEspecialidades.SelectedIndex = 0;
 
-            txtMotivo.Text = string.Empty;
-            txtImporte.Text = string.Empty;
-            txtFechaDesde.Text = string.Empty;
+            txtMotivo.Text = "";
+            txtImporte.Text = "";
+            txtFechaDesde.Text = DateTime.Today.ToString("yyyy-MM-dd");
 
             pnlSugerencias.Visible = false;
 
