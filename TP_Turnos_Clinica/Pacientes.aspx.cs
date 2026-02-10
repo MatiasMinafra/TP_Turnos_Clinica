@@ -14,6 +14,7 @@ namespace TP_Turnos_Clinica
         PacienteNegocio negocio = new PacienteNegocio();
         protected void Page_Load(object sender, EventArgs e)
         {
+
             
             if (Session["usuario"] == null)
             {
@@ -21,6 +22,15 @@ namespace TP_Turnos_Clinica
                 return;
             }
 
+            
+            var u = (Usuario)Session["usuario"];
+            if (u.RolID != RolesIds.ADMIN && u.RolID != RolesIds.RECEPCIONISTA)
+            {
+                Response.Redirect("~/Home.aspx");
+                return;
+            }
+
+           
             if (!IsPostBack)
             {
                 CargarGrilla();
@@ -29,7 +39,7 @@ namespace TP_Turnos_Clinica
 
         private void CargarGrilla(string filtro = "")
         {
-            filtro = (filtro ?? "").Trim();     
+            filtro = (filtro ?? "").Trim();
             bool soloActivos = !chkInactivos.Checked;
 
             List<Paciente> lista = negocio.Listar(filtro, soloActivos);

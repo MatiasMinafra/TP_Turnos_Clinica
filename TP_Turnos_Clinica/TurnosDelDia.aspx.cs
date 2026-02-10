@@ -49,12 +49,19 @@ namespace TP_Turnos_Clinica
             DateTime fecha = DateTime.Today;
 
             if (!string.IsNullOrWhiteSpace(txtFecha.Text))
+                fecha = DateTime.Parse(txtFecha.Text);
+
+            var lista = negocio.ListarDelDia(fecha);
+
+       
+            if (!chkMostrarCancelados.Checked)
             {
-                
-                fecha = DateTime.ParseExact(txtFecha.Text.Trim(), "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                lista = lista
+                    .Where(x => x.EstadoTurno != "Cancelado")
+                    .ToList();
             }
 
-            dgvTurnos.DataSource = negocio.ListarDelDia(fecha);
+            dgvTurnos.DataSource = lista;
             dgvTurnos.DataBind();
         }
 
@@ -62,13 +69,21 @@ namespace TP_Turnos_Clinica
         {
             try
             {
-               
                 int rowIndex = Convert.ToInt32(e.CommandArgument);
-                int turnoId = (int)dgvTurnos.DataKeys[rowIndex].Value;
+
+                int turnoId = Convert.ToInt32(dgvTurnos.DataKeys[rowIndex].Values["TurnoID"]);
+                string estadoTurno = dgvTurnos.DataKeys[rowIndex].Values["EstadoTurno"]?.ToString() ?? "";
+                string estadoPago = dgvTurnos.DataKeys[rowIndex].Values["EstadoPago"]?.ToString() ?? "";
 
                 if (e.CommandName == "ConfirmarPago")
                 {
-                   
+                  
+                    if (estadoTurno.Equals("Cancelado", StringComparison.OrdinalIgnoreCase))
+                        throw new Exception("No se puede confirmar el pago: el turno está cancelado.");
+
+                    if (!estadoPago.Equals("Pendiente", StringComparison.OrdinalIgnoreCase))
+                        throw new Exception("El pago no está pendiente.");
+
                     hfTurnoIdPago.Value = turnoId.ToString();
                     txtComprobante.Text = "";
                     pnlPago.Visible = true;
@@ -78,15 +93,50 @@ namespace TP_Turnos_Clinica
                     return;
                 }
 
+
+                if (e.CommandName == "NoAsistio")
+                {
+                    negocio.MarcarNoAsistio(turnoId);
+
+                    lblMsg.CssClass = "alert alert-success d-block mb-3";
+                    lblMsg.Text = "Turno marcado como NO ASISTIÓ.";
+
+                    CargarGrilla();
+                    return;
+                }
+
                 if (e.CommandName == "Cancelar")
                 {
                     
+                    negocio.CancelarTurno(turnoId);
+
+                    pnlPago.Visible = false;
+
+                    lblMsg.CssClass = "alert alert-success d-block mb-3";
+                    lblMsg.Text = "Turno cancelado.";
+
+                    CargarGrilla();
                     return;
                 }
 
                 if (e.CommandName == "Reprogramar")
                 {
                     
+                    if (estadoTurno.Equals("Cancelado", StringComparison.OrdinalIgnoreCase))
+                        throw new Exception("No se puede reprogramar: el turno está cancelado.");
+
+                    
+                    if (estadoTurno.Equals("Cerrado", StringComparison.OrdinalIgnoreCase))
+                        throw new Exception("No se puede reprogramar: el turno está cerrado.");
+
+                   
+                    if (estadoTurno.Equals("No asistió", StringComparison.OrdinalIgnoreCase) &&
+                        !estadoPago.Equals("Confirmado", StringComparison.OrdinalIgnoreCase))
+                    {
+                        throw new Exception("No se puede reprogramar un 'No asistió' si el pago está pendiente.");
+                    }
+
+                    Response.Redirect($"~/AgendaTurnos.aspx?reprog=1&turnoId={turnoId}", false);
                     return;
                 }
             }
@@ -126,6 +176,44 @@ namespace TP_Turnos_Clinica
             pnlPago.Visible = false;
             hfTurnoIdPago.Value = "";
             txtComprobante.Text = "";
+        }
+
+        protected void chkMostrarCancelados_CheckedChanged(object sender, EventArgs e)
+        {
+            CargarGrilla();
+        }
+
+        protected void dgvTurnos_FilaDataBound(object sender, GridViewRowEventArgs e)
+        {
+            if (e.Row.RowType != DataControlRowType.DataRow)
+                return;
+
+            string estadoTurno = DataBinder.Eval(e.Row.DataItem, "EstadoTurno")?.ToString();
+
+            if (estadoTurno == "Cancelado")
+            {
+               
+                e.Row.BackColor = System.Drawing.Color.LightGray;
+                e.Row.ForeColor = System.Drawing.Color.Gray;
+
+                
+                foreach (TableCell celda in e.Row.Cells)
+                {
+                    foreach (Control ctrl in celda.Controls)
+                    {
+                        if (ctrl is Button btn)
+                        {
+                            btn.Enabled = false;
+                            btn.CssClass += " disabled";
+                        }
+                        else if (ctrl is LinkButton lnk)
+                        {
+                            lnk.Enabled = false;
+                            lnk.CssClass += " disabled";
+                        }
+                    }
+                }
+            }
         }
 
     }

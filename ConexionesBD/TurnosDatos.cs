@@ -265,6 +265,8 @@ ORDER BY t.HoraInicio;
         }
 
 
+
+
         public void ConfirmarPago(int turnoId, string comprobante)
         {
             AccesoDatos datos = new AccesoDatos();
@@ -291,13 +293,31 @@ ORDER BY t.HoraInicio;
             {
                 datos.setearConsulta(@"
 DECLARE @EstadoCancelado INT = (SELECT EstadoTurnoID FROM EstadosTurno WHERE Nombre = 'Cancelado');
+DECLARE @EstadoPagoConfirmado INT = (SELECT EstadoPagoID FROM EstadosPago WHERE Nombre = 'Confirmado');
+
 IF (@EstadoCancelado IS NULL)
     THROW 50021, 'Falta el estado Cancelado.', 1;
+
+
+IF EXISTS (
+    SELECT 1 FROM Turnos
+    WHERE TurnoID = @turnoId AND EstadoTurnoID = @EstadoCancelado
+)
+    THROW 50022, 'El turno ya está cancelado.', 1;
+
+
+IF EXISTS (
+    SELECT 1 FROM Pagos
+    WHERE TurnoID = @turnoId AND EstadoPagoID = @EstadoPagoConfirmado
+)
+    THROW 50023, 'No se puede cancelar un turno con pago confirmado.', 1;
+
 
 UPDATE Turnos
 SET EstadoTurnoID = @EstadoCancelado
 WHERE TurnoID = @turnoId;
 ");
+
                 datos.setearParametro("@turnoId", turnoId);
                 datos.ejecutarAccion();
             }
@@ -324,6 +344,75 @@ WHERE TurnoID = @turnoId;
         }
 
 
+        public void ReprogramarTurno(int turnoId, DateTime nuevaFecha, TimeSpan nuevaHoraInicio, int nuevoMedicoId)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearProcedimiento("dbo.SP_ReprogramarTurno");
+                datos.setearParametro("@TurnoID", turnoId);
+                datos.setearParametro("@NuevaFecha", nuevaFecha.Date);
+                datos.setearParametro("@NuevaHoraInicio", nuevaHoraInicio);
+                datos.setearParametro("@NuevoMedicoID", nuevoMedicoId);
+                datos.ejecutarAccion();
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+        public int ObtenerEspecialidadDelTurno(int turnoId)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta(@"
+SELECT EspecialidadID
+FROM Turnos
+WHERE TurnoID = @turnoId
+");
+                datos.setearParametro("@turnoId", turnoId);
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                    return (int)datos.Lector["EspecialidadID"];
+
+                throw new Exception("No se pudo obtener la especialidad del turno.");
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+
+
+
+        }
+
+        public void MarcarNoAsistio(int turnoId)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta(@"
+DECLARE @NoAsistio INT = (SELECT EstadoTurnoID FROM EstadosTurno WHERE Nombre='No asistió');
+DECLARE @Cancelado INT = (SELECT EstadoTurnoID FROM EstadosTurno WHERE Nombre='Cancelado');
+
+IF (@NoAsistio IS NULL) THROW 50030, 'Falta estado No asistió.', 1;
+
+IF EXISTS (SELECT 1 FROM Turnos WHERE TurnoID=@turnoId AND EstadoTurnoID=@Cancelado)
+    THROW 50031, 'No se puede marcar No asistió si está cancelado.', 1;
+
+UPDATE Turnos
+SET EstadoTurnoID=@NoAsistio
+WHERE TurnoID=@turnoId;
+");
+                datos.setearParametro("@turnoId", turnoId);
+                datos.ejecutarAccion();
+            }
+            finally { datos.cerrarConexion(); }
+        }
     }
 
 

@@ -35,50 +35,74 @@
             </Scripts>
         </asp:ScriptManager>
 
-       
-        <asp:Panel ID="pnlNavbar" runat="server">
+        <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+            <div class="container">
 
-            <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
-                <div class="container">
-                   
-                    <a class="navbar-brand" runat="server" href="~/Home.aspx">Clínica Turnos</a>
+                <a class="navbar-brand" runat="server" href="~/Home.aspx">Clínica Turnos</a>
 
-                    <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarMain"
-                        aria-controls="navbarMain" aria-expanded="false" aria-label="Alternar navegación">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarMain"
+                    aria-controls="navbarMain" aria-expanded="false" aria-label="Alternar navegación">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-                    <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between" id="navbarMain">
-                        <ul class="navbar-nav me-auto">
-                            <li class="nav-item">
-                                <a class="nav-link" runat="server" href="~/Home.aspx">Home</a>
-                            </li>
+                <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between" id="navbarMain">
 
+                    <!-- IZQUIERDA: Menú dinámico por rol -->
+                    <ul class="navbar-nav me-auto">
+
+                      
+                        <li class="nav-item">
+                            <a class="nav-link" runat="server" href="~/Home.aspx">Home</a>
+                        </li>
+
+                        
+                        <asp:PlaceHolder ID="phMenuAdminRecep" runat="server">
                             <li class="nav-item">
                                 <a class="nav-link" runat="server" href="~/Pacientes.aspx">Pacientes</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" runat="server" href="~/AgendaTurnos.aspx">Agenda</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" runat="server" href="~/TurnosDelDia.aspx">Turnos del día</a>
+                            </li>
+                        </asp:PlaceHolder>
 
-                            <%-- Activar cuando hagas estos módulos
+                    
+                        <asp:PlaceHolder ID="phMenuMedico" runat="server">
                             <li class="nav-item">
-                                <a class="nav-link" runat="server" href="~/Medicos.aspx">Médicos</a>
+                                <a class="nav-link" runat="server" href="~/MisTurnos.aspx">Mis turnos</a>
                             </li>
+                            
+                        
                             <li class="nav-item">
-                                <a class="nav-link" runat="server" href="~/Turnos.aspx">Turnos</a>
+                                <a class="nav-link" runat="server" href="~/Evoluciones.aspx">Evoluciones</a>
                             </li>
-                            --%>
-                        </ul>
+                           
+                        </asp:PlaceHolder>
 
-                        <!-- Derecha: volver a Home (NO logout) -->
-                        <ul class="navbar-nav ms-auto">
+                    </ul>
+
+                  
+                    <ul class="navbar-nav ms-auto">
+
+                       
+                        <asp:PlaceHolder ID="phUser" runat="server">
                             <li class="nav-item">
-                                <a class="nav-link" runat="server" href="~/Home.aspx">Volver al Home</a>
+                                <span class="navbar-text text-light me-3">
+                                    <asp:Literal ID="litUsuario" runat="server" />
+                                </span>
                             </li>
-                        </ul>
-                    </div>
+                        </asp:PlaceHolder>
+
+                        <li class="nav-item">
+                            <a class="nav-link text-danger" runat="server" href="~/Logout.aspx">Cerrar sesión</a>
+                        </li>
+                    </ul>
+
                 </div>
-            </nav>
-
-        </asp:Panel>
+            </div>
+        </nav>
 
         <div class="container body-content mt-4">
             <asp:ContentPlaceHolder ID="MainContent" runat="server" />
@@ -94,4 +118,4 @@
         <%: Scripts.Render("~/Scripts/bootstrap.js") %>
     </asp:PlaceHolder>
 </body>
-</html>>
+</html>

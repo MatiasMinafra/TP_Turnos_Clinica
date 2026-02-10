@@ -35,7 +35,36 @@ namespace TP_Turnos_Clinica
 
                 pnlSugerencias.Visible = false;
                 lblMensaje.Visible = false;
+
+                if (Request.QueryString["reprog"] == "1" && int.TryParse(Request.QueryString["turnoId"], out int turnoIdReprog))
+                {
+                    hfTurnoIdReprog.Value = turnoIdReprog.ToString();
+
+                    pnlReprog.Visible = true;
+                    lblTurnoReprog.Text = turnoIdReprog.ToString();
+
+                   
+                    ddlPacientes.Enabled = false;
+                    ddlEspecialidades.Enabled = false;
+                }
             }
+        }
+
+        protected void btnSalirReprog_Click(object sender, EventArgs e)
+        {
+            hfTurnoIdReprog.Value = "";
+            pnlReprog.Visible = false;
+            lblTurnoReprog.Text = "";
+
+            ddlPacientes.Enabled = true;
+            ddlEspecialidades.Enabled = true;
+
+            pnlSugerencias.Visible = false;
+            gvSugerencias.DataSource = null;
+            gvSugerencias.DataBind();
+            Session.Remove("Sugerencias");
+
+            lblMensaje.Visible = false;
         }
 
         private void CargarCombos()
@@ -80,26 +109,45 @@ namespace TP_Turnos_Clinica
         {
             lblMensaje.Visible = false;
             pnlSugerencias.Visible = false;
+
+            LimpiarSugerencias();
         }
 
         protected void ddlEspecialidades_SelectedIndexChanged(object sender, EventArgs e)
         {
             lblMensaje.Visible = false;
             pnlSugerencias.Visible = false;
+
+            LimpiarSugerencias();
         }
 
         protected void btnSugerir_Click(object sender, EventArgs e)
         {
+
+            LimpiarSugerencias();
             lblMensaje.Visible = false;
             pnlSugerencias.Visible = false;
 
-            int pacienteId = Convert.ToInt32(ddlPacientes.SelectedValue);
-            int especialidadId = Convert.ToInt32(ddlEspecialidades.SelectedValue);
+            bool esReprogramacion = !string.IsNullOrWhiteSpace(hfTurnoIdReprog.Value);
 
-            if (pacienteId <= 0 || especialidadId <= 0)
+            int pacienteId = Convert.ToInt32(ddlPacientes.SelectedValue);
+            int especialidadId;
+
+          
+            if (esReprogramacion)
             {
-                MostrarError("Seleccioná paciente y especialidad.");
-                return;
+                int turnoIdReprog = int.Parse(hfTurnoIdReprog.Value);
+                especialidadId = turnosNegocio.ObtenerEspecialidadDelTurno(turnoIdReprog);
+            }
+            else
+            {
+                especialidadId = Convert.ToInt32(ddlEspecialidades.SelectedValue);
+
+                if (pacienteId <= 0 || especialidadId <= 0)
+                {
+                    MostrarError("Seleccioná paciente y especialidad.");
+                    return;
+                }
             }
 
             DateTime fecha;
@@ -131,7 +179,6 @@ namespace TP_Turnos_Clinica
                 MostrarError(ex.Message);
             }
         }
-
         protected void gvSugerencias_ComandoPorFila(object sender, GridViewCommandEventArgs e)
         {
             if (e.CommandName != "Elegir")
@@ -154,24 +201,58 @@ namespace TP_Turnos_Clinica
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(txtMotivo.Text))
-            {
-                MostrarError("Debés cargar el motivo.");
-                return;
-            }
-
-            decimal importe;
-            string impTxt = (txtImporte.Text ?? "").Trim();
-
-            if (!decimal.TryParse(impTxt, NumberStyles.Number, CultureInfo.GetCultureInfo("es-AR"), out importe) &&
-                !decimal.TryParse(impTxt, NumberStyles.Number, CultureInfo.InvariantCulture, out importe))
-            {
-                MostrarError("Importe inválido.");
-                return;
-            }
-
             try
             {
+                bool esReprogramacion = !string.IsNullOrWhiteSpace(hfTurnoIdReprog.Value);
+
+                
+                if (esReprogramacion)
+                {
+                    int turnoIdReprog = int.Parse(hfTurnoIdReprog.Value);
+
+                    turnosNegocio.ReprogramarTurno(
+                        turnoIdReprog,
+                        op.Fecha,
+                        op.HoraInicio,
+                        op.MedicoID
+                    );
+
+                    
+                    hfTurnoIdReprog.Value = "";
+                    pnlReprog.Visible = false;
+                    lblTurnoReprog.Text = "";
+
+                    
+                    ddlPacientes.Enabled = true;
+                    ddlEspecialidades.Enabled = true;
+
+                    
+                    LimpiarSugerencias();
+
+                    lblMensaje.CssClass = "alert alert-success d-block mb-3";
+                    lblMensaje.Text = $"Turno reprogramado correctamente. N° {turnoIdReprog}";
+                    lblMensaje.Visible = true;
+
+                    return;
+                }
+
+               
+                if (string.IsNullOrWhiteSpace(txtMotivo.Text))
+                {
+                    MostrarError("Debés cargar el motivo.");
+                    return;
+                }
+
+                decimal importe;
+                string impTxt = (txtImporte.Text ?? "").Trim();
+
+                if (!decimal.TryParse(impTxt, NumberStyles.Number, CultureInfo.GetCultureInfo("es-AR"), out importe) &&
+                    !decimal.TryParse(impTxt, NumberStyles.Number, CultureInfo.InvariantCulture, out importe))
+                {
+                    MostrarError("Importe inválido.");
+                    return;
+                }
+
                 int turnoId = turnosNegocio.AltaTurno(
                     Convert.ToInt32(ddlPacientes.SelectedValue),
                     Convert.ToInt32(ddlEspecialidades.SelectedValue),
@@ -193,6 +274,24 @@ namespace TP_Turnos_Clinica
             {
                 MostrarError(ex.Message);
             }
+        }
+        private void LimpiarSugerencias()
+        {
+            pnlSugerencias.Visible = false;
+
+            gvSugerencias.DataSource = null;
+            gvSugerencias.DataBind();
+
+            Session.Remove("Sugerencias");
+
+            lblMensaje.Visible = false;
+            lblMensaje.Text = "";
+            lblMensaje.CssClass = "alert alert-danger d-block mb-3";
+        }
+
+        protected void ddlFranja_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            LimpiarSugerencias();
         }
 
         private void MostrarError(string msg)
@@ -218,5 +317,8 @@ namespace TP_Turnos_Clinica
 
             Session.Remove("Sugerencias");
         }
+
+        
+       
     }
 }

@@ -9,6 +9,21 @@
 
     <h3 class="mb-3">Agenda - Alta de Turno</h3>
 
+   
+    <asp:HiddenField ID="hfTurnoIdReprog" runat="server" />
+
+  
+    <asp:Panel ID="pnlReprog" runat="server" Visible="false" CssClass="alert alert-info d-block mb-3">
+        <strong>Modo REPROGRAMAR:</strong>
+        elegí un nuevo horario para el turno <asp:Label ID="lblTurnoReprog" runat="server" />.
+        <asp:LinkButton ID="btnSalirReprog" runat="server"
+            CssClass="btn btn-sm btn-outline-dark ms-2"
+            OnClick="btnSalirReprog_Click"
+            CausesValidation="false">
+            Salir
+        </asp:LinkButton>
+    </asp:Panel>
+
     <asp:Label ID="lblMensaje" runat="server"
         CssClass="alert alert-danger d-block mb-3"
         Visible="false" />
@@ -67,7 +82,9 @@
 
                 <div class="col-md-4">
                     <label class="form-label">Disponibilidad del paciente</label>
-                   <asp:DropDownList ID="ddlFranja" runat="server" CssClass="form-select">
+                    <asp:DropDownList ID="ddlFranja" runat="server" CssClass="form-select"
+    AutoPostBack="true"
+    OnSelectedIndexChanged="ddlFranja_SelectedIndexChanged">
     <asp:ListItem Text="Mañana (08 a 12)" Value="MANIANA" Selected="True" />
     <asp:ListItem Text="Tarde (14 a 18)" Value="TARDE" />
     <asp:ListItem Text="Noche (19 a 22)" Value="NOCHE" />

@@ -15,13 +15,40 @@ namespace TP_Turnos_Clinica
     {
 
         /// <summary>
-        /// Control pnlNavbar.
+        /// Control phMenuAdminRecep.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel pnlNavbar;
+        protected global::System.Web.UI.WebControls.PlaceHolder phMenuAdminRecep;
+
+        /// <summary>
+        /// Control phMenuMedico.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder phMenuMedico;
+
+        /// <summary>
+        /// Control phUser.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder phUser;
+
+        /// <summary>
+        /// Control litUsuario.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litUsuario;
 
         /// <summary>
         /// Control MainContent.

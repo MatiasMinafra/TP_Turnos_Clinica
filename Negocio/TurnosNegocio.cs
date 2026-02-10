@@ -59,7 +59,7 @@ namespace Negocio
                 hasta = new TimeSpan(22, 0, 0);
             }
 
-            byte diaSemana = (byte)(((int)fecha.DayOfWeek + 6) % 7 + 1);
+            byte diaSemana = (byte)fecha.DayOfWeek;
 
             foreach (var m in medicos)
             {
@@ -143,5 +143,23 @@ namespace Negocio
         {
             datos.CancelarTurno(turnoId);
         }
+
+        public void ReprogramarTurno(int turnoId, DateTime nuevaFecha, TimeSpan nuevaHoraInicio, int nuevoMedicoId)
+        {
+            TurnosDatos datos = new TurnosDatos();
+            datos.ReprogramarTurno(turnoId, nuevaFecha, nuevaHoraInicio, nuevoMedicoId);
+        }
+
+        public int ObtenerEspecialidadDelTurno(int turnoId)
+        {
+            return datos.ObtenerEspecialidadDelTurno(turnoId);
+        }
+
+        
+        public void MarcarNoAsistio(int turnoId)
+        {
+            datos.MarcarNoAsistio(turnoId);
+        }
+
     }
 }
