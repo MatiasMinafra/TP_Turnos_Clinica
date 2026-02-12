@@ -7,7 +7,7 @@
 
     <h3 class="mb-3">Pacientes</h3>
 
-    <!-- BUSCADOR + CHECKBOX + NUEVO -->
+    
     <div class="row mb-3 align-items-end">
 
         <div class="col-md-5">
@@ -45,38 +45,41 @@
 
     </div>
 
-    <!-- GRILLA -->
-    <asp:GridView ID="gvPacientes" runat="server"
-        CssClass="table table-striped table-bordered table-sm"
-        AutoGenerateColumns="false"
-        DataKeyNames="PacienteID"
-        OnRowCommand="Pacientes_ComandoPorFila">
+   
+<asp:GridView ID="gvPacientes" runat="server"
+    CssClass="table table-striped table-bordered table-sm"
+    AutoGenerateColumns="false"
+    DataKeyNames="PacienteID,Activo"
+    OnRowCommand="Pacientes_ComandoPorFila">
 
-        <Columns>
-            <asp:BoundField DataField="DNI" HeaderText="DNI" />
-            <asp:BoundField DataField="Nombre" HeaderText="Nombre" />
-            <asp:BoundField DataField="Apellido" HeaderText="Apellido" />
-            <asp:BoundField DataField="Telefono" HeaderText="Teléfono" />
-            <asp:CheckBoxField DataField="Activo" HeaderText="Activo" />
+    <Columns>
+        <asp:BoundField DataField="DNI" HeaderText="DNI" />
+        <asp:BoundField DataField="Nombre" HeaderText="Nombre" />
+        <asp:BoundField DataField="Apellido" HeaderText="Apellido" />
+        <asp:BoundField DataField="Telefono" HeaderText="Teléfono" />
+        <asp:BoundField DataField="Email" HeaderText="Email" />
+        <asp:CheckBoxField DataField="Activo" HeaderText="Activo" />
 
-            <asp:TemplateField HeaderText="Acciones">
-                <ItemTemplate>
-                    <asp:HyperLink ID="hlEditar" runat="server"
-                        Text="Editar"
-                        NavigateUrl='<%# ResolveUrl("~/PacienteForm.aspx?id=" + Eval("PacienteID")) %>'
-                        CssClass="btn btn-warning btn-sm me-1" />
+        <asp:TemplateField HeaderText="Acciones">
+            <ItemTemplate>
+                <asp:HyperLink ID="hlEditar" runat="server"
+                    Text="Editar"
+                    NavigateUrl='<%# ResolveUrl("~/PacienteForm.aspx?id=" + Eval("PacienteID")) %>'
+                    CssClass="btn btn-warning btn-sm me-1" />
 
-                    <asp:LinkButton ID="btnDesactivar" runat="server"
-                        Text="Desactivar"
-                        CommandName="Desactivar"
-                        CommandArgument="<%# Container.DataItemIndex %>"
-                        CssClass="btn btn-danger btn-sm"
-                        CausesValidation="false"
-                        OnClientClick="return confirm('¿Seguro que querés desactivar este paciente?');" />
-                </ItemTemplate>
-            </asp:TemplateField>
+                <asp:LinkButton ID="btnToggleActivo" runat="server"
+                    Text='<%# (bool)Eval("Activo") ? "Desactivar" : "Activar" %>'
+                    CommandName="ToggleActivo"
+                    CommandArgument="<%# Container.DataItemIndex %>"
+                    CssClass='<%# (bool)Eval("Activo") ? "btn btn-danger btn-sm" : "btn btn-success btn-sm" %>'
+                    CausesValidation="false"
+                    OnClientClick='<%# (bool)Eval("Activo")
+                        ? "return confirm(\"¿Seguro que querés desactivar este paciente?\");"
+                        : "return confirm(\"¿Seguro que querés activar este paciente?\");" %>' />
+            </ItemTemplate>
+        </asp:TemplateField>
 
-        </Columns>
-    </asp:GridView>
+    </Columns>
+</asp:GridView>
 
 </asp:Content>

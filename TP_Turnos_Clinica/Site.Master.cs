@@ -34,5 +34,13 @@ namespace TP_Turnos_Clinica
 
             
         }
+        protected void btnLogout_Click(object sender, EventArgs e)
+        {
+            Session.Clear();
+            Session.Abandon();
+
+            Response.Redirect("~/Login.aspx", false);
+            Context.ApplicationInstance.CompleteRequest();
+        }
     }
 }

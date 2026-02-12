@@ -413,6 +413,75 @@ WHERE TurnoID=@turnoId;
             }
             finally { datos.cerrarConexion(); }
         }
+
+
+        public DtoTurnoMail ObtenerDatosMailTurno(int turnoId)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta(@"
+SELECT
+    t.TurnoID,
+    t.Fecha,
+    t.HoraInicio,
+    t.HoraFin,
+    (p.Apellido + ' ' + p.Nombre) AS PacienteNombre,
+    p.Email AS PacienteEmail,
+    (m.Apellido + ' ' + m.Nombre) AS MedicoNombre,
+    e.Nombre AS Especialidad,
+    ISNULL(pa.MedioPago, '-') AS MedioPago,
+    ISNULL(pa.Importe, 0) AS Importe,
+    ISNULL(t.MotivoConsulta, '') AS MotivoConsulta
+FROM Turnos t
+INNER JOIN Pacientes p ON p.PacienteID = t.PacienteID
+INNER JOIN Medicos m ON m.MedicoID = t.MedicoID
+INNER JOIN Especialidades e ON e.EspecialidadID = t.EspecialidadID
+LEFT JOIN Pagos pa ON pa.TurnoID = t.TurnoID
+WHERE t.TurnoID = @turnoId;
+");
+
+                datos.setearParametro("@turnoId", turnoId);
+                datos.ejecutarLectura();
+
+                if (!datos.Lector.Read())
+                    throw new Exception("No se encontró el turno para enviar mail.");
+
+                return new DtoTurnoMail
+                {
+                    TurnoID = (int)datos.Lector["TurnoID"],
+                    Fecha = (DateTime)datos.Lector["Fecha"],
+                    HoraInicio = (TimeSpan)datos.Lector["HoraInicio"],
+                    HoraFin = (TimeSpan)datos.Lector["HoraFin"],
+                    PacienteNombre = datos.Lector["PacienteNombre"].ToString(),
+                    PacienteEmail = datos.Lector["PacienteEmail"] == DBNull.Value ? "" : datos.Lector["PacienteEmail"].ToString(),
+                    MedicoNombre = datos.Lector["MedicoNombre"].ToString(),
+                    Especialidad = datos.Lector["Especialidad"].ToString(),
+                    MedioPago = datos.Lector["MedioPago"].ToString(),
+                    Importe = (decimal)datos.Lector["Importe"],
+                    MotivoConsulta = datos.Lector["MotivoConsulta"].ToString()
+                };
+            }
+            finally { datos.cerrarConexion(); }
+        }
+
+        public (DateTime Fecha, TimeSpan HoraInicio) ObtenerFechaHoraTurno(int turnoId)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta(@"SELECT Fecha, HoraInicio FROM Turnos WHERE TurnoID = @id;");
+                datos.setearParametro("@id", turnoId);
+                datos.ejecutarLectura();
+
+                if (!datos.Lector.Read())
+                    throw new Exception("No se encontró el turno.");
+
+                return ((DateTime)datos.Lector["Fecha"], (TimeSpan)datos.Lector["HoraInicio"]);
+            }
+            finally { datos.cerrarConexion(); }
+        }
+
     }
 
 

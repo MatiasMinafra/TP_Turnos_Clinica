@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DtoTurnoDia.cs" />
+    <Compile Include="DtoTurnoMail.cs" />
     <Compile Include="Dto_MedicosTurnosTrabajo.cs" />
     <Compile Include="Especialidad.cs" />
     <Compile Include="Medico.cs" />

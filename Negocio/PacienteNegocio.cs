@@ -12,7 +12,7 @@ namespace Negocio
     {
         private readonly PacienteDatos datos = new PacienteDatos();
 
-        public List<Paciente> Listar(string filtro = "", bool soloActivos = true)
+        public List<Paciente> Listar(string filtro, bool soloActivos)
         {
             return datos.Listar(filtro, soloActivos);
         }
@@ -63,6 +63,10 @@ namespace Negocio
             if (string.IsNullOrWhiteSpace(p.Nombre)) throw new Exception("El Nombre es obligatorio.");
             if (string.IsNullOrWhiteSpace(p.Apellido)) throw new Exception("El Apellido es obligatorio.");
             if (string.IsNullOrWhiteSpace(p.Email)) throw new Exception("El Email es obligatorio.");
+        }
+        public void Activar(int idPaciente)
+        {
+            datos.Activar(idPaciente);
         }
     }
 }

@@ -20,12 +20,23 @@ namespace ConexionesBD
             filtro = (filtro ?? "").Trim();
 
             datos.setearConsulta(@"
-SELECT PacienteID, DNI, Nombre, Apellido, Email, Telefono, Activo
-FROM dbo.Pacientes
+SELECT
+    PacienteID,
+    DNI,
+    Nombre,
+    Apellido,
+    Telefono,
+    Email,
+    Activo
+FROM Pacientes
 WHERE
-    (@filtro = '' OR DNI LIKE @like OR Nombre LIKE @like OR Apellido LIKE @like OR Email LIKE @like)
+    (@filtro = '' 
+     OR DNI LIKE @like 
+     OR Nombre LIKE @like 
+     OR Apellido LIKE @like 
+     OR Email LIKE @like)
     AND (@soloActivos = 0 OR Activo = 1)
-ORDER BY Apellido, Nombre;");
+ORDER BY Activo DESC, Apellido, Nombre;");
 
             datos.setearParametro("@filtro", filtro);
             datos.setearParametro("@like", "%" + filtro + "%");
@@ -244,6 +255,18 @@ WHERE Email = @email
             {
                 datos.cerrarConexion();
             }
+        }
+
+        public void Activar(int idPaciente)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("UPDATE Pacientes SET Activo = 1 WHERE PacienteID = @id");
+                datos.setearParametro("@id", idPaciente);
+                datos.ejecutarAccion();
+            }
+            finally { datos.cerrarConexion(); }
         }
     }
 }

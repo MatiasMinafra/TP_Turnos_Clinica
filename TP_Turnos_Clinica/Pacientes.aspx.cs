@@ -40,9 +40,11 @@ namespace TP_Turnos_Clinica
         private void CargarGrilla(string filtro = "")
         {
             filtro = (filtro ?? "").Trim();
-            bool soloActivos = !chkInactivos.Checked;
+
+            bool soloActivos = !chkInactivos.Checked; // ← CLAVE
 
             List<Paciente> lista = negocio.Listar(filtro, soloActivos);
+
             gvPacientes.DataSource = lista;
             gvPacientes.DataBind();
 
@@ -55,7 +57,7 @@ namespace TP_Turnos_Clinica
 
         protected void chkInactivos_CheckedChanged(object sender, EventArgs e)
         {
-            CargarGrilla();
+            CargarGrilla(txtBuscar.Text);
         }
 
 

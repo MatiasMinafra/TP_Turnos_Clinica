@@ -13,9 +13,9 @@ namespace TP_Turnos_Clinica
     public partial class TurnosDelDia : System.Web.UI.Page
     {
         private TurnosNegocio negocio = new TurnosNegocio();
+
         protected void Page_Load(object sender, EventArgs e)
         {
-            
             if (Session["usuario"] == null)
             {
                 Response.Redirect("~/Login.aspx");
@@ -31,7 +31,6 @@ namespace TP_Turnos_Clinica
 
             if (!IsPostBack)
             {
-               
                 txtFecha.Text = DateTime.Today.ToString("yyyy-MM-dd");
                 CargarGrilla();
             }
@@ -39,8 +38,11 @@ namespace TP_Turnos_Clinica
 
         protected void btnBuscar_Click(object sender, EventArgs e)
         {
+            // limpiar mensaje anterior
             lblMsg.Text = "";
             lblMsg.CssClass = "d-block mb-3";
+            lblMsg.Visible = false;
+
             CargarGrilla();
         }
 
@@ -49,11 +51,10 @@ namespace TP_Turnos_Clinica
             DateTime fecha = DateTime.Today;
 
             if (!string.IsNullOrWhiteSpace(txtFecha.Text))
-                fecha = DateTime.Parse(txtFecha.Text);
+                fecha = DateTime.Parse(txtFecha.Text); // no tocamos tu lógica
 
             var lista = negocio.ListarDelDia(fecha);
 
-       
             if (!chkMostrarCancelados.Checked)
             {
                 lista = lista
@@ -63,6 +64,20 @@ namespace TP_Turnos_Clinica
 
             dgvTurnos.DataSource = lista;
             dgvTurnos.DataBind();
+
+            // Mensaje cuando no hay turnos
+            if (lista == null || lista.Count == 0)
+            {
+                lblMsg.CssClass = "alert alert-info d-block mb-3";
+                lblMsg.Text = "No hay turnos para la fecha seleccionada.";
+                lblMsg.Visible = true;
+            }
+            else
+            {
+                lblMsg.Text = "";
+                lblMsg.CssClass = "d-block mb-3";
+                lblMsg.Visible = false;
+            }
         }
 
         protected void dgvTurnos_ComandoPorFila(object sender, GridViewCommandEventArgs e)
@@ -77,7 +92,6 @@ namespace TP_Turnos_Clinica
 
                 if (e.CommandName == "ConfirmarPago")
                 {
-                  
                     if (estadoTurno.Equals("Cancelado", StringComparison.OrdinalIgnoreCase))
                         throw new Exception("No se puede confirmar el pago: el turno está cancelado.");
 
@@ -90,9 +104,9 @@ namespace TP_Turnos_Clinica
 
                     lblMsg.CssClass = "alert alert-info d-block mb-3";
                     lblMsg.Text = $"Confirmar pago del turno #{turnoId}.";
+                    lblMsg.Visible = true;
                     return;
                 }
-
 
                 if (e.CommandName == "NoAsistio")
                 {
@@ -100,6 +114,7 @@ namespace TP_Turnos_Clinica
 
                     lblMsg.CssClass = "alert alert-success d-block mb-3";
                     lblMsg.Text = "Turno marcado como NO ASISTIÓ.";
+                    lblMsg.Visible = true;
 
                     CargarGrilla();
                     return;
@@ -107,13 +122,13 @@ namespace TP_Turnos_Clinica
 
                 if (e.CommandName == "Cancelar")
                 {
-                    
                     negocio.CancelarTurno(turnoId);
 
                     pnlPago.Visible = false;
 
                     lblMsg.CssClass = "alert alert-success d-block mb-3";
                     lblMsg.Text = "Turno cancelado.";
+                    lblMsg.Visible = true;
 
                     CargarGrilla();
                     return;
@@ -121,15 +136,12 @@ namespace TP_Turnos_Clinica
 
                 if (e.CommandName == "Reprogramar")
                 {
-                    
                     if (estadoTurno.Equals("Cancelado", StringComparison.OrdinalIgnoreCase))
                         throw new Exception("No se puede reprogramar: el turno está cancelado.");
 
-                    
                     if (estadoTurno.Equals("Cerrado", StringComparison.OrdinalIgnoreCase))
                         throw new Exception("No se puede reprogramar: el turno está cerrado.");
 
-                   
                     if (estadoTurno.Equals("No asistió", StringComparison.OrdinalIgnoreCase) &&
                         !estadoPago.Equals("Confirmado", StringComparison.OrdinalIgnoreCase))
                     {
@@ -144,6 +156,7 @@ namespace TP_Turnos_Clinica
             {
                 lblMsg.CssClass = "alert alert-danger d-block mb-3";
                 lblMsg.Text = ex.Message;
+                lblMsg.Visible = true;
             }
         }
 
@@ -154,13 +167,13 @@ namespace TP_Turnos_Clinica
                 int turnoId = int.Parse(hfTurnoIdPago.Value);
                 string comprobante = txtComprobante.Text?.Trim();
 
-                TurnosNegocio negocio = new TurnosNegocio();
                 negocio.ConfirmarPago(turnoId, comprobante);
 
                 pnlPago.Visible = false;
 
                 lblMsg.CssClass = "alert alert-success d-block mb-3";
                 lblMsg.Text = "Pago confirmado correctamente.";
+                lblMsg.Visible = true;
 
                 CargarGrilla();
             }
@@ -168,6 +181,7 @@ namespace TP_Turnos_Clinica
             {
                 lblMsg.CssClass = "alert alert-danger d-block mb-3";
                 lblMsg.Text = ex.Message;
+                lblMsg.Visible = true;
             }
         }
 
@@ -176,6 +190,10 @@ namespace TP_Turnos_Clinica
             pnlPago.Visible = false;
             hfTurnoIdPago.Value = "";
             txtComprobante.Text = "";
+
+            lblMsg.Text = "";
+            lblMsg.CssClass = "d-block mb-3";
+            lblMsg.Visible = false;
         }
 
         protected void chkMostrarCancelados_CheckedChanged(object sender, EventArgs e)
@@ -192,11 +210,9 @@ namespace TP_Turnos_Clinica
 
             if (estadoTurno == "Cancelado")
             {
-               
                 e.Row.BackColor = System.Drawing.Color.LightGray;
                 e.Row.ForeColor = System.Drawing.Color.Gray;
 
-                
                 foreach (TableCell celda in e.Row.Cells)
                 {
                     foreach (Control ctrl in celda.Controls)
@@ -215,6 +231,5 @@ namespace TP_Turnos_Clinica
                 }
             }
         }
-
     }
 }

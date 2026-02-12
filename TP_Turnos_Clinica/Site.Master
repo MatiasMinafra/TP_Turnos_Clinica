@@ -47,7 +47,7 @@
 
                 <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between" id="navbarMain">
 
-                    <!-- IZQUIERDA: Menú dinámico por rol -->
+                   
                     <ul class="navbar-nav me-auto">
 
                       
@@ -96,8 +96,13 @@
                         </asp:PlaceHolder>
 
                         <li class="nav-item">
-                            <a class="nav-link text-danger" runat="server" href="~/Logout.aspx">Cerrar sesión</a>
-                        </li>
+    <asp:LinkButton ID="btnLogout" runat="server"
+        CssClass="nav-link text-danger"
+        OnClick="btnLogout_Click"
+        CausesValidation="false">
+        Cerrar sesión
+    </asp:LinkButton>
+</li>
                     </ul>
 
                 </div>

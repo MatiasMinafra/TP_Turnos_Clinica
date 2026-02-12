@@ -124,6 +124,7 @@
     <Content Include="Global.asax" />
     <Content Include="Home.aspx" />
     <Content Include="Login.aspx" />
+    <Content Include="Logout.aspx" />
     <Content Include="MedicoEspecialidades.aspx" />
     <Content Include="MedicoForm.aspx" />
     <Content Include="MedicoHorarios.aspx" />
@@ -244,6 +245,13 @@
     </Compile>
     <Compile Include="Login.aspx.designer.cs">
       <DependentUpon>Login.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Logout.aspx.cs">
+      <DependentUpon>Logout.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Logout.aspx.designer.cs">
+      <DependentUpon>Logout.aspx</DependentUpon>
     </Compile>
     <Compile Include="MedicoEspecialidades.aspx.cs">
       <DependentUpon>MedicoEspecialidades.aspx</DependentUpon>

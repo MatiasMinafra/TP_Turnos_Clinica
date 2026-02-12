@@ -9,13 +9,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Login</title>
 
-    <!-- Bootstrap -->
+  
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
 
     <style>
         body {
             min-height: 100vh;
-            background-color: #f4f6f8; /* gris claro relajado */
+            background-color: #f4f6f8; 
         }
 
         .login-card {
@@ -24,7 +24,7 @@
         }
 
         .login-title {
-            color: #2f8f7a; /* verde suave */
+            color: #2f8f7a; 
             font-weight: 600;
         }
 

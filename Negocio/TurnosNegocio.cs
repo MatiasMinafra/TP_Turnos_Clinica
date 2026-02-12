@@ -6,19 +6,21 @@ using System.Linq;
 
 namespace Negocio
 {
+  
     public class TurnosNegocio
     {
         private TurnosDatos datos = new TurnosDatos();
+        private readonly EmailServicio emailServicio = new EmailServicio();
 
         public int AltaTurno(
-            int pacienteId,
-            int especialidadId,
-            int medicoId,
-            DateTime fecha,
-            TimeSpan horaInicio,
-            string motivo,
-            decimal importe,
-            string medioPago = "MERCADOPAGO")
+    int pacienteId,
+    int especialidadId,
+    int medicoId,
+    DateTime fecha,
+    TimeSpan horaInicio,
+    string motivo,
+    decimal importe,
+    string medioPago = "MERCADOPAGO")
         {
             if (string.IsNullOrWhiteSpace(motivo))
                 throw new Exception("Debe indicar el motivo de la consulta.");
@@ -26,7 +28,8 @@ namespace Negocio
             if (importe <= 0)
                 throw new Exception("El importe debe ser mayor a 0.");
 
-            return datos.AltaConSP(
+          
+            int turnoId = datos.AltaConSP(
                 pacienteId,
                 especialidadId,
                 medicoId,
@@ -35,8 +38,26 @@ namespace Negocio
                 motivo,
                 importe,
                 medioPago);
-        }
 
+
+            try
+            {
+                var dto = datos.ObtenerDatosMailTurno(turnoId);
+
+                if (string.IsNullOrWhiteSpace(dto.PacienteEmail))
+                    throw new Exception("El paciente NO tiene email cargado.");
+
+                emailServicio.EnviarConfirmacionTurno(dto);
+            }
+            catch (Exception ex)
+            {
+                // Para pruebas: mostrámelo. Después lo volvemos silencioso.
+                throw new Exception("El turno se creó, pero el envío de mail falló: " + ex.Message);
+            }
+
+            return turnoId;
+        }
+        
 
         public List<OpcionTurno> SugerirTurnos(int especialidadId, DateTime fecha, string franja)
         {
@@ -146,8 +167,26 @@ namespace Negocio
 
         public void ReprogramarTurno(int turnoId, DateTime nuevaFecha, TimeSpan nuevaHoraInicio, int nuevoMedicoId)
         {
-            TurnosDatos datos = new TurnosDatos();
+            // Antes (para mostrar "antes" en el mail)
+            var antes = datos.ObtenerFechaHoraTurno(turnoId); // (Fecha, HoraInicio)
+
+            // Ejecuta SP
             datos.ReprogramarTurno(turnoId, nuevaFecha, nuevaHoraInicio, nuevoMedicoId);
+
+            // Mail (prueba con error visible)
+            try
+            {
+                var dto = datos.ObtenerDatosMailTurno(turnoId);
+
+                if (string.IsNullOrWhiteSpace(dto.PacienteEmail))
+                    throw new Exception("El paciente NO tiene email cargado.");
+
+                emailServicio.EnviarReprogramacionTurno(dto, antes.Fecha, antes.HoraInicio);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Se reprogramó, pero el envío de mail falló: " + ex.Message);
+            }
         }
 
         public int ObtenerEspecialidadDelTurno(int turnoId)
@@ -155,7 +194,10 @@ namespace Negocio
             return datos.ObtenerEspecialidadDelTurno(turnoId);
         }
 
-        
+        public (DateTime Fecha, TimeSpan HoraInicio) ObtenerFechaHoraTurno(int turnoId)
+        {
+            return datos.ObtenerFechaHoraTurno(turnoId);
+        }
         public void MarcarNoAsistio(int turnoId)
         {
             datos.MarcarNoAsistio(turnoId);
