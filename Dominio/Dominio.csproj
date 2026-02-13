@@ -45,6 +45,7 @@
     <Compile Include="DtoTurnoMail.cs" />
     <Compile Include="Dto_MedicosTurnosTrabajo.cs" />
     <Compile Include="Especialidad.cs" />
+    <Compile Include="Evolucion.cs" />
     <Compile Include="Medico.cs" />
     <Compile Include="MedicosTurnosTrabajo.cs" />
     <Compile Include="OpcionTurno.cs" />
@@ -53,6 +54,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RolesIds.cs" />
     <Compile Include="Turno.cs" />
+    <Compile Include="TurnoHistorialPaciente.cs" />
     <Compile Include="TurnoTrabajo.cs" />
     <Compile Include="Usuario.cs" />
   </ItemGroup>

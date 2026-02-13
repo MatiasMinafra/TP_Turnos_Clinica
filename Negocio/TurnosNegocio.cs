@@ -51,7 +51,7 @@ namespace Negocio
             }
             catch (Exception ex)
             {
-                // Para pruebas: mostrámelo. Después lo volvemos silencioso.
+                
                 throw new Exception("El turno se creó, pero el envío de mail falló: " + ex.Message);
             }
 
@@ -167,13 +167,13 @@ namespace Negocio
 
         public void ReprogramarTurno(int turnoId, DateTime nuevaFecha, TimeSpan nuevaHoraInicio, int nuevoMedicoId)
         {
-            // Antes (para mostrar "antes" en el mail)
-            var antes = datos.ObtenerFechaHoraTurno(turnoId); // (Fecha, HoraInicio)
+            
+            var antes = datos.ObtenerFechaHoraTurno(turnoId); 
 
-            // Ejecuta SP
+            
             datos.ReprogramarTurno(turnoId, nuevaFecha, nuevaHoraInicio, nuevoMedicoId);
 
-            // Mail (prueba con error visible)
+           
             try
             {
                 var dto = datos.ObtenerDatosMailTurno(turnoId);
@@ -201,6 +201,17 @@ namespace Negocio
         public void MarcarNoAsistio(int turnoId)
         {
             datos.MarcarNoAsistio(turnoId);
+        }
+
+        public List<Turno> ListarPorMedico(int medicoId, DateTime desde, DateTime hasta)
+        {
+            return datos.ListarPorMedico(medicoId, desde, hasta);
+        }
+
+        public (int Atendidos, int NoAsistio, int Reprogramados) StatsMedicoMes(int medicoId, int anio, int mes)
+        {
+            if (medicoId <= 0) throw new Exception("Médico inválido.");
+            return datos.StatsMedicoMes(medicoId, anio, mes);
         }
 
     }

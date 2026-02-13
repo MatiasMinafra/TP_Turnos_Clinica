@@ -7,7 +7,7 @@
     <div class="container-fluid p-0">
         <div class="row g-0">
 
-            
+         
             <aside class="col-12 col-md-3 col-lg-2 bg-dark text-white min-vh-100 p-3">
 
                 <div class="fw-bold mb-3">CLÍNICA</div>
@@ -63,20 +63,21 @@
                         Turnos de trabajo
                     </asp:HyperLink>
 
-                  
+                   
                     <asp:HyperLink ID="lnkMisTurnos" runat="server"
                         NavigateUrl="~/MisTurnos.aspx"
                         CssClass="btn btn-outline-info">
                         Mis turnos
                     </asp:HyperLink>
 
+                   
                     <asp:HyperLink ID="lnkEvoluciones" runat="server"
-                        NavigateUrl="~/Evoluciones.aspx"
+                        NavigateUrl="~/PanelMedico.aspx"
                         CssClass="btn btn-outline-info">
-                        Diagnóstico / Evoluciones
+                        Panel Médico
                     </asp:HyperLink>
 
-                  
+                    
                     <asp:HyperLink ID="lnkUsuarios" runat="server"
                         NavigateUrl="~/Usuarios.aspx"
                         CssClass="btn btn-outline-secondary">
@@ -102,7 +103,6 @@
                 <div class="alert alert-info">
                     Estado: login + roles + sesión OK.
                 </div>
-
             </main>
 
         </div>

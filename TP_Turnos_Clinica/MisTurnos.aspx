@@ -82,17 +82,20 @@
             <asp:BoundField DataField="MotivoConsulta" HeaderText="Motivo" />
 
            
-            <asp:TemplateField HeaderText="Estado">
-                <ItemTemplate>
-                    <span class='badge
-                        <%# Eval("EstadoTurno").ToString() == "Cancelado" ? "bg-danger" :
-                            Eval("EstadoTurno").ToString() == "Confirmado" ? "bg-success" :
-                            Eval("EstadoTurno").ToString() == "Reprogramado" ? "bg-warning text-dark" :
-                            "bg-secondary" %>'>
-                        <%# Eval("EstadoTurno") %>
-                    </span>
-                </ItemTemplate>
-            </asp:TemplateField>
+         <asp:TemplateField HeaderText="Estado">
+    <ItemTemplate>
+        <span class='badge
+            <%# Eval("EstadoTurno").ToString() == "Cancelado" ? "bg-danger" :
+                Eval("EstadoTurno").ToString() == "Confirmado" ? "bg-success" :
+                Eval("EstadoTurno").ToString() == "Atendido" ? "bg-success" :
+                Eval("EstadoTurno").ToString() == "Reprogramado" ? "bg-warning text-dark" :
+                (Eval("EstadoTurno").ToString() == "No Asistió" || Eval("EstadoTurno").ToString() == "No Asistio") ? "bg-dark" :
+                Eval("EstadoTurno").ToString() == "Cerrado" ? "bg-secondary" :
+                "bg-secondary" %>'>
+            <%# Eval("EstadoTurno") %>
+        </span>
+    </ItemTemplate>
+</asp:TemplateField>
 
             
             <asp:TemplateField HeaderText="Acciones">

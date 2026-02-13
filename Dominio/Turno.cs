@@ -30,5 +30,7 @@ namespace Dominio
         public string Diagnostico { get; set; }
 
         public bool Activo { get; set; }
+
+        public string EstadoPago { get; set; }
     }
 }

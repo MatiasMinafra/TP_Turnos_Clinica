@@ -120,8 +120,10 @@
     <Content Include="Content\Site.css" />
     <Content Include="Especialidades.aspx" />
     <Content Include="EspecialidadesForm.aspx" />
+    <Content Include="EvolucionForm.aspx" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="HistorialPaciente.aspx" />
     <Content Include="Home.aspx" />
     <Content Include="Login.aspx" />
     <Content Include="Logout.aspx" />
@@ -132,6 +134,7 @@
     <Content Include="MisTurnos.aspx" />
     <Content Include="PacienteForm.aspx" />
     <Content Include="Pacientes.aspx" />
+    <Content Include="PanelMedico.aspx" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.esm.js" />
@@ -229,8 +232,22 @@
     <Compile Include="EspecialidadesForm.aspx.designer.cs">
       <DependentUpon>EspecialidadesForm.aspx</DependentUpon>
     </Compile>
+    <Compile Include="EvolucionForm.aspx.cs">
+      <DependentUpon>EvolucionForm.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="EvolucionForm.aspx.designer.cs">
+      <DependentUpon>EvolucionForm.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="HistorialPaciente.aspx.cs">
+      <DependentUpon>HistorialPaciente.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="HistorialPaciente.aspx.designer.cs">
+      <DependentUpon>HistorialPaciente.aspx</DependentUpon>
     </Compile>
     <Compile Include="Home.aspx.cs">
       <DependentUpon>Home.aspx</DependentUpon>
@@ -301,6 +318,13 @@
     </Compile>
     <Compile Include="Pacientes.aspx.designer.cs">
       <DependentUpon>Pacientes.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PanelMedico.aspx.cs">
+      <DependentUpon>PanelMedico.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PanelMedico.aspx.designer.cs">
+      <DependentUpon>PanelMedico.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Site.Master.cs">

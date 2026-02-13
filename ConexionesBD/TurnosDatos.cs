@@ -148,6 +148,7 @@ WHERE MedicoID = @med
                 datos.setearConsulta(@"
 SELECT 
     t.TurnoID,
+    t.PacienteID,
     t.Fecha,
     t.HoraInicio,
     t.HoraFin,
@@ -156,15 +157,22 @@ SELECT
     p.Apellido + ' ' + p.Nombre AS Paciente,
     e.Nombre AS Especialidad,
     et.Nombre AS EstadoTurno,
+
+    -- ✅ PAGO
+    ISNULL(ep.Nombre, 'Pendiente') AS EstadoPago,
+
     t.Activo
 FROM Turnos t
 INNER JOIN Pacientes p ON p.PacienteID = t.PacienteID
 INNER JOIN Especialidades e ON e.EspecialidadID = t.EspecialidadID
 INNER JOIN EstadosTurno et ON et.EstadoTurnoID = t.EstadoTurnoID
+LEFT JOIN Pagos pa ON pa.TurnoID = t.TurnoID
+LEFT JOIN EstadosPago ep ON ep.EstadoPagoID = pa.EstadoPagoID
 WHERE t.MedicoID = @medicoId
   AND t.Fecha BETWEEN @desde AND @hasta
 ORDER BY t.Fecha, t.HoraInicio;
 ");
+
                 datos.setearParametro("@medicoId", medicoId);
                 datos.setearParametro("@desde", desde.Date);
                 datos.setearParametro("@hasta", hasta.Date);
@@ -176,6 +184,7 @@ ORDER BY t.Fecha, t.HoraInicio;
                     Turno t = new Turno
                     {
                         TurnoID = (int)datos.Lector["TurnoID"],
+                        PacienteID = (int)datos.Lector["PacienteID"],
                         Fecha = (DateTime)datos.Lector["Fecha"],
                         HoraInicio = (TimeSpan)datos.Lector["HoraInicio"],
                         HoraFin = (TimeSpan)datos.Lector["HoraFin"],
@@ -184,6 +193,10 @@ ORDER BY t.Fecha, t.HoraInicio;
                         PacienteNombre = datos.Lector["Paciente"].ToString(),
                         EspecialidadNombre = datos.Lector["Especialidad"].ToString(),
                         EstadoTurno = datos.Lector["EstadoTurno"].ToString(),
+
+                        
+                        EstadoPago = datos.Lector["EstadoPago"].ToString(),
+
                         Activo = (bool)datos.Lector["Activo"]
                     };
 
@@ -198,7 +211,7 @@ ORDER BY t.Fecha, t.HoraInicio;
             }
         }
 
- 
+
         public List<DtoTurnoDia> ListarDelDia(DateTime fecha)
         {
             List<DtoTurnoDia> lista = new List<DtoTurnoDia>();
@@ -481,6 +494,48 @@ WHERE t.TurnoID = @turnoId;
             }
             finally { datos.cerrarConexion(); }
         }
+
+        public (int Atendidos, int NoAsistio, int Reprogramados) StatsMedicoMes(int medicoId, int anio, int mes)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta(@"
+SELECT
+    SUM(CASE WHEN et.Nombre = 'Atendido' THEN 1 ELSE 0 END) AS Atendidos,
+    SUM(CASE WHEN et.Nombre IN ('No Asistio','No Asistió') THEN 1 ELSE 0 END) AS NoAsistio,
+    SUM(CASE WHEN et.Nombre = 'Reprogramado' THEN 1 ELSE 0 END) AS Reprogramados
+FROM Turnos t
+INNER JOIN EstadosTurno et ON et.EstadoTurnoID = t.EstadoTurnoID
+WHERE t.Activo = 1
+  AND t.MedicoID = @medicoId
+  AND YEAR(t.Fecha) = @anio
+  AND MONTH(t.Fecha) = @mes;
+");
+
+                datos.setearParametro("@medicoId", medicoId);
+                datos.setearParametro("@anio", anio);
+                datos.setearParametro("@mes", mes);
+
+                datos.ejecutarLectura();
+
+                int a = 0, n = 0, r = 0;
+
+                if (datos.Lector.Read())
+                {
+                    a = datos.Lector["Atendidos"] == DBNull.Value ? 0 : Convert.ToInt32(datos.Lector["Atendidos"]);
+                    n = datos.Lector["NoAsistio"] == DBNull.Value ? 0 : Convert.ToInt32(datos.Lector["NoAsistio"]);
+                    r = datos.Lector["Reprogramados"] == DBNull.Value ? 0 : Convert.ToInt32(datos.Lector["Reprogramados"]);
+                }
+
+                return (a, n, r);
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
 
     }
 

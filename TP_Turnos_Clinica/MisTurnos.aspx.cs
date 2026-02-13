@@ -12,11 +12,12 @@ namespace TP_Turnos_Clinica
     public partial class MisTurnos : System.Web.UI.Page
     {
         private readonly TurnosNegocio turnosNegocio = new TurnosNegocio();
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (Session["usuario"] == null)
             {
-                Response.Redirect("~/Login.aspx");
+                Response.Redirect("~/PanelMedico.aspx");
                 return;
             }
 
@@ -34,14 +35,17 @@ namespace TP_Turnos_Clinica
                 CargarGrilla();
             }
         }
+
         protected void btnBuscar_Click(object sender, EventArgs e)
         {
             CargarGrilla();
         }
+
         protected void Filtros_CheckedChanged(object sender, EventArgs e)
         {
             CargarGrilla();
         }
+
         private void CargarGrilla()
         {
             OcultarMensaje();
@@ -61,7 +65,6 @@ namespace TP_Turnos_Clinica
                 return;
             }
 
-            
             if (chkSoloProximos.Checked && desde.Date < DateTime.Today)
                 desde = DateTime.Today;
 
@@ -71,14 +74,23 @@ namespace TP_Turnos_Clinica
 
                 
                 if (chkOcultarCancelados.Checked)
-                    lista = lista.Where(t => !string.Equals(t.EstadoTurno, "Cancelado", StringComparison.OrdinalIgnoreCase)).ToList();
+                    lista = lista.Where(t => t.EstadoTurno != "Cancelado").ToList();
+
+              
+                lista = lista.Where(t =>
+                    t.EstadoTurno != "Atendido" &&
+                    t.EstadoTurno != "Cancelado" &&
+                    t.EstadoTurno != "Cerrado" &&
+                    t.EstadoTurno != "No Asistió" &&
+                    t.EstadoTurno != "No Asistio"
+                ).ToList();
 
                 gvMisTurnos.DataSource = lista;
                 gvMisTurnos.DataBind();
 
-                if (lista == null || lista.Count == 0)
+                if (lista.Count == 0)
                 {
-                    MostrarInfo("No hay turnos para el rango seleccionado.");
+                    MostrarInfo("No hay turnos pendientes para el rango seleccionado.");
                 }
             }
             catch (Exception ex)
@@ -109,6 +121,5 @@ namespace TP_Turnos_Clinica
             lblMensaje.CssClass = "alert alert-info d-block mb-3";
             lblMensaje.Visible = true;
         }
-
     }
 }

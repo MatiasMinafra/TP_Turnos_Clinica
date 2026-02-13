@@ -38,7 +38,7 @@ namespace TP_Turnos_Clinica
 
         protected void btnBuscar_Click(object sender, EventArgs e)
         {
-            // limpiar mensaje anterior
+            
             lblMsg.Text = "";
             lblMsg.CssClass = "d-block mb-3";
             lblMsg.Visible = false;
@@ -51,7 +51,7 @@ namespace TP_Turnos_Clinica
             DateTime fecha = DateTime.Today;
 
             if (!string.IsNullOrWhiteSpace(txtFecha.Text))
-                fecha = DateTime.Parse(txtFecha.Text); // no tocamos tu lógica
+                fecha = DateTime.Parse(txtFecha.Text); 
 
             var lista = negocio.ListarDelDia(fecha);
 
@@ -65,7 +65,7 @@ namespace TP_Turnos_Clinica
             dgvTurnos.DataSource = lista;
             dgvTurnos.DataBind();
 
-            // Mensaje cuando no hay turnos
+        
             if (lista == null || lista.Count == 0)
             {
                 lblMsg.CssClass = "alert alert-info d-block mb-3";

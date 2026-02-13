@@ -13,6 +13,8 @@ namespace Negocio
 {
     public class EmailServicio
     {
+        private readonly bool enabled;
+
         private readonly string host;
         private readonly int port;
         private readonly bool ssl;
@@ -22,6 +24,17 @@ namespace Negocio
 
         public EmailServicio()
         {
+            
+            enabled = string.Equals(
+                (ConfigurationManager.AppSettings["SMTP_ENABLED"] ?? "").Trim(),
+                "true",
+                StringComparison.OrdinalIgnoreCase
+            );
+
+            
+            if (!enabled)
+                return;
+
             host = Get("SMTP_HOST");
             user = Get("SMTP_USER");
             pass = Get("SMTP_PASS");
@@ -40,13 +53,14 @@ namespace Negocio
             if (string.IsNullOrWhiteSpace(pass)) throw new Exception("Falta SMTP_PASS en web.config.");
             if (string.IsNullOrWhiteSpace(from)) throw new Exception("Falta SMTP_FROM en web.config.");
 
-            // Detectar placeholders comunes (tu config actual los tiene)
+       
             if (user.Equals("tuemail@gmail.com", StringComparison.OrdinalIgnoreCase) ||
                 from.Equals("tuemail@gmail.com", StringComparison.OrdinalIgnoreCase))
                 throw new Exception("SMTP_USER/SMTP_FROM siguen con el placeholder 'tuemail@gmail.com'. Poné tu Gmail real.");
 
-            if (pass.IndexOf("TU_APP_PASSWORD", StringComparison.OrdinalIgnoreCase) >= 0)
-                throw new Exception("SMTP_PASS sigue con el placeholder. Tenés que poner la APP PASSWORD real de Gmail (16 caracteres).");
+            if (pass.IndexOf("TU_APP_PASSWORD", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                pass.IndexOf("ACA_TU_APP_PASSWORD_REAL", StringComparison.OrdinalIgnoreCase) >= 0)
+                throw new Exception("SMTP_PASS sigue con placeholder. Tenés que poner la APP PASSWORD real de Gmail (16 caracteres).");
         }
 
         private string Get(string key) => (ConfigurationManager.AppSettings[key] ?? "").Trim();
@@ -59,6 +73,9 @@ namespace Negocio
 
         private void Enviar(string para, string asunto, string html)
         {
+            
+            if (!enabled) return;
+
             para = (para ?? "").Trim();
 
             if (string.IsNullOrWhiteSpace(para))
@@ -91,7 +108,6 @@ namespace Negocio
                     }
                     catch (SmtpException ex)
                     {
-                        // Esto te da el error REAL (credenciales, bloqueo, etc.)
                         throw new Exception("Fallo SMTP: " + ex.Message);
                     }
                 }
@@ -100,6 +116,8 @@ namespace Negocio
 
         public void EnviarConfirmacionTurno(DtoTurnoMail t)
         {
+            if (!enabled) return;
+
             string asunto = $"Confirmación de turno #{t.TurnoID} - Clínica Turnos";
 
             string html = $@"
@@ -124,6 +142,8 @@ namespace Negocio
 
         public void EnviarReprogramacionTurno(DtoTurnoMail t, DateTime fechaAnterior, TimeSpan horaAnterior)
         {
+            if (!enabled) return;
+
             string asunto = $"Turno reprogramado #{t.TurnoID} - Clínica Turnos";
 
             string html = $@"
