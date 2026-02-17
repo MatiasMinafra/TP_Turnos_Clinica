@@ -7,7 +7,6 @@
     <div class="container-fluid p-0">
         <div class="row g-0">
 
-         
             <aside class="col-12 col-md-3 col-lg-2 bg-dark text-white min-vh-100 p-3">
 
                 <div class="fw-bold mb-3">CLÍNICA</div>
@@ -26,7 +25,6 @@
 
                 <div class="d-grid gap-2">
 
-                  
                     <asp:HyperLink ID="lnkAsignarTurno" runat="server"
                         NavigateUrl="~/AgendaTurnos.aspx"
                         CssClass="btn btn-warning text-dark fw-semibold">
@@ -42,13 +40,13 @@
                     <asp:HyperLink ID="lnkPacientes" runat="server"
                         NavigateUrl="~/Pacientes.aspx"
                         CssClass="btn btn-outline-light">
-                        Pacientes (ABM)
+                        Pacientes 
                     </asp:HyperLink>
 
                     <asp:HyperLink ID="lnkMedicos" runat="server"
                         NavigateUrl="~/Medicos.aspx"
                         CssClass="btn btn-outline-light">
-                        Médicos (ABM)
+                        Médicos 
                     </asp:HyperLink>
 
                     <asp:HyperLink ID="lnkEspecialidades" runat="server"
@@ -64,25 +62,26 @@
                     </asp:HyperLink>
 
                    
-                    <asp:HyperLink ID="lnkMisTurnos" runat="server"
-                        NavigateUrl="~/MisTurnos.aspx"
-                        CssClass="btn btn-outline-info">
-                        Mis turnos
-                    </asp:HyperLink>
-
-                   
-                    <asp:HyperLink ID="lnkEvoluciones" runat="server"
+                    <asp:HyperLink ID="lnkPanelMedico" runat="server"
                         NavigateUrl="~/PanelMedico.aspx"
                         CssClass="btn btn-outline-info">
                         Panel Médico
                     </asp:HyperLink>
 
-                    
-                    <asp:HyperLink ID="lnkUsuarios" runat="server"
-                        NavigateUrl="~/Usuarios.aspx"
-                        CssClass="btn btn-outline-secondary">
-                        Usuarios (Admin)
+                   
+                    <asp:HyperLink ID="lnkMisEstadisticas" runat="server"
+                        NavigateUrl="~/MisEstadisticas.aspx"
+                        CssClass="btn btn-outline-info">
+                        Mis estadísticas
                     </asp:HyperLink>
+
+                    
+
+                    <asp:HyperLink ID="lnkUsuarios" runat="server"
+    NavigateUrl="~/Usuarios.aspx"
+    CssClass="btn btn-outline-light">
+    Usuarios (Admin)
+</asp:HyperLink>
 
                     <asp:HyperLink ID="lnkLogout" runat="server"
                         NavigateUrl="~/Logout.aspx"
@@ -93,7 +92,6 @@
                 </div>
             </aside>
 
-           
             <main class="col-12 col-md-9 col-lg-10 p-4">
                 <h3 class="mb-2">Panel principal</h3>
                 <p class="text-muted mb-4">
@@ -101,7 +99,7 @@
                 </p>
 
                 <div class="alert alert-info">
-                    Estado: login + roles + sesión OK.
+                 
                 </div>
             </main>
 

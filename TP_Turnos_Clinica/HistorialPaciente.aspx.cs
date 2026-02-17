@@ -46,6 +46,13 @@ namespace TP_Turnos_Clinica
                 if (PacienteId <= 0)
                     throw new Exception("Paciente inválido.");
 
+                var u = (Usuario)Session["usuario"];
+
+                if (!u.MedicoID.HasValue)
+                    throw new Exception("Usuario sin médico asociado.");
+
+                int medicoId = u.MedicoID.Value;
+
                 // 🔹 Cargar datos del paciente
                 var pacNeg = new PacienteNegocio();
                 var p = pacNeg.ObtenerPorId(PacienteId);
@@ -75,8 +82,8 @@ namespace TP_Turnos_Clinica
                     lblPacienteEdad.Text = "-";
                 }
 
-                // 🔹 Cargar historial
-                var lista = negocio.HistorialPaciente(PacienteId);
+                
+                var lista = negocio.HistorialPaciente(PacienteId, medicoId);
 
                 gvHistorial.DataSource = lista;
                 gvHistorial.DataBind();

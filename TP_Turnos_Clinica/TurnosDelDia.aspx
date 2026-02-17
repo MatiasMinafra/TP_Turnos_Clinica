@@ -19,10 +19,8 @@
         </asp:HyperLink>
     </div>
 
-    
     <asp:Label ID="lblMsg" runat="server" CssClass="d-block mb-3"></asp:Label>
 
-    
     <asp:Panel ID="pnlPago" runat="server" Visible="false" CssClass="card shadow-sm mb-3">
         <div class="card-body">
             <h5 class="mb-2">Confirmar pago</h5>
@@ -56,26 +54,35 @@
         </div>
     </asp:Panel>
 
-   
+    <!-- ✅ FILTROS -->
     <div class="card shadow-sm mb-3">
         <div class="card-body">
             <div class="row g-2 align-items-end">
 
-                <div class="col-12 col-md-4">
+                <div class="col-12 col-md-3">
                     <label class="form-label">Fecha</label>
                     <asp:TextBox ID="txtFecha" runat="server"
                         CssClass="form-control"
                         TextMode="Date" />
                 </div>
 
+                <!-- ✅ NUEVO: DNI -->
                 <div class="col-12 col-md-3">
+                    <label class="form-label">DNI paciente</label>
+                    <asp:TextBox ID="txtDni" runat="server"
+                        CssClass="form-control"
+                        MaxLength="15"
+                        placeholder="Ej: 40123456" />
+                </div>
+
+                <div class="col-12 col-md-2">
                     <asp:Button ID="btnBuscar" runat="server"
                         Text="Buscar"
                         CssClass="btn btn-primary w-100"
                         OnClick="btnBuscar_Click" />
                 </div>
 
-                <div class="col-12 col-md-3">
+                <div class="col-12 col-md-4">
                     <div class="form-check mt-4">
                         <asp:CheckBox ID="chkMostrarCancelados" runat="server"
                             CssClass="form-check-input"
@@ -91,7 +98,6 @@
         </div>
     </div>
 
-   
     <div class="card shadow-sm">
         <div class="card-body">
 
@@ -110,21 +116,21 @@
                     <asp:BoundField DataField="Medico" HeaderText="Médico" />
                     <asp:BoundField DataField="Especialidad" HeaderText="Especialidad" />
 
-                    
                     <asp:TemplateField HeaderText="Estado turno">
-                        <ItemTemplate>
-                            <span class='badge
-                                <%# Eval("EstadoTurno").ToString() == "Cancelado" ? "bg-danger" :
-                                    Eval("EstadoTurno").ToString() == "Confirmado" ? "bg-success" :
-                                    Eval("EstadoTurno").ToString() == "Reprogramado" ? "bg-warning text-dark" :
-                                    Eval("EstadoTurno").ToString() == "No asistió" ? "bg-warning text-dark" :
-                                    "bg-secondary" %>'>
-                                <%# Eval("EstadoTurno") %>
-                            </span>
-                        </ItemTemplate>
-                    </asp:TemplateField>
+    <ItemTemplate>
+        <span class='badge <%# 
+            Eval("EstadoTurno").ToString().Equals("Cancelado", StringComparison.OrdinalIgnoreCase) ? "bg-danger" :
+            Eval("EstadoTurno").ToString().Equals("Atendido", StringComparison.OrdinalIgnoreCase) ? "bg-success" :
+            Eval("EstadoTurno").ToString().Equals("Agendado", StringComparison.OrdinalIgnoreCase) ? "bg-primary" :
+            Eval("EstadoTurno").ToString().Equals("Reprogramado", StringComparison.OrdinalIgnoreCase) ? "bg-warning text-dark" :
+            Eval("EstadoTurno").ToString().Equals("No asistió", StringComparison.OrdinalIgnoreCase) ? "bg-warning text-dark" :
+            "bg-secondary"
+        %>'>
+            <%# Eval("EstadoTurno") %>
+        </span>
+    </ItemTemplate>
+</asp:TemplateField>
 
-                  
                     <asp:TemplateField HeaderText="Estado pago">
                         <ItemTemplate>
                             <span class='badge
@@ -138,13 +144,11 @@
                     <asp:BoundField DataField="Importe" HeaderText="Importe" DataFormatString="{0:C}" />
                     <asp:BoundField DataField="MedioPago" HeaderText="Medio" />
 
-                    
                     <asp:ButtonField
                         Text="Confirmar pago"
                         CommandName="ConfirmarPago"
                         ButtonType="Button" />
 
-                  
                     <asp:TemplateField>
                         <ItemTemplate>
                             <asp:LinkButton runat="server"
@@ -156,7 +160,6 @@
                         </ItemTemplate>
                     </asp:TemplateField>
 
-                    
                     <asp:TemplateField>
                         <ItemTemplate>
                             <asp:LinkButton runat="server"
@@ -168,7 +171,6 @@
                         </ItemTemplate>
                     </asp:TemplateField>
 
-                   
                     <asp:ButtonField
                         Text="Reprogramar"
                         CommandName="Reprogramar"

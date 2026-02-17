@@ -45,10 +45,10 @@ namespace TP_Turnos_Clinica
             lnkAgenda.Visible = false;
             lnkUsuarios.Visible = false;
 
-            lnkMisTurnos.Visible = false;
-            lnkEvoluciones.Visible = false;
+            lnkPanelMedico.Visible = false;
+            lnkMisEstadisticas.Visible = false;
 
-            
+
             if (esAdmin)
             {
                 lnkAsignarTurno.Visible = true;
@@ -83,8 +83,8 @@ namespace TP_Turnos_Clinica
                     return;
                 }
 
-                lnkMisTurnos.Visible = true;
-                lnkEvoluciones.Visible = true;
+                lnkPanelMedico.Visible = true;
+                lnkMisEstadisticas.Visible = true;
                 return;
             }
 

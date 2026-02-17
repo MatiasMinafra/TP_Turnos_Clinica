@@ -9,7 +9,7 @@ namespace ConexionesBD
 {
     public class EvolucionDatos
     {
-        public List<TurnoHistorialPaciente> ListarHistorialPaciente(int pacienteId)
+        public List<TurnoHistorialPaciente> ListarHistorialPaciente(int pacienteId, int medicoId)
         {
             var lista = new List<TurnoHistorialPaciente>();
             AccesoDatos datos = new AccesoDatos();
@@ -24,7 +24,6 @@ SELECT
     e2.Nombre AS Especialidad,
     et.Nombre AS EstadoTurno,
     ep.Nombre AS EstadoPago,
-
     CASE WHEN ev.EvolucionID IS NULL THEN 0 ELSE 1 END AS TieneEvolucion,
     ev.Fecha AS FechaEvolucion,
     ev.Descripcion AS DescripcionEvolucion
@@ -36,9 +35,12 @@ INNER JOIN dbo.Pagos p ON p.TurnoID = t.TurnoID
 INNER JOIN dbo.EstadosPago ep ON ep.EstadoPagoID = p.EstadoPagoID
 LEFT JOIN dbo.Evoluciones ev ON ev.TurnoID = t.TurnoID
 WHERE t.PacienteID = @pacienteId
+  AND t.MedicoID = @medicoId
 ORDER BY t.Fecha DESC, t.HoraInicio DESC;
 ");
+
             datos.setearParametro("@pacienteId", pacienteId);
+            datos.setearParametro("@medicoId", medicoId);
 
             datos.ejecutarLectura();
             while (datos.Lector.Read())
@@ -49,12 +51,10 @@ ORDER BY t.Fecha DESC, t.HoraInicio DESC;
                     Fecha = Convert.ToDateTime(datos.Lector["Fecha"]),
                     HoraInicio = (TimeSpan)datos.Lector["HoraInicio"],
                     HoraFin = (TimeSpan)datos.Lector["HoraFin"],
-
                     Medico = datos.Lector["Medico"].ToString(),
                     Especialidad = datos.Lector["Especialidad"].ToString(),
                     EstadoTurno = datos.Lector["EstadoTurno"].ToString(),
                     EstadoPago = datos.Lector["EstadoPago"].ToString(),
-
                     TieneEvolucion = Convert.ToInt32(datos.Lector["TieneEvolucion"]) == 1,
                     FechaEvolucion = datos.Lector["FechaEvolucion"] == DBNull.Value ? (DateTime?)null : Convert.ToDateTime(datos.Lector["FechaEvolucion"]),
                     DescripcionEvolucion = datos.Lector["DescripcionEvolucion"] == DBNull.Value ? "" : datos.Lector["DescripcionEvolucion"].ToString()
@@ -63,7 +63,6 @@ ORDER BY t.Fecha DESC, t.HoraInicio DESC;
 
             return lista;
         }
-
         public bool ExistePorTurno(int turnoId)
         {
             AccesoDatos datos = new AccesoDatos();

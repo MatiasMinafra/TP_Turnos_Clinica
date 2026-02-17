@@ -131,6 +131,7 @@
     <Content Include="MedicoForm.aspx" />
     <Content Include="MedicoHorarios.aspx" />
     <Content Include="Medicos.aspx" />
+    <Content Include="MisEstadisticas.aspx" />
     <Content Include="MisTurnos.aspx" />
     <Content Include="PacienteForm.aspx" />
     <Content Include="Pacientes.aspx" />
@@ -297,6 +298,13 @@
     </Compile>
     <Compile Include="Medicos.aspx.designer.cs">
       <DependentUpon>Medicos.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MisEstadisticas.aspx.cs">
+      <DependentUpon>MisEstadisticas.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MisEstadisticas.aspx.designer.cs">
+      <DependentUpon>MisEstadisticas.aspx</DependentUpon>
     </Compile>
     <Compile Include="MisTurnos.aspx.cs">
       <DependentUpon>MisTurnos.aspx</DependentUpon>

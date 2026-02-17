@@ -46,7 +46,13 @@
                         </div>
                     </div>
 
-                    <asp:Label ID="lblMsg" runat="server" CssClass="d-block mt-3"></asp:Label>
+                    
+                    <div id="msgWrap" runat="server" visible="false" class="mt-3">
+                        <div id="msgAlert" class="alert alert-success alert-dismissible fade show mb-0" role="alert">
+                            <asp:Label ID="lblMsg" runat="server"></asp:Label>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    </div>
 
                 </div>
             </div>
@@ -94,5 +100,24 @@
 
         </div>
     </div>
+
+    
+    <script>
+        (function () {
+            var el = document.getElementById('msgAlert');
+            if (!el) return;
+            setTimeout(function () {
+                try {
+                   
+                    if (window.bootstrap && bootstrap.Alert) {
+                        bootstrap.Alert.getOrCreateInstance(el).close();
+                    } else {
+                        
+                        el.style.display = 'none';
+                    }
+                } catch (e) { el.style.display = 'none'; }
+            }, 3000);
+        })();
+    </script>
 
 </asp:Content>

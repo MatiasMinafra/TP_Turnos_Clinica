@@ -16,16 +16,13 @@ namespace Negocio
         private bool Eq(string a, string b)
             => string.Equals((a ?? "").Trim(), (b ?? "").Trim(), StringComparison.OrdinalIgnoreCase);
 
-   
-        public List<TurnoHistorialPaciente> HistorialPaciente(int pacienteId)
-        {
-            if (pacienteId <= 0)
-                throw new Exception("Paciente inválido.");
 
-            return datos.ListarHistorialPaciente(pacienteId);
+        public List<TurnoHistorialPaciente> HistorialPaciente(int pacienteId, int medicoId)
+        {
+            return datos.ListarHistorialPaciente(pacienteId, medicoId);
         }
 
-      
+
         public bool PuedeEvolucionar(string estadoTurno, string estadoPago)
         {
            

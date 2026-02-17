@@ -111,19 +111,22 @@ WHERE mtt.MedicoID = @med
             finally { datos.cerrarConexion(); }
         }
 
-        
+
         public HashSet<TimeSpan> HorasOcupadas(int medicoId, DateTime fecha)
         {
             var set = new HashSet<TimeSpan>();
             AccesoDatos datos = new AccesoDatos();
 
             datos.setearConsulta(@"
-SELECT HoraInicio
-FROM dbo.Turnos
-WHERE MedicoID = @med
-  AND Fecha = @fec
-  AND Activo = 1;
+SELECT t.HoraInicio
+FROM dbo.Turnos t
+INNER JOIN EstadosTurno et ON et.EstadoTurnoID = t.EstadoTurnoID
+WHERE t.MedicoID = @med
+  AND t.Fecha = @fec
+  AND t.Activo = 1
+  AND et.Nombre <> 'Cancelado';
 ");
+
             datos.setearParametro("@med", medicoId);
             datos.setearParametro("@fec", fecha.Date);
 
@@ -212,19 +215,23 @@ ORDER BY t.Fecha, t.HoraInicio;
         }
 
 
-        public List<DtoTurnoDia> ListarDelDia(DateTime fecha)
+        public List<DtoTurnoDia> ListarDelDia(DateTime fecha, string dniPaciente = "", bool incluirCancelados = false)
         {
             List<DtoTurnoDia> lista = new List<DtoTurnoDia>();
             AccesoDatos datos = new AccesoDatos();
 
             try
             {
-                datos.setearConsulta(@"
-SELECT 
+                dniPaciente = (dniPaciente ?? "").Trim().Replace(".", "").Replace(" ", "");
+
+                
+                string sqlConDni = @"
+SELECT TOP 1
     t.TurnoID,
     t.Fecha,
     t.HoraInicio,
     t.HoraFin,
+    p.DNI,
     (p.Apellido + ' ' + p.Nombre) as Paciente,
     (m.Apellido + ' ' + m.Nombre) as Medico,
     e.Nombre as Especialidad,
@@ -239,15 +246,56 @@ INNER JOIN Especialidades e ON e.EspecialidadID = t.EspecialidadID
 INNER JOIN EstadosTurno et ON et.EstadoTurnoID = t.EstadoTurnoID
 LEFT JOIN Pagos pa ON pa.TurnoID = t.TurnoID
 LEFT JOIN EstadosPago ep ON ep.EstadoPagoID = pa.EstadoPagoID
-WHERE t.Activo = 1 AND t.Fecha = @fecha
-ORDER BY t.HoraInicio;
-");
-                datos.setearParametro("@fecha", fecha.Date);
+WHERE t.Activo = 1
+  AND REPLACE(REPLACE(p.DNI, '.', ''), ' ', '') = @dni
+  AND (@incluirCancelados = 1 OR et.Nombre <> 'Cancelado')
+ORDER BY t.Fecha DESC, t.HoraInicio DESC;";
+
+                string sqlSinDni = @"
+SELECT 
+    t.TurnoID,
+    t.Fecha,
+    t.HoraInicio,
+    t.HoraFin,
+    p.DNI,
+    (p.Apellido + ' ' + p.Nombre) as Paciente,
+    (m.Apellido + ' ' + m.Nombre) as Medico,
+    e.Nombre as Especialidad,
+    et.Nombre as EstadoTurno,
+    ep.Nombre as EstadoPago,
+    pa.Importe,
+    pa.MedioPago
+FROM Turnos t
+INNER JOIN Pacientes p ON p.PacienteID = t.PacienteID
+INNER JOIN Medicos m ON m.MedicoID = t.MedicoID
+INNER JOIN Especialidades e ON e.EspecialidadID = t.EspecialidadID
+INNER JOIN EstadosTurno et ON et.EstadoTurnoID = t.EstadoTurnoID
+LEFT JOIN Pagos pa ON pa.TurnoID = t.TurnoID
+LEFT JOIN EstadosPago ep ON ep.EstadoPagoID = pa.EstadoPagoID
+WHERE t.Activo = 1
+  AND t.Fecha = @fecha
+  AND (@incluirCancelados = 1 OR et.Nombre <> 'Cancelado')
+ORDER BY t.HoraInicio;";
+
+                if (!string.IsNullOrEmpty(dniPaciente))
+                {
+                    datos.setearConsulta(sqlConDni);
+                    datos.setearParametro("@dni", dniPaciente);
+                }
+                else
+                {
+                    datos.setearConsulta(sqlSinDni);
+                    datos.setearParametro("@fecha", fecha.Date);
+                }
+
+                datos.setearParametro("@incluirCancelados", incluirCancelados ? 1 : 0);
+
                 datos.ejecutarLectura();
 
                 while (datos.Lector.Read())
                 {
                     var dto = new DtoTurnoDia();
+
                     dto.TurnoID = (int)datos.Lector["TurnoID"];
 
                     DateTime f = (DateTime)datos.Lector["Fecha"];
@@ -257,6 +305,7 @@ ORDER BY t.HoraInicio;
                     TimeSpan hf = (TimeSpan)datos.Lector["HoraFin"];
                     dto.Hora = $"{hi:hh\\:mm} - {hf:hh\\:mm}";
 
+                    dto.Dni = datos.Lector["DNI"].ToString();
                     dto.Paciente = (string)datos.Lector["Paciente"];
                     dto.Medico = (string)datos.Lector["Medico"];
                     dto.Especialidad = (string)datos.Lector["Especialidad"];
@@ -276,6 +325,7 @@ ORDER BY t.HoraInicio;
                 datos.cerrarConexion();
             }
         }
+
 
 
 
@@ -305,29 +355,42 @@ ORDER BY t.HoraInicio;
             try
             {
                 datos.setearConsulta(@"
-DECLARE @EstadoCancelado INT = (SELECT EstadoTurnoID FROM EstadosTurno WHERE Nombre = 'Cancelado');
-DECLARE @EstadoPagoConfirmado INT = (SELECT EstadoPagoID FROM EstadosPago WHERE Nombre = 'Confirmado');
+DECLARE @EstadoCancelado INT =
+(
+    SELECT EstadoTurnoID
+    FROM EstadosTurno
+    WHERE Nombre = 'Cancelado'
+);
 
 IF (@EstadoCancelado IS NULL)
     THROW 50021, 'Falta el estado Cancelado.', 1;
 
+-- Validar que exista el turno y esté activo
+IF NOT EXISTS (SELECT 1 FROM Turnos WHERE TurnoID = @turnoId AND Activo = 1)
+    THROW 50024, 'El turno no existe o ya está inactivo.', 1;
 
+-- Si ya está cancelado, avisar
 IF EXISTS (
-    SELECT 1 FROM Turnos
+    SELECT 1
+    FROM Turnos
     WHERE TurnoID = @turnoId AND EstadoTurnoID = @EstadoCancelado
 )
     THROW 50022, 'El turno ya está cancelado.', 1;
 
-
+-- No permitir cancelar si el pago está confirmado (si existe pago)
 IF EXISTS (
-    SELECT 1 FROM Pagos
-    WHERE TurnoID = @turnoId AND EstadoPagoID = @EstadoPagoConfirmado
+    SELECT 1
+    FROM Pagos pa
+    INNER JOIN EstadosPago ep ON ep.EstadoPagoID = pa.EstadoPagoID
+    WHERE pa.TurnoID = @turnoId
+      AND ep.Nombre = 'Confirmado'
 )
     THROW 50023, 'No se puede cancelar un turno con pago confirmado.', 1;
 
-
+-- Cancelar y liberar el horario (clave: Activo = 0)
 UPDATE Turnos
-SET EstadoTurnoID = @EstadoCancelado
+SET EstadoTurnoID = @EstadoCancelado,
+    Activo = 0
 WHERE TurnoID = @turnoId;
 ");
 
@@ -529,6 +592,48 @@ WHERE t.Activo = 1
                 }
 
                 return (a, n, r);
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+        public EstadisticasMedicoMes ObtenerEstadisticasMes(int medicoId, int anio, int mes)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta(@"
+SELECT 
+    SUM(CASE WHEN et.Nombre = 'Atendido' THEN 1 ELSE 0 END) AS Atendidos,
+    SUM(CASE WHEN et.Nombre IN ('No Asistió','No Asistio') THEN 1 ELSE 0 END) AS NoAsistio,
+    SUM(CASE WHEN et.Nombre = 'Reprogramado' THEN 1 ELSE 0 END) AS Reprogramados
+FROM Turnos t
+INNER JOIN EstadosTurno et ON et.EstadoTurnoID = t.EstadoTurnoID
+WHERE t.MedicoID = @medicoId
+  AND YEAR(t.Fecha) = @anio
+  AND MONTH(t.Fecha) = @mes
+  AND t.Activo = 1;
+");
+
+                datos.setearParametro("@medicoId", medicoId);
+                datos.setearParametro("@anio", anio);
+                datos.setearParametro("@mes", mes);
+
+                datos.ejecutarLectura();
+
+                EstadisticasMedicoMes est = new EstadisticasMedicoMes();
+
+                if (datos.Lector.Read())
+                {
+                    est.Atendidos = datos.Lector["Atendidos"] != DBNull.Value ? (int)datos.Lector["Atendidos"] : 0;
+                    est.NoAsistio = datos.Lector["NoAsistio"] != DBNull.Value ? (int)datos.Lector["NoAsistio"] : 0;
+                    est.Reprogramados = datos.Lector["Reprogramados"] != DBNull.Value ? (int)datos.Lector["Reprogramados"] : 0;
+                }
+
+                return est;
             }
             finally
             {

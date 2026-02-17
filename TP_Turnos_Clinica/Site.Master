@@ -47,15 +47,12 @@
 
                 <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between" id="navbarMain">
 
-                   
                     <ul class="navbar-nav me-auto">
 
-                      
                         <li class="nav-item">
                             <a class="nav-link" runat="server" href="~/Home.aspx">Home</a>
                         </li>
 
-                        
                         <asp:PlaceHolder ID="phMenuAdminRecep" runat="server">
                             <li class="nav-item">
                                 <a class="nav-link" runat="server" href="~/Pacientes.aspx">Pacientes</a>
@@ -68,25 +65,31 @@
                             </li>
                         </asp:PlaceHolder>
 
-                    
+                        <!-- ✅ MENÚ MÉDICO (CORREGIDO) -->
                         <asp:PlaceHolder ID="phMenuMedico" runat="server">
+                            <li class="nav-item">
+                                <a class="nav-link" runat="server" href="~/PanelMedico.aspx">Panel médico</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" runat="server" href="~/MisEstadisticas.aspx">Mis estadísticas</a>
+                            </li>
+
+                            <%-- Dejamos esto comentado para NO borrarlo, pero que NO aparezca --%>
+                            <%-- 
                             <li class="nav-item">
                                 <a class="nav-link" runat="server" href="~/MisTurnos.aspx">Mis turnos</a>
                             </li>
-                            
-                        
                             <li class="nav-item">
                                 <a class="nav-link" runat="server" href="~/Evoluciones.aspx">Evoluciones</a>
                             </li>
-                           
+                            --%>
                         </asp:PlaceHolder>
 
                     </ul>
 
-                  
                     <ul class="navbar-nav ms-auto">
 
-                       
                         <asp:PlaceHolder ID="phUser" runat="server">
                             <li class="nav-item">
                                 <span class="navbar-text text-light me-3">
@@ -96,13 +99,14 @@
                         </asp:PlaceHolder>
 
                         <li class="nav-item">
-    <asp:LinkButton ID="btnLogout" runat="server"
-        CssClass="nav-link text-danger"
-        OnClick="btnLogout_Click"
-        CausesValidation="false">
-        Cerrar sesión
-    </asp:LinkButton>
-</li>
+                            <asp:LinkButton ID="btnLogout" runat="server"
+                                CssClass="nav-link text-danger"
+                                OnClick="btnLogout_Click"
+                                CausesValidation="false">
+                                Cerrar sesión
+                            </asp:LinkButton>
+                        </li>
+
                     </ul>
 
                 </div>

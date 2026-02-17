@@ -132,9 +132,12 @@ namespace Negocio
             return datos.ListarPorMedico(medicoId, desde, hasta);
         }
 
-        public List<DtoTurnoDia> ListarDelDia(DateTime fecha)
+        public List<DtoTurnoDia> ListarDelDia(DateTime fecha, string dniPaciente = "", bool incluirCancelados = false)
         {
-            return datos.ListarDelDia(fecha);
+            if (fecha == DateTime.MinValue)
+                throw new Exception("Fecha inválida.");
+
+            return datos.ListarDelDia(fecha, dniPaciente, incluirCancelados);
         }
 
         public void ConfirmarPago(int turnoId, string comprobante)
@@ -212,6 +215,14 @@ namespace Negocio
         {
             if (medicoId <= 0) throw new Exception("Médico inválido.");
             return datos.StatsMedicoMes(medicoId, anio, mes);
+        }
+
+        public EstadisticasMedicoMes ObtenerEstadisticasMes(int medicoId, int anio, int mes)
+        {
+            if (medicoId <= 0)
+                throw new Exception("Médico inválido.");
+
+            return datos.ObtenerEstadisticasMes(medicoId, anio, mes);
         }
 
     }

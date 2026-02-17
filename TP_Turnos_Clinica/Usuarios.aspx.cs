@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Dominio;
@@ -30,12 +28,15 @@ namespace TP_Turnos_Clinica
             }
 
             if (!IsPostBack)
+            {
+                OcultarMsg();
                 CargarGrilla();
+            }
         }
 
         private void CargarGrilla()
         {
-            string filtro = txtFiltro.Text.Trim();
+            string filtro = (txtFiltro.Text ?? "").Trim();
             bool soloActivos = chkSoloActivos.Checked;
 
             List<Usuario> lista = negocio.Listar(filtro, soloActivos);
@@ -44,10 +45,23 @@ namespace TP_Turnos_Clinica
             dgvUsuarios.DataBind();
         }
 
-        protected void btnBuscar_Click(object sender, EventArgs e)
+        private void OcultarMsg()
         {
             lblMsg.Text = "";
-            lblMsg.CssClass = "d-block mt-3";
+            lblMsg.Visible = false;
+            lblMsg.CssClass = "d-none";
+        }
+
+        private void MostrarMsg(string texto, string css)
+        {
+            lblMsg.Text = texto;
+            lblMsg.Visible = true;
+            lblMsg.CssClass = css + " d-block mt-3";
+        }
+
+        protected void btnBuscar_Click(object sender, EventArgs e)
+        {
+            OcultarMsg();
             CargarGrilla();
         }
 
@@ -72,14 +86,21 @@ namespace TP_Turnos_Clinica
                 try
                 {
                     negocio.BajaLogica(id);
-                    lblMsg.CssClass = "alert alert-success mt-3";
-                    lblMsg.Text = "Usuario dado de baja correctamente.";
+
+                    MostrarMsg("Usuario dado de baja correctamente.", "alert alert-success");
+
                     CargarGrilla();
+
+
+                    ScriptManager.RegisterStartupScript(
+                        this, GetType(), "hideMsg",
+                        $"setTimeout(function(){{var el=document.getElementById('{lblMsg.ClientID}'); if(el) el.style.display='none';}}, 3000);",
+                        true
+                    );
                 }
                 catch (Exception ex)
                 {
-                    lblMsg.CssClass = "alert alert-danger mt-3";
-                    lblMsg.Text = ex.Message;
+                    MostrarMsg(ex.Message, "alert alert-danger");
                 }
             }
         }

@@ -16,7 +16,7 @@
                     CssClass="alert alert-danger d-block mb-3"
                     Visible="false"></asp:Label>
 
-                <!-- Botones post-alta (solo aparecen cuando guardás un médico nuevo) -->
+            
                 <div class="d-flex gap-2 mb-3">
                     <asp:HyperLink ID="lnkVolverLista" runat="server"
                         NavigateUrl="~/Medicos.aspx"

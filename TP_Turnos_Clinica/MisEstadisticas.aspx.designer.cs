@@ -11,115 +11,88 @@ namespace TP_Turnos_Clinica
 {
 
 
-    public partial class Home
+    public partial class MisEstadisticas
     {
 
         /// <summary>
-        /// Control lblUsuario.
+        /// Control lblMsg.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblUsuario;
+        protected global::System.Web.UI.WebControls.Label lblMsg;
 
         /// <summary>
-        /// Control lblRol.
+        /// Control lblHoy.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblRol;
+        protected global::System.Web.UI.WebControls.Label lblHoy;
 
         /// <summary>
-        /// Control lnkAsignarTurno.
+        /// Control lblAtendidosHoy.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink lnkAsignarTurno;
+        protected global::System.Web.UI.WebControls.Label lblAtendidosHoy;
 
         /// <summary>
-        /// Control lnkTurnosDia.
+        /// Control lblPendientesHoy.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink lnkTurnosDia;
+        protected global::System.Web.UI.WebControls.Label lblPendientesHoy;
 
         /// <summary>
-        /// Control lnkPacientes.
+        /// Control lblMesActual.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink lnkPacientes;
+        protected global::System.Web.UI.WebControls.Label lblMesActual;
 
         /// <summary>
-        /// Control lnkMedicos.
+        /// Control lblAtendidosMes.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink lnkMedicos;
+        protected global::System.Web.UI.WebControls.Label lblAtendidosMes;
 
         /// <summary>
-        /// Control lnkEspecialidades.
+        /// Control lblNoAsistioMes.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink lnkEspecialidades;
+        protected global::System.Web.UI.WebControls.Label lblNoAsistioMes;
 
         /// <summary>
-        /// Control lnkAgenda.
+        /// Control lblReprogramadosMes.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink lnkAgenda;
+        protected global::System.Web.UI.WebControls.Label lblReprogramadosMes;
 
         /// <summary>
-        /// Control lnkPanelMedico.
+        /// Control lblPromedioDia.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink lnkPanelMedico;
-
-        /// <summary>
-        /// Control lnkMisEstadisticas.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink lnkMisEstadisticas;
-
-        /// <summary>
-        /// Control lnkUsuarios.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink lnkUsuarios;
-
-        /// <summary>
-        /// Control lnkLogout.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink lnkLogout;
+        protected global::System.Web.UI.WebControls.Label lblPromedioDia;
     }
 }

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -51,25 +52,21 @@ namespace TP_Turnos_Clinica
             DateTime fecha = DateTime.Today;
 
             if (!string.IsNullOrWhiteSpace(txtFecha.Text))
-                fecha = DateTime.Parse(txtFecha.Text); 
+                fecha = DateTime.Parse(txtFecha.Text);
 
-            var lista = negocio.ListarDelDia(fecha);
+            string dni = (txtDni.Text ?? "").Trim().Replace(".", "").Replace(" ", "");
 
-            if (!chkMostrarCancelados.Checked)
-            {
-                lista = lista
-                    .Where(x => x.EstadoTurno != "Cancelado")
-                    .ToList();
-            }
+            var lista = negocio.ListarDelDia(fecha, dni, chkMostrarCancelados.Checked);
 
             dgvTurnos.DataSource = lista;
             dgvTurnos.DataBind();
 
-        
             if (lista == null || lista.Count == 0)
             {
                 lblMsg.CssClass = "alert alert-info d-block mb-3";
-                lblMsg.Text = "No hay turnos para la fecha seleccionada.";
+                lblMsg.Text = string.IsNullOrEmpty(dni)
+                    ? "No hay turnos para la fecha seleccionada."
+                    : "No se encontró ningún turno para ese DNI.";
                 lblMsg.Visible = true;
             }
             else
@@ -79,7 +76,6 @@ namespace TP_Turnos_Clinica
                 lblMsg.Visible = false;
             }
         }
-
         protected void dgvTurnos_ComandoPorFila(object sender, GridViewCommandEventArgs e)
         {
             try
@@ -136,17 +132,18 @@ namespace TP_Turnos_Clinica
 
                 if (e.CommandName == "Reprogramar")
                 {
+                    
                     if (estadoTurno.Equals("Cancelado", StringComparison.OrdinalIgnoreCase))
                         throw new Exception("No se puede reprogramar: el turno está cancelado.");
 
                     if (estadoTurno.Equals("Cerrado", StringComparison.OrdinalIgnoreCase))
                         throw new Exception("No se puede reprogramar: el turno está cerrado.");
 
-                    if (estadoTurno.Equals("No asistió", StringComparison.OrdinalIgnoreCase) &&
-                        !estadoPago.Equals("Confirmado", StringComparison.OrdinalIgnoreCase))
-                    {
-                        throw new Exception("No se puede reprogramar un 'No asistió' si el pago está pendiente.");
-                    }
+                    
+                    if (estadoTurno.Equals("Atendido", StringComparison.OrdinalIgnoreCase))
+                        throw new Exception("No se puede reprogramar: el turno ya fue atendido.");
+
+                    
 
                     Response.Redirect($"~/AgendaTurnos.aspx?reprog=1&turnoId={turnoId}", false);
                     return;
@@ -180,7 +177,7 @@ namespace TP_Turnos_Clinica
             catch (Exception ex)
             {
                 lblMsg.CssClass = "alert alert-danger d-block mb-3";
-                lblMsg.Text = ex.Message;
+                lblMsg.Text = ex.ToString(); 
                 lblMsg.Visible = true;
             }
         }

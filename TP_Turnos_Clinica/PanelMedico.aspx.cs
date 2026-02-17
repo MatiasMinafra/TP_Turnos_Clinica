@@ -23,7 +23,7 @@ namespace TP_Turnos_Clinica
 
             var u = (Usuario)Session["usuario"];
 
-            // ✅ Solo MEDICO
+            
             if (u.RolID != RolesIds.MEDICO)
             {
                 Response.Redirect("~/Home.aspx");
@@ -71,7 +71,6 @@ namespace TP_Turnos_Clinica
                     txtHasta.Text = hasta.ToString("yyyy-MM-dd");
                 }
 
-                // ✅ Grilla
                 var lista = turnosNegocio.ListarPorMedico(medicoId, desde, hasta);
 
                 if (chkOcultarCancelados.Checked)
@@ -79,27 +78,6 @@ namespace TP_Turnos_Clinica
 
                 gvTurnos.DataSource = lista;
                 gvTurnos.DataBind();
-
-                // ✅ Resumen HOY (como lo tenías)
-                var hoy = DateTime.Today;
-                var hoyList = lista.Where(x => x.Fecha.Date == hoy).ToList();
-
-                lblHoy.Text = hoyList.Count.ToString();
-                lblAtendidos.Text = hoyList.Count(x => Eq(x.EstadoTurno, "Atendido")).ToString();
-                lblPendientes.Text = hoyList.Count(x =>
-                    !Eq(x.EstadoTurno, "Atendido") &&
-                    !Eq(x.EstadoTurno, "Cancelado") &&
-                    !Eq(x.EstadoTurno, "No Asistió") &&
-                    !Eq(x.EstadoTurno, "No Asistio")
-                ).ToString();
-
-                // ✅ Estadísticas del MES (NUEVO)
-                lblMesActual.Text = DateTime.Today.ToString("MMMM yyyy"); // ej: "febrero 2026"
-
-                var statsMes = turnosNegocio.StatsMedicoMes(medicoId, DateTime.Today.Year, DateTime.Today.Month);
-                lblAtendidosMes.Text = statsMes.Atendidos.ToString();
-                lblNoAsistioMes.Text = statsMes.NoAsistio.ToString();
-                lblReprogramadosMes.Text = statsMes.Reprogramados.ToString();
 
                 if (lista.Count == 0)
                     MostrarInfo("No hay turnos para el rango seleccionado.");

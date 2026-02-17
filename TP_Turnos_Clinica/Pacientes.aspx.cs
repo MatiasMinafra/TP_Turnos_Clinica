@@ -41,7 +41,7 @@ namespace TP_Turnos_Clinica
         {
             filtro = (filtro ?? "").Trim();
 
-            bool soloActivos = !chkInactivos.Checked; // ← CLAVE
+            bool soloActivos = !chkInactivos.Checked;
 
             List<Paciente> lista = negocio.Listar(filtro, soloActivos);
 
@@ -61,15 +61,31 @@ namespace TP_Turnos_Clinica
         }
 
 
-        protected void Pacientes_ComandoPorFila(object sender, System.Web.UI.WebControls.GridViewCommandEventArgs e)
+        protected void Pacientes_ComandoPorFila(object sender, GridViewCommandEventArgs e)
         {
-            if (e.CommandName != "Desactivar")
+            if (e.CommandName != "ToggleActivo")
                 return;
 
-            int index = Convert.ToInt32(e.CommandArgument);
-            int idPaciente = Convert.ToInt32(gvPacientes.DataKeys[index].Value);
+            int idPaciente = Convert.ToInt32(e.CommandArgument);
 
-            negocio.Desactivar(idPaciente);
+            
+            var btn = e.CommandSource as Control;
+            var row = btn?.NamingContainer as GridViewRow;
+
+            bool activoActual = true; 
+            if (row != null)
+            {
+               
+                activoActual = Convert.ToBoolean(gvPacientes.DataKeys[row.RowIndex].Values["Activo"]);
+            }
+
+           
+            if (activoActual)
+                negocio.Desactivar(idPaciente);
+            else
+                negocio.Activar(idPaciente);
+
+            
             CargarGrilla(txtBuscar.Text.Trim());
         }
     }

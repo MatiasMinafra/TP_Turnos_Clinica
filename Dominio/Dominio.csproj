@@ -45,6 +45,7 @@
     <Compile Include="DtoTurnoMail.cs" />
     <Compile Include="Dto_MedicosTurnosTrabajo.cs" />
     <Compile Include="Especialidad.cs" />
+    <Compile Include="EstadisticasMedicoMes.cs" />
     <Compile Include="Evolucion.cs" />
     <Compile Include="Medico.cs" />
     <Compile Include="MedicosTurnosTrabajo.cs" />

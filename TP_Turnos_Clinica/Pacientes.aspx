@@ -70,7 +70,7 @@
                 <asp:LinkButton ID="btnToggleActivo" runat="server"
                     Text='<%# (bool)Eval("Activo") ? "Desactivar" : "Activar" %>'
                     CommandName="ToggleActivo"
-                    CommandArgument="<%# Container.DataItemIndex %>"
+                    CommandArgument='<%# Eval("PacienteID") %>'
                     CssClass='<%# (bool)Eval("Activo") ? "btn btn-danger btn-sm" : "btn btn-success btn-sm" %>'
                     CausesValidation="false"
                     OnClientClick='<%# (bool)Eval("Activo")

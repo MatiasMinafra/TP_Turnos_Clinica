@@ -21,5 +21,7 @@ namespace Dominio
 
         public decimal Importe { get; set; }
         public string MedioPago { get; set; }
+
+        public string Dni { get; set; }
     }
 }
