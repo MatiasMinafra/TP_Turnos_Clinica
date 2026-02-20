@@ -6,7 +6,7 @@ namespace ConexionesBD
 {
     public class TurnosDatos
     {
-    
+
         public int AltaConSP(
             int pacienteId,
             int especialidadId,
@@ -36,7 +36,7 @@ namespace ConexionesBD
             finally { datos.cerrarConexion(); }
         }
 
-    
+
         public List<MedicoBasico> MedicosPorEspecialidad(int especialidadId)
         {
             var lista = new List<MedicoBasico>();
@@ -199,7 +199,7 @@ ORDER BY t.Fecha, t.HoraInicio;
                         EspecialidadNombre = datos.Lector["Especialidad"].ToString(),
                         EstadoTurno = datos.Lector["EstadoTurno"].ToString(),
 
-                        
+
                         EstadoPago = datos.Lector["EstadoPago"].ToString(),
 
                         Activo = (bool)datos.Lector["Activo"]
@@ -226,7 +226,7 @@ ORDER BY t.Fecha, t.HoraInicio;
             {
                 dniPaciente = (dniPaciente ?? "").Trim().Replace(".", "").Replace(" ", "");
 
-                
+
                 string sqlConDni = @"
 SELECT TOP 1
     t.TurnoID,
@@ -428,7 +428,7 @@ WHERE TurnoID = @turnoId;
 
             try
             {
-                
+
                 datos.setearConsulta(@"
 DECLARE @Cancelado INT = (SELECT EstadoTurnoID FROM EstadosTurno WHERE Nombre = 'Cancelado');
 DECLARE @Atendido  INT = (SELECT EstadoTurnoID FROM EstadosTurno WHERE Nombre = 'Atendido');
@@ -446,11 +446,11 @@ BEGIN
 END
 ");
                 datos.setearParametro("@TurnoID", turnoId);
-                datos.ejecutarLectura(); 
-                                         
+                datos.ejecutarLectura();
+
                 datos.cerrarConexion();
 
-            
+
                 datos = new AccesoDatos();
                 datos.setearProcedimiento("dbo.SP_ReprogramarTurno");
                 datos.setearParametro("@TurnoID", turnoId);
@@ -578,7 +578,7 @@ WHERE t.TurnoID = @turnoId;
                 if (!datos.Lector.Read())
                     throw new Exception("No se encontró el turno para enviar mail.");
 
-               
+
                 TimeSpan horaIni = datos.Lector["HoraInicio"] is TimeSpan ts1
                     ? ts1
                     : TimeSpan.Parse(datos.Lector["HoraInicio"].ToString());
@@ -587,7 +587,7 @@ WHERE t.TurnoID = @turnoId;
                     ? ts2
                     : TimeSpan.Parse(datos.Lector["HoraFin"].ToString());
 
-              
+
                 decimal importe = datos.Lector["Importe"] is decimal d
                     ? d
                     : Convert.ToDecimal(datos.Lector["Importe"]);
@@ -727,7 +727,6 @@ WHERE t.MedicoID = @medicoId
                 datos.cerrarConexion();
             }
         }
-
 
     }
 

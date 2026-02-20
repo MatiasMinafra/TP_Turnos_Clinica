@@ -14,6 +14,7 @@ namespace TP_Turnos_Clinica
         private readonly MedicoNegocio medicoNegocio = new MedicoNegocio();
         private readonly TurnoTrabajoNegocio turnoTrabajoNegocio = new TurnoTrabajoNegocio();
         private readonly MedicoTurnoTrabajoNegocio mttNegocio = new MedicoTurnoTrabajoNegocio();
+        EspecialidadNegocio espNegocio = new EspecialidadNegocio();
 
         private int MedicoId
         {
@@ -76,13 +77,14 @@ namespace TP_Turnos_Clinica
         {
             ddlEspecialidad.Items.Clear();
 
-            var esp = medicoNegocio.ObtenerEspecialidades(MedicoId);
-            ddlEspecialidad.DataSource = esp;
-            ddlEspecialidad.DataValueField = "EspecialidadID";
+            
+            var lista = espNegocio.Listar("", true); 
+            ddlEspecialidad.DataSource = lista;
             ddlEspecialidad.DataTextField = "Nombre";
+            ddlEspecialidad.DataValueField = "EspecialidadID";
             ddlEspecialidad.DataBind();
 
-            ddlEspecialidad.Items.Insert(0, new ListItem("-- Seleccionar --", ""));
+            ddlEspecialidad.Items.Insert(0, new ListItem("-- Seleccionar --", "0"));
         }
 
         private void CargarGrilla()

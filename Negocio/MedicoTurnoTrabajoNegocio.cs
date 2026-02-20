@@ -25,6 +25,8 @@ namespace Negocio
                 return datos.ObtenerPorId(medicoTurnoId);
             }
 
+
+
         public void Asignar(int medicoId, int turnoTrabajoId, int especialidadId, byte diaSemana)
         {
             if (medicoId <= 0)
@@ -40,7 +42,9 @@ namespace Negocio
                 throw new Exception("Día inválido. (1=Lun ... 7=Dom)");
 
             if (!datos.MedicoTieneEspecialidad(medicoId, especialidadId))
-                throw new Exception("El médico no tiene asignada esa especialidad.");
+            {
+                datos.AsegurarEspecialidad(medicoId, especialidadId);
+            }
 
             TurnoTrabajo turno = datos.ObtenerTurnoTrabajo(turnoTrabajoId);
             if (turno == null)

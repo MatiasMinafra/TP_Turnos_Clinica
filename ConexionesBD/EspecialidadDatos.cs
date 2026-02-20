@@ -161,8 +161,29 @@ WHERE Nombre = @nombre
 
         public List<Especialidad> ListarActivas()
         {
-            
-            return Listar("", true);
+            List<Especialidad> lista = new List<Especialidad>();
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta(@"
+SELECT EspecialidadID, Nombre
+FROM dbo.Especialidades
+WHERE Activo = 1
+ORDER BY Nombre;
+");
+                datos.ejecutarLectura();
+                while (datos.Lector.Read())
+                {
+                    lista.Add(new Especialidad
+                    {
+                        EspecialidadID = (int)datos.Lector["EspecialidadID"],
+                        Nombre = (string)datos.Lector["Nombre"]
+                    });
+                }
+                return lista;
+            }
+            finally { datos.cerrarConexion(); }
         }
 
         public List<Especialidad> ListarPorMedico(int medicoId)

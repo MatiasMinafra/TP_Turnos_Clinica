@@ -182,6 +182,29 @@ WHERE MedicoID = @med
             finally { datos.cerrarConexion(); }
         }
 
+        public void AsegurarEspecialidad(int medicoId, int especialidadId)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta(@"
+IF NOT EXISTS (
+    SELECT 1
+    FROM dbo.MedicosEspecialidades
+    WHERE MedicoID = @med AND EspecialidadID = @esp
+)
+BEGIN
+    INSERT INTO dbo.MedicosEspecialidades (MedicoID, EspecialidadID)
+    VALUES (@med, @esp);
+END
+");
+                datos.setearParametro("@med", medicoId);
+                datos.setearParametro("@esp", especialidadId);
+                datos.ejecutarAccion();
+            }
+            finally { datos.cerrarConexion(); }
+        }
+
         public void Desactivar(int medicoTurnoId)
         {
             AccesoDatos datos = new AccesoDatos();
