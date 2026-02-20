@@ -60,41 +60,33 @@
 
             <asp:CheckBoxField DataField="Activo" HeaderText="Activo" />
 
-            <asp:TemplateField HeaderText="Acciones">
-                <ItemTemplate>
+           <asp:TemplateField HeaderText="Acciones">
+    <ItemTemplate>
 
+        <asp:HyperLink ID="hlEditar" runat="server"
+            Text="Editar"
+            NavigateUrl='<%# ResolveUrl("~/MedicoForm.aspx?id=" + Eval("MedicoID")) %>'
+            CssClass="btn btn-warning btn-sm me-1" />
 
-                    <asp:HyperLink ID="hlEditar" runat="server"
-                        Text="Editar"
-                        NavigateUrl='<%# ResolveUrl("~/MedicoForm.aspx?id=" + Eval("MedicoID")) %>'
-                        CssClass="btn btn-warning btn-sm me-1" />
+        <asp:HyperLink ID="hlAgenda" runat="server"
+    Text="Disponibilidad"
+    NavigateUrl='<%# ResolveUrl("~/AsignacionTurnoMedico.aspx?id=" + Eval("MedicoID")) %>'
+    CssClass="btn btn-primary btn-sm me-1" />
 
-                    <asp:HyperLink ID="hlEspecialidades" runat="server"
-                        Text="Especialidades"
-                        NavigateUrl='<%# ResolveUrl("~/MedicoEspecialidades.aspx?id=" + Eval("MedicoID")) %>'
-                        CssClass="btn btn-info btn-sm me-1" />
+        <asp:LinkButton ID="btnToggleActivo" runat="server"
+            Text='<%# (Convert.ToBoolean(Eval("Activo")) ? "Desactivar" : "Activar") %>'
+            CommandName="ToggleActivo"
+            CommandArgument="<%# Container.DataItemIndex %>"
+            CssClass='<%# (Convert.ToBoolean(Eval("Activo"))
+                ? "btn btn-danger btn-sm"
+                : "btn btn-success btn-sm") %>'
+            CausesValidation="false"
+            OnClientClick='<%# (Convert.ToBoolean(Eval("Activo"))
+                ? "return confirm(\"¿Seguro que querés desactivar este médico?\");"
+                : "return confirm(\"¿Seguro que querés activar este médico?\");") %>' />
 
-                  
-                    <asp:HyperLink ID="hlHorarios" runat="server"
-                        Text="Horarios"
-                        NavigateUrl='<%# ResolveUrl("~/AsignacionTurnoMedico.aspx?id=" + Eval("MedicoID")) %>'
-                        CssClass="btn btn-primary btn-sm me-1" />
-
-                    
-                    <asp:LinkButton ID="btnToggleActivo" runat="server"
-                        Text='<%# (Convert.ToBoolean(Eval("Activo")) ? "Desactivar" : "Activar") %>'
-                        CommandName="ToggleActivo"
-                        CommandArgument="<%# Container.DataItemIndex %>"
-                        CssClass='<%# (Convert.ToBoolean(Eval("Activo"))
-                            ? "btn btn-danger btn-sm"
-                            : "btn btn-success btn-sm") %>'
-                        CausesValidation="false"
-                        OnClientClick='<%# (Convert.ToBoolean(Eval("Activo"))
-                            ? "return confirm(\"¿Seguro que querés desactivar este médico?\");"
-                            : "return confirm(\"¿Seguro que querés activar este médico?\");") %>' />
-
-                </ItemTemplate>
-            </asp:TemplateField>
+    </ItemTemplate>
+</asp:TemplateField>
 
         </Columns>
     </asp:GridView>

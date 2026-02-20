@@ -20,5 +20,8 @@ namespace Dominio
         public string TurnoNombre { get; set; }
         public TimeSpan HoraInicio { get; set; }
         public TimeSpan HoraFin { get; set; }
+
+        public int EspecialidadID { get; set; }
+        public string EspecialidadNombre { get; set; }
     }
 }

@@ -113,6 +113,12 @@ namespace Negocio
             if (datos.ExisteEmail(m.Email, idExcluido))
                 throw new Exception("Ya existe un médico con ese Email.");
         }
+
+        public List<Especialidad> ObtenerEspecialidades(int medicoId)
+        {
+            if (medicoId <= 0) return new List<Especialidad>();
+            return datos.ObtenerEspecialidades(medicoId);
         }
+    }
     }
 

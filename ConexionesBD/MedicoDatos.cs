@@ -27,7 +27,10 @@ FROM dbo.Medicos m
 WHERE
     (@filtro = '' OR m.DNI LIKE @like OR m.Matricula LIKE @like OR m.Nombre LIKE @like OR m.Apellido LIKE @like)
     AND (@soloActivos = 0 OR m.Activo = 1)
-ORDER BY m.Apellido, m.Nombre;
+ORDER BY 
+    m.Activo DESC,
+    m.Apellido,
+    m.Nombre;
 ");
 
             datos.setearParametro("@filtro", filtro);
@@ -268,7 +271,36 @@ WHERE Email = @email
             }
             finally { datos.cerrarConexion(); }
         }
+        public List<Especialidad> ObtenerEspecialidades(int medicoId)
+        {
+            var lista = new List<Especialidad>();
+            var datos = new AccesoDatos();
 
+            datos.setearConsulta(@"
+SELECT e.EspecialidadID, e.Nombre
+FROM dbo.MedicosEspecialidades me
+INNER JOIN dbo.Especialidades e ON e.EspecialidadID = me.EspecialidadID
+WHERE me.MedicoID = @med
+  AND e.Activo = 1
+ORDER BY e.Nombre;
+");
+            datos.setearParametro("@med", medicoId);
+
+            try
+            {
+                datos.ejecutarLectura();
+                while (datos.Lector.Read())
+                {
+                    lista.Add(new Especialidad
+                    {
+                        EspecialidadID = (int)datos.Lector["EspecialidadID"],
+                        Nombre = datos.Lector["Nombre"].ToString()
+                    });
+                }
+                return lista;
+            }
+            finally { datos.cerrarConexion(); }
+        }
     }
 }
 

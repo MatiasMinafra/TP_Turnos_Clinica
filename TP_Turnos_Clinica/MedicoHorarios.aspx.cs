@@ -81,9 +81,25 @@ namespace TP_Turnos_Clinica
 
         protected void ddlMedico_SelectedIndexChanged(object sender, EventArgs e)
         {
+            CargarEspecialidadesMedico();
             CargarGrilla();
         }
+        private void CargarEspecialidadesMedico()
+        {
+            ddlEspecialidad.Items.Clear();
 
+            var medicoId = MedicoSeleccionado();
+            if (!medicoId.HasValue) return;
+
+            var esp = medicoNegocio.ObtenerEspecialidades(medicoId.Value);
+
+            ddlEspecialidad.DataSource = esp;
+            ddlEspecialidad.DataValueField = "EspecialidadID";
+            ddlEspecialidad.DataTextField = "Nombre";
+            ddlEspecialidad.DataBind();
+
+            ddlEspecialidad.Items.Insert(0, new ListItem("-- Seleccionar --", ""));
+        }
         protected void chkInactivos_CheckedChanged(object sender, EventArgs e)
         {
             CargarGrilla();
@@ -98,13 +114,21 @@ namespace TP_Turnos_Clinica
                 if (!medicoId.HasValue)
                     throw new Exception("Seleccioná un médico.");
 
+                if (!int.TryParse(ddlEspecialidad.SelectedValue, out int especialidadId) || especialidadId <= 0)
+                    throw new Exception("Seleccioná una especialidad.");
+
                 if (!byte.TryParse(ddlDia.SelectedValue, out byte diaSemana) || diaSemana < 1 || diaSemana > 7)
                     throw new Exception("Día inválido.");
 
                 if (!int.TryParse(ddlTurnoTrabajo.SelectedValue, out int turnoTrabajoId) || turnoTrabajoId <= 0)
                     throw new Exception("Seleccioná un turno de trabajo.");
 
-                mttNegocio.Asignar(medicoId.Value, turnoTrabajoId, diaSemana);
+                mttNegocio.Asignar(
+                    medicoId.Value,
+                    turnoTrabajoId,
+                    especialidadId,
+                    diaSemana
+                );
 
                 lblMensaje.Text = "Horario asignado correctamente.";
                 lblMensaje.CssClass = "alert alert-success d-block mb-3";

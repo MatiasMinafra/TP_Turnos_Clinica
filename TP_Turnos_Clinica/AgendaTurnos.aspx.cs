@@ -194,7 +194,6 @@ namespace TP_Turnos_Clinica
 
             var op = lista[index];
 
-            
             if (op.Ocupado)
             {
                 MostrarError("Ese horario está ocupado.");
@@ -206,6 +205,15 @@ namespace TP_Turnos_Clinica
                 bool esReprogramacion = !string.IsNullOrWhiteSpace(hfTurnoIdReprog.Value);
 
                 
+                if (string.IsNullOrWhiteSpace(txtMotivo.Text))
+                {
+                    MostrarError("Debés cargar el motivo.");
+                    return;
+                }
+
+                string motivo = txtMotivo.Text.Trim();
+
+                
                 if (esReprogramacion)
                 {
                     int turnoIdReprog = int.Parse(hfTurnoIdReprog.Value);
@@ -214,19 +222,17 @@ namespace TP_Turnos_Clinica
                         turnoIdReprog,
                         op.Fecha,
                         op.HoraInicio,
-                        op.MedicoID
+                        op.MedicoID,
+                        motivo
                     );
 
-                    
                     hfTurnoIdReprog.Value = "";
                     pnlReprog.Visible = false;
                     lblTurnoReprog.Text = "";
 
-                    
                     ddlPacientes.Enabled = true;
                     ddlEspecialidades.Enabled = true;
 
-                    
                     LimpiarSugerencias();
 
                     lblMensaje.CssClass = "alert alert-success d-block mb-3";
@@ -236,13 +242,7 @@ namespace TP_Turnos_Clinica
                     return;
                 }
 
-               
-                if (string.IsNullOrWhiteSpace(txtMotivo.Text))
-                {
-                    MostrarError("Debés cargar el motivo.");
-                    return;
-                }
-
+                
                 decimal importe;
                 string impTxt = (txtImporte.Text ?? "").Trim();
 
@@ -259,7 +259,7 @@ namespace TP_Turnos_Clinica
                     op.MedicoID,
                     op.Fecha,
                     op.HoraInicio,
-                    txtMotivo.Text.Trim(),
+                    motivo,
                     importe,
                     ddlMedioPago.SelectedValue
                 );

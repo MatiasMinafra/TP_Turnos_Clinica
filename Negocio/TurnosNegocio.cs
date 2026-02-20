@@ -13,14 +13,14 @@ namespace Negocio
         private readonly EmailServicio emailServicio = new EmailServicio();
 
         public int AltaTurno(
-    int pacienteId,
-    int especialidadId,
-    int medicoId,
-    DateTime fecha,
-    TimeSpan horaInicio,
-    string motivo,
-    decimal importe,
-    string medioPago = "MERCADOPAGO")
+     int pacienteId,
+     int especialidadId,
+     int medicoId,
+     DateTime fecha,
+     TimeSpan horaInicio,
+     string motivo,
+     decimal importe,
+     string medioPago = "MERCADOPAGO")
         {
             if (string.IsNullOrWhiteSpace(motivo))
                 throw new Exception("Debe indicar el motivo de la consulta.");
@@ -28,7 +28,10 @@ namespace Negocio
             if (importe <= 0)
                 throw new Exception("El importe debe ser mayor a 0.");
 
-          
+            
+            if (datos.PacienteTieneTurnoEseDia(pacienteId, fecha))
+                throw new Exception("El paciente ya tiene un turno asignado para esa fecha (máximo 1 por día).");
+
             int turnoId = datos.AltaConSP(
                 pacienteId,
                 especialidadId,
@@ -38,7 +41,6 @@ namespace Negocio
                 motivo,
                 importe,
                 medioPago);
-
 
             try
             {
@@ -51,51 +53,72 @@ namespace Negocio
             }
             catch (Exception ex)
             {
-                
                 throw new Exception("El turno se creó, pero el envío de mail falló: " + ex.Message);
             }
 
             return turnoId;
         }
-        
+
 
         public List<OpcionTurno> SugerirTurnos(int especialidadId, DateTime fecha, string franja)
         {
-            List<OpcionTurno> lista = new List<OpcionTurno>();
+            var lista = new List<OpcionTurno>();
+
+            
+            int diaSemanaInt = ((int)fecha.DayOfWeek + 6) % 7 + 1; 
+            byte diaSemana = (byte)diaSemanaInt;
+
+            if (diaSemana == 7) 
+                return lista;
+
+
+            franja = (franja ?? "").Trim().ToUpperInvariant().Replace("Ñ", "N");
+
+            TimeSpan desde;
+            TimeSpan hasta;
+
+            switch (franja)
+            {
+                case "MAÑANA":
+                case "MANANA":
+                    desde = new TimeSpan(8, 0, 0);
+                    hasta = new TimeSpan(12, 0, 0);
+                    break;
+
+                case "TARDE":
+                    desde = new TimeSpan(14, 0, 0);
+                    hasta = new TimeSpan(18, 0, 0);
+                    break;
+
+                case "NOCHE":
+                    desde = new TimeSpan(19, 0, 0);
+                    hasta = new TimeSpan(22, 0, 0);
+                    break;
+
+                default:
+                    throw new Exception("No existe franja horaria. (MAÑANA/TARDE/NOCHE)");
+            }
 
             var medicos = datos.MedicosPorEspecialidad(especialidadId);
 
-            
-            TimeSpan desde = new TimeSpan(8, 0, 0);
-            TimeSpan hasta = new TimeSpan(12, 0, 0);
-
-            if (franja == "TARDE")
-            {
-                desde = new TimeSpan(14, 0, 0);
-                hasta = new TimeSpan(18, 0, 0);
-            }
-            else if (franja == "NOCHE")
-            {
-                desde = new TimeSpan(19, 0, 0);
-                hasta = new TimeSpan(22, 0, 0);
-            }
-
-            byte diaSemana = (byte)fecha.DayOfWeek;
-
             foreach (var m in medicos)
             {
-                var rangos = datos.RangosLaborales(m.MedicoID, diaSemana);
+                
+                var rangos = datos.RangosLaborales(m.MedicoID, diaSemana, especialidadId);
                 if (rangos == null || rangos.Count == 0)
                     continue;
 
-                var ocupadas = datos.HorasOcupadas(m.MedicoID, fecha);
+                
+                var ocupadas = datos.HorasOcupadas(m.MedicoID, fecha.Date);
 
                 foreach (var r in rangos)
                 {
+                   
                     TimeSpan inicio = r.Inicio > desde ? r.Inicio : desde;
                     TimeSpan fin = r.Fin < hasta ? r.Fin : hasta;
 
-                    if (fin <= inicio) continue;
+                    if (fin <= inicio)
+                        continue;
 
                     for (TimeSpan h = inicio; h + TimeSpan.FromHours(1) <= fin; h = h.Add(TimeSpan.FromHours(1)))
                     {
@@ -123,7 +146,6 @@ namespace Negocio
                 .ThenBy(x => x.HoraInicio)
                 .ToList();
         }
-
         public List<Turno> ListarMisTurnos(int medicoId, DateTime desde, DateTime hasta)
         {
             if (medicoId <= 0)
@@ -168,15 +190,19 @@ namespace Negocio
             datos.CancelarTurno(turnoId);
         }
 
-        public void ReprogramarTurno(int turnoId, DateTime nuevaFecha, TimeSpan nuevaHoraInicio, int nuevoMedicoId)
+        public void ReprogramarTurno(int turnoId, DateTime nuevaFecha, TimeSpan nuevaHoraInicio, int nuevoMedicoId, string motivo)
         {
-            
-            var antes = datos.ObtenerFechaHoraTurno(turnoId); 
-
-            
-            datos.ReprogramarTurno(turnoId, nuevaFecha, nuevaHoraInicio, nuevoMedicoId);
+            if (turnoId <= 0) throw new Exception("Turno inválido.");
+            if (nuevoMedicoId <= 0) throw new Exception("Médico inválido.");
+            if (string.IsNullOrWhiteSpace(motivo)) throw new Exception("El motivo es obligatorio.");
 
            
+            var antes = datos.ObtenerFechaHoraTurno(turnoId);
+
+           
+            datos.ReprogramarTurno(turnoId, nuevaFecha, nuevaHoraInicio, nuevoMedicoId, motivo.Trim());
+
+         
             try
             {
                 var dto = datos.ObtenerDatosMailTurno(turnoId);
@@ -188,6 +214,7 @@ namespace Negocio
             }
             catch (Exception ex)
             {
+               
                 throw new Exception("Se reprogramó, pero el envío de mail falló: " + ex.Message);
             }
         }

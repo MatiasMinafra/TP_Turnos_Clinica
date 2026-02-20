@@ -17,7 +17,7 @@
 
             <div class="row g-3 align-items-end">
 
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label class="form-label">Día</label>
                     <asp:DropDownList ID="ddlDia" runat="server" CssClass="form-select">
                         <asp:ListItem Text="Lunes" Value="1" />
@@ -30,12 +30,17 @@
                     </asp:DropDownList>
                 </div>
 
-                <div class="col-md-5">
+                <div class="col-md-4">
+                    <label class="form-label">Especialidad</label>
+                    <asp:DropDownList ID="ddlEspecialidad" runat="server" CssClass="form-select" />
+                </div>
+
+                <div class="col-md-3">
                     <label class="form-label">Turno de trabajo</label>
                     <asp:DropDownList ID="ddlTurnoTrabajo" runat="server" CssClass="form-select" />
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <asp:Button ID="btnAsignar" runat="server"
                         Text="Asignar"
                         CssClass="btn btn-success w-100"
@@ -64,37 +69,41 @@
     </div>
 
     <asp:GridView ID="gvAsignaciones" runat="server"
-        CssClass="table table-striped table-bordered"
-        AutoGenerateColumns="false"
-        DataKeyNames="MedicoTurnoID"
-        OnRowCommand="gvAsignaciones_ComandoFila">
+    CssClass="table table-striped table-bordered"
+    AutoGenerateColumns="false"
+    DataKeyNames="MedicoTurnoID"
+    OnRowCommand="gvAsignaciones_ComandoFila">
 
-        <Columns>
+    <Columns>
 
-            <asp:BoundField DataField="DiaNombre" HeaderText="Día" />
-            <asp:BoundField DataField="TurnoNombre" HeaderText="Turno" />
+        <asp:BoundField DataField="DiaNombre" HeaderText="Día" />
 
-            <asp:TemplateField HeaderText="Horario">
-                <ItemTemplate>
-                    <%# ((TimeSpan)Eval("HoraInicio")).ToString(@"hh\:mm") %> -
-                    <%# ((TimeSpan)Eval("HoraFin")).ToString(@"hh\:mm") %>
-                </ItemTemplate>
-            </asp:TemplateField>
+        <asp:BoundField DataField="TurnoNombre" HeaderText="Turno" />
 
-            <asp:CheckBoxField DataField="Activo" HeaderText="Activo" />
+        
+        <asp:BoundField DataField="EspecialidadNombre" HeaderText="Especialidad" />
 
-            <asp:TemplateField HeaderText="Acciones">
-                <ItemTemplate>
-                    <asp:LinkButton ID="btnCambiarEstado" runat="server"
-                        Text='<%# (Convert.ToBoolean(Eval("Activo")) ? "Desactivar" : "Activar") %>'
-                        CommandName="CambiarEstado"
-                        CommandArgument="<%# Container.DataItemIndex %>"
-                        CssClass='<%# (Convert.ToBoolean(Eval("Activo")) ? "btn btn-danger btn-sm" : "btn btn-success btn-sm") %>'
-                        CausesValidation="false" />
-                </ItemTemplate>
-            </asp:TemplateField>
+        <asp:TemplateField HeaderText="Horario">
+            <ItemTemplate>
+                <%# ((TimeSpan)Eval("HoraInicio")).ToString(@"hh\:mm") %> -
+                <%# ((TimeSpan)Eval("HoraFin")).ToString(@"hh\:mm") %>
+            </ItemTemplate>
+        </asp:TemplateField>
 
-        </Columns>
-    </asp:GridView>
+        <asp:CheckBoxField DataField="Activo" HeaderText="Activo" />
+
+        <asp:TemplateField HeaderText="Acciones">
+            <ItemTemplate>
+                <asp:LinkButton ID="btnCambiarEstado" runat="server"
+                    Text='<%# (Convert.ToBoolean(Eval("Activo")) ? "Desactivar" : "Activar") %>'
+                    CommandName="CambiarEstado"
+                    CommandArgument="<%# Container.DataItemIndex %>"
+                    CssClass='<%# (Convert.ToBoolean(Eval("Activo")) ? "btn btn-danger btn-sm" : "btn btn-success btn-sm") %>'
+                    CausesValidation="false" />
+            </ItemTemplate>
+        </asp:TemplateField>
+
+    </Columns>
+</asp:GridView>
 
 </asp:Content>

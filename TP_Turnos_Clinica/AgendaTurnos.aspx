@@ -9,10 +9,8 @@
 
     <h3 class="mb-3">Agenda - Alta de Turno</h3>
 
-   
     <asp:HiddenField ID="hfTurnoIdReprog" runat="server" />
 
-  
     <asp:Panel ID="pnlReprog" runat="server" Visible="false" CssClass="alert alert-info d-block mb-3">
         <strong>Modo REPROGRAMAR:</strong>
         elegí un nuevo horario para el turno <asp:Label ID="lblTurnoReprog" runat="server" />.
@@ -82,13 +80,15 @@
 
                 <div class="col-md-4">
                     <label class="form-label">Disponibilidad del paciente</label>
+
+                    <!-- ✅ CORREGIDO: Value debe ser MANANA/TARDE/NOCHE -->
                     <asp:DropDownList ID="ddlFranja" runat="server" CssClass="form-select"
-    AutoPostBack="true"
-    OnSelectedIndexChanged="ddlFranja_SelectedIndexChanged">
-    <asp:ListItem Text="Mañana (08 a 12)" Value="MANIANA" Selected="True" />
-    <asp:ListItem Text="Tarde (14 a 18)" Value="TARDE" />
-    <asp:ListItem Text="Noche (19 a 22)" Value="NOCHE" />
-</asp:DropDownList>
+                        AutoPostBack="true"
+                        OnSelectedIndexChanged="ddlFranja_SelectedIndexChanged">
+                        <asp:ListItem Text="Mañana (08 a 12)" Value="MANANA" Selected="True" />
+                        <asp:ListItem Text="Tarde (14 a 18)" Value="TARDE" />
+                        <asp:ListItem Text="Noche (19 a 22)" Value="NOCHE" />
+                    </asp:DropDownList>
                 </div>
 
             </div>

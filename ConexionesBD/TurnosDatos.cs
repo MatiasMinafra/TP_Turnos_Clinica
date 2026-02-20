@@ -77,8 +77,8 @@ ORDER BY x.Apellido, x.Nombre;
             finally { datos.cerrarConexion(); }
         }
 
-     
-        public List<RangoHorario> RangosLaborales(int medicoId, byte diaSemana)
+
+        public List<RangoHorario> RangosLaborales(int medicoId, byte diaSemana, int especialidadId)
         {
             var lista = new List<RangoHorario>();
             AccesoDatos datos = new AccesoDatos();
@@ -89,11 +89,13 @@ FROM dbo.MedicosTurnosTrabajo mtt
 INNER JOIN dbo.TurnosTrabajo tt ON tt.TurnoTrabajoID = mtt.TurnoTrabajoID
 WHERE mtt.MedicoID = @med
   AND mtt.DiaSemana = @dia
+  AND mtt.EspecialidadID = @esp
   AND mtt.Activo = 1
   AND tt.Activo = 1;
 ");
             datos.setearParametro("@med", medicoId);
             datos.setearParametro("@dia", diaSemana);
+            datos.setearParametro("@esp", especialidadId);
 
             try
             {
@@ -420,16 +422,22 @@ WHERE TurnoID = @turnoId;
         }
 
 
-        public void ReprogramarTurno(int turnoId, DateTime nuevaFecha, TimeSpan nuevaHoraInicio, int nuevoMedicoId)
+        public void ReprogramarTurno(int turnoId, DateTime fecha, TimeSpan horaInicio, int medicoId, string motivo)
         {
             AccesoDatos datos = new AccesoDatos();
+
             try
             {
                 datos.setearProcedimiento("dbo.SP_ReprogramarTurno");
+
                 datos.setearParametro("@TurnoID", turnoId);
-                datos.setearParametro("@NuevaFecha", nuevaFecha.Date);
-                datos.setearParametro("@NuevaHoraInicio", nuevaHoraInicio);
-                datos.setearParametro("@NuevoMedicoID", nuevoMedicoId);
+                datos.setearParametro("@NuevaFecha", fecha.Date);
+                datos.setearParametro("@NuevaHoraInicio", horaInicio);
+                datos.setearParametro("@NuevoMedicoID", medicoId);
+
+                
+                datos.setearParametro("@Motivo", motivo);
+
                 datos.ejecutarAccion();
             }
             finally
@@ -499,15 +507,19 @@ WHERE TurnoID=@turnoId;
                 datos.setearConsulta(@"
 SELECT
     t.TurnoID,
-    t.Fecha,
-    t.HoraInicio,
-    t.HoraFin,
+    CAST(t.Fecha AS date) AS Fecha,
+    CAST(t.HoraInicio AS time) AS HoraInicio,
+    CAST(t.HoraFin AS time) AS HoraFin,
+
     (p.Apellido + ' ' + p.Nombre) AS PacienteNombre,
-    p.Email AS PacienteEmail,
+    LTRIM(RTRIM(ISNULL(p.Email,''))) AS PacienteEmail,
+
     (m.Apellido + ' ' + m.Nombre) AS MedicoNombre,
     e.Nombre AS Especialidad,
+
     ISNULL(pa.MedioPago, '-') AS MedioPago,
-    ISNULL(pa.Importe, 0) AS Importe,
+    CAST(ISNULL(pa.Importe, 0) AS decimal(18,2)) AS Importe,
+
     ISNULL(t.MotivoConsulta, '') AS MotivoConsulta
 FROM Turnos t
 INNER JOIN Pacientes p ON p.PacienteID = t.PacienteID
@@ -523,18 +535,32 @@ WHERE t.TurnoID = @turnoId;
                 if (!datos.Lector.Read())
                     throw new Exception("No se encontró el turno para enviar mail.");
 
+               
+                TimeSpan horaIni = datos.Lector["HoraInicio"] is TimeSpan ts1
+                    ? ts1
+                    : TimeSpan.Parse(datos.Lector["HoraInicio"].ToString());
+
+                TimeSpan horaFin = datos.Lector["HoraFin"] is TimeSpan ts2
+                    ? ts2
+                    : TimeSpan.Parse(datos.Lector["HoraFin"].ToString());
+
+              
+                decimal importe = datos.Lector["Importe"] is decimal d
+                    ? d
+                    : Convert.ToDecimal(datos.Lector["Importe"]);
+
                 return new DtoTurnoMail
                 {
-                    TurnoID = (int)datos.Lector["TurnoID"],
-                    Fecha = (DateTime)datos.Lector["Fecha"],
-                    HoraInicio = (TimeSpan)datos.Lector["HoraInicio"],
-                    HoraFin = (TimeSpan)datos.Lector["HoraFin"],
+                    TurnoID = Convert.ToInt32(datos.Lector["TurnoID"]),
+                    Fecha = Convert.ToDateTime(datos.Lector["Fecha"]),
+                    HoraInicio = horaIni,
+                    HoraFin = horaFin,
                     PacienteNombre = datos.Lector["PacienteNombre"].ToString(),
-                    PacienteEmail = datos.Lector["PacienteEmail"] == DBNull.Value ? "" : datos.Lector["PacienteEmail"].ToString(),
+                    PacienteEmail = datos.Lector["PacienteEmail"].ToString(),
                     MedicoNombre = datos.Lector["MedicoNombre"].ToString(),
                     Especialidad = datos.Lector["Especialidad"].ToString(),
                     MedioPago = datos.Lector["MedioPago"].ToString(),
-                    Importe = (decimal)datos.Lector["Importe"],
+                    Importe = importe,
                     MotivoConsulta = datos.Lector["MotivoConsulta"].ToString()
                 };
             }
@@ -598,7 +624,25 @@ WHERE t.Activo = 1
                 datos.cerrarConexion();
             }
         }
+        public bool PacienteTieneTurnoEseDia(int pacienteId, DateTime fecha)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta(@"
+SELECT COUNT(1)
+FROM Turnos
+WHERE PacienteID = @pacienteId
+  AND Fecha = @fecha
+  AND Activo = 1
+");
+                datos.setearParametro("@pacienteId", pacienteId);
+                datos.setearParametro("@fecha", fecha.Date);
 
+                return Convert.ToInt32(datos.ejecutarScalar()) > 0;
+            }
+            finally { datos.cerrarConexion(); }
+        }
         public EstadisticasMedicoMes ObtenerEstadisticasMes(int medicoId, int anio, int mes)
         {
             AccesoDatos datos = new AccesoDatos();

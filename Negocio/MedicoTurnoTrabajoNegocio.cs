@@ -25,30 +25,47 @@ namespace Negocio
                 return datos.ObtenerPorId(medicoTurnoId);
             }
 
-        public void Asignar(int medicoId, int turnoTrabajoId, byte diaSemana)
+        public void Asignar(int medicoId, int turnoTrabajoId, int especialidadId, byte diaSemana)
         {
-            // 1) Validaciones básicas
-            if (medicoId <= 0) throw new Exception("Médico inválido.");
-            if (turnoTrabajoId <= 0) throw new Exception("Turno de trabajo inválido.");
-            if (diaSemana < 1 || diaSemana > 7) throw new Exception("Día inválido. (1=Lun ... 7=Dom)");
+            if (medicoId <= 0)
+                throw new Exception("Médico inválido.");
 
-            // 2) Que el turno de trabajo exista y tenga horas coherentes
+            if (turnoTrabajoId <= 0)
+                throw new Exception("Turno de trabajo inválido.");
+
+            if (especialidadId <= 0)
+                throw new Exception("Especialidad inválida.");
+
+            if (diaSemana < 1 || diaSemana > 7)
+                throw new Exception("Día inválido. (1=Lun ... 7=Dom)");
+
+            if (!datos.MedicoTieneEspecialidad(medicoId, especialidadId))
+                throw new Exception("El médico no tiene asignada esa especialidad.");
+
             TurnoTrabajo turno = datos.ObtenerTurnoTrabajo(turnoTrabajoId);
-            if (turno == null) throw new Exception("No existe el turno de trabajo seleccionado.");
-            if (!turno.Activo) throw new Exception("El turno de trabajo está inactivo.");
+            if (turno == null)
+                throw new Exception("No existe el turno de trabajo seleccionado.");
+
+            if (!turno.Activo)
+                throw new Exception("El turno de trabajo está inactivo.");
 
             ValidarHorasTurno(turno.HoraInicio, turno.HoraFin);
 
-            // 3) Evitar duplicado exacto (mismo médico, mismo turnoTrabajo, mismo día)
-            if (datos.Existe(medicoId, turnoTrabajoId, diaSemana))
-                throw new Exception("Ese horario ya está asignado para ese médico y día.");
+           
+            if (datos.ExisteBloque(medicoId, diaSemana, turnoTrabajoId))
+            {
+                datos.ActualizarBloque(medicoId, turnoTrabajoId, especialidadId, diaSemana);
+                return; 
+            }
 
-            // 4) Evitar solapamientos (mismo médico + día, rangos que se pisan)
+            
+            if (datos.Existe(medicoId, turnoTrabajoId, especialidadId, diaSemana))
+                throw new Exception("Ese horario ya está asignado para ese médico, especialidad y día.");
+
             if (datos.ExisteSolapado(medicoId, diaSemana, turno.HoraInicio, turno.HoraFin))
                 throw new Exception("Ese turno se superpone con otro horario ya asignado a ese médico en ese día.");
 
-            // 5) OK
-            datos.Agregar(medicoId, turnoTrabajoId, diaSemana);
+            datos.Agregar(medicoId, turnoTrabajoId, especialidadId, diaSemana);
         }
 
         private void ValidarHorasTurno(TimeSpan inicio, TimeSpan fin)
@@ -62,9 +79,9 @@ namespace Negocio
             if (fin <= inicio)
                 throw new Exception("La hora fin debe ser mayor a la hora inicio.");
 
-            // Ajustá estos límites a tu TP
-            TimeSpan min = new TimeSpan(6, 0, 0);   // 06:00
-            TimeSpan max = new TimeSpan(23, 59, 0); // 23:59
+            
+            TimeSpan min = new TimeSpan(6, 0, 0);   
+            TimeSpan max = new TimeSpan(23, 59, 0); 
 
             if (inicio < min || inicio > max)
                 throw new Exception("La hora de inicio debe estar entre 06:00 y 23:59.");
@@ -72,11 +89,11 @@ namespace Negocio
             if (fin < min || fin > max)
                 throw new Exception("La hora de fin debe estar entre 06:00 y 23:59.");
 
-            // Si querés turnos en punto:
+            
             if (inicio.Minutes != 0 || fin.Minutes != 0)
                 throw new Exception("Las horas deben ser en punto (ej: 08:00, 12:00).");
 
-            // Duración mínima (si tu turno trabajo es franja, podés dejarlo en 1h mínimo)
+       
             TimeSpan duracion = fin - inicio;
             if (duracion < TimeSpan.FromHours(1))
                 throw new Exception("El turno de trabajo debe durar al menos 1 hora.");
@@ -84,7 +101,10 @@ namespace Negocio
 
         public void Activar(int medicoTurnoId) => datos.Activar(medicoTurnoId);
 
-            public void Desactivar(int medicoTurnoId) => datos.Desactivar(medicoTurnoId);
+
+        
+
+        public void Desactivar(int medicoTurnoId) => datos.Desactivar(medicoTurnoId);
         }
     }
 

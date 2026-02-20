@@ -1,13 +1,9 @@
 ﻿using Dominio;
 using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Configuration;
 using System.Net;
 using System.Net.Mail;
 using System.Text;
-using System.Threading.Tasks;
-using System.Configuration;
-
 
 namespace Negocio
 {
@@ -24,69 +20,85 @@ namespace Negocio
 
         public EmailServicio()
         {
-            
             enabled = string.Equals(
                 (ConfigurationManager.AppSettings["SMTP_ENABLED"] ?? "").Trim(),
                 "true",
                 StringComparison.OrdinalIgnoreCase
             );
 
-            
-            if (!enabled)
-                return;
+            if (!enabled) return;
 
             host = Get("SMTP_HOST");
             user = Get("SMTP_USER");
-            pass = Get("SMTP_PASS");
+            pass = (Get("SMTP_PASS") ?? "").Replace(" ", "").Trim(); 
             from = Get("SMTP_FROM");
 
             string portTxt = Get("SMTP_PORT");
             if (!int.TryParse(portTxt, out port))
-                throw new Exception($"SMTP_PORT inválido en web.config. Debe ser número (ej: 587). Valor actual: '{portTxt}'");
+                throw new Exception($"SMTP_PORT inválido. Valor: '{portTxt}'");
 
             string sslTxt = Get("SMTP_SSL");
             if (!bool.TryParse(sslTxt, out ssl))
-                throw new Exception($"SMTP_SSL inválido en web.config. Debe ser true/false. Valor actual: '{sslTxt}'");
+                throw new Exception($"SMTP_SSL inválido. Valor: '{sslTxt}'");
 
-            if (string.IsNullOrWhiteSpace(host)) throw new Exception("Falta SMTP_HOST en web.config.");
-            if (string.IsNullOrWhiteSpace(user)) throw new Exception("Falta SMTP_USER en web.config.");
-            if (string.IsNullOrWhiteSpace(pass)) throw new Exception("Falta SMTP_PASS en web.config.");
-            if (string.IsNullOrWhiteSpace(from)) throw new Exception("Falta SMTP_FROM en web.config.");
-
-       
-            if (user.Equals("tuemail@gmail.com", StringComparison.OrdinalIgnoreCase) ||
-                from.Equals("tuemail@gmail.com", StringComparison.OrdinalIgnoreCase))
-                throw new Exception("SMTP_USER/SMTP_FROM siguen con el placeholder 'tuemail@gmail.com'. Poné tu Gmail real.");
-
-            if (pass.IndexOf("TU_APP_PASSWORD", StringComparison.OrdinalIgnoreCase) >= 0 ||
-                pass.IndexOf("ACA_TU_APP_PASSWORD_REAL", StringComparison.OrdinalIgnoreCase) >= 0)
-                throw new Exception("SMTP_PASS sigue con placeholder. Tenés que poner la APP PASSWORD real de Gmail (16 caracteres).");
+            if (string.IsNullOrWhiteSpace(host)) throw new Exception("Falta SMTP_HOST.");
+            if (string.IsNullOrWhiteSpace(user)) throw new Exception("Falta SMTP_USER.");
+            if (string.IsNullOrWhiteSpace(pass)) throw new Exception("Falta SMTP_PASS.");
+            if (string.IsNullOrWhiteSpace(from)) throw new Exception("Falta SMTP_FROM.");
         }
 
         private string Get(string key) => (ConfigurationManager.AppSettings[key] ?? "").Trim();
 
+      
+        private string NormalizarEmail(string email)
+        {
+            if (email == null) return "";
+
+            email = email.Trim();
+
+            
+            email = email.Replace("\u00A0", " ")
+                         .Replace("\u200B", "")
+                         .Replace("\u200C", "")
+                         .Replace("\u200D", "")
+                         .Replace("\uFEFF", "")
+                         .Replace(" ", "");
+
+            return email;
+        }
+
         private void ValidarMail(string mail, string nombreCampo)
         {
+            mail = NormalizarEmail(mail);
+
             try { _ = new MailAddress(mail); }
-            catch { throw new Exception($"{nombreCampo} inválido: '{mail}'"); }
+            catch (Exception ex)
+            {
+             
+                throw new Exception($"{nombreCampo} inválido: '{mail}'. Detalle: {ex.Message}");
+            }
         }
 
         private void Enviar(string para, string asunto, string html)
         {
-            
             if (!enabled) return;
 
-            para = (para ?? "").Trim();
+            para = NormalizarEmail(para);
+            string fromLimpio = NormalizarEmail(from);
 
             if (string.IsNullOrWhiteSpace(para))
                 throw new Exception("El paciente no tiene email cargado. No se puede enviar el mail.");
 
-            ValidarMail(para, "Email del paciente");
-            ValidarMail(from, "SMTP_FROM");
+            
+            try { _ = new MailAddress(para); }
+            catch { throw new Exception($"Email del paciente inválido: '{para}'"); }
+
+            try { _ = new MailAddress(fromLimpio); }
+            catch { throw new Exception($"SMTP_FROM inválido: '{fromLimpio}'"); }
 
             using (var msg = new MailMessage())
             {
-                msg.From = new MailAddress(from, "Clinica Turnos");
+                msg.From = new MailAddress(fromLimpio, "Clinica Turnos");
                 msg.To.Add(new MailAddress(para));
                 msg.Subject = asunto;
                 msg.Body = html;
@@ -100,20 +112,12 @@ namespace Negocio
                     smtp.UseDefaultCredentials = false;
                     smtp.Credentials = new NetworkCredential(user, pass);
                     smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
-                    smtp.Timeout = 15000; // 15s
+                    smtp.Timeout = 15000;
 
-                    try
-                    {
-                        smtp.Send(msg);
-                    }
-                    catch (SmtpException ex)
-                    {
-                        throw new Exception("Fallo SMTP: " + ex.Message);
-                    }
+                    smtp.Send(msg);
                 }
             }
         }
-
         public void EnviarConfirmacionTurno(DtoTurnoMail t)
         {
             if (!enabled) return;
@@ -139,7 +143,6 @@ namespace Negocio
 
             Enviar(t.PacienteEmail, asunto, html);
         }
-
         public void EnviarReprogramacionTurno(DtoTurnoMail t, DateTime fechaAnterior, TimeSpan horaAnterior)
         {
             if (!enabled) return;

@@ -11,6 +11,7 @@ namespace Dominio
         public int MedicoTurnoID { get; set; }
         public int MedicoID { get; set; }
         public int TurnoTrabajoID { get; set; }
+        public int EspecialidadID { get; set; }   
         public byte DiaSemana { get; set; }
         public bool Activo { get; set; }
 

@@ -22,6 +22,13 @@
                         OnSelectedIndexChanged="ddlMedico_SelectedIndexChanged" />
                 </div>
 
+                <div class="col-md-4">
+    <label class="form-label">Especialidad</label>
+    <asp:DropDownList ID="ddlEspecialidad" runat="server"
+        CssClass="form-select" />
+</div>
+
+
                 <div class="col-md-3">
                     <label class="form-label">Día</label>
                     <asp:DropDownList ID="ddlDia" runat="server" CssClass="form-select">

@@ -31,10 +31,17 @@ namespace TP_Turnos_Clinica
                 return;
             }
 
-            if (MedicoId == 0)
+            var u = (Dominio.Usuario)Session["usuario"];
+
+            if (u == null || u.RolID != 1) 
             {
-                MostrarError("Falta el id del médico en la URL.");
-                btnAsignar.Enabled = false;
+                Response.Redirect("~/Home.aspx");
+                return;
+            }
+
+            if (MedicoId <= 0)
+            {
+                Response.Redirect("~/Medicos.aspx");
                 return;
             }
 
@@ -52,7 +59,7 @@ namespace TP_Turnos_Clinica
             if (m == null)
             {
                 MostrarError("Médico inexistente.");
-                btnAsignar.Enabled = false;   // OJO: es btnAsignar
+                btnAsignar.Enabled = false;  
                 return;
             }
 
@@ -83,7 +90,7 @@ namespace TP_Turnos_Clinica
             {
                 int espId = int.Parse(ddlEspecialidades.SelectedValue);
 
-                // Acá llamás al negocio que asigna
+                
                 espNegocio.AsignarAMedico(MedicoId, espId);
 
                 CargarComboEspecialidades();

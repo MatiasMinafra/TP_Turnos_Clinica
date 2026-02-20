@@ -43,6 +43,7 @@ namespace TP_Turnos_Clinica
             {
                 CargarCabecera();
                 CargarComboTurnosTrabajo();
+                CargarComboEspecialidades();   
                 CargarGrilla();
             }
         }
@@ -71,6 +72,19 @@ namespace TP_Turnos_Clinica
             ddlTurnoTrabajo.Items.Insert(0, new ListItem("-- Seleccionar --", ""));
         }
 
+        private void CargarComboEspecialidades()
+        {
+            ddlEspecialidad.Items.Clear();
+
+            var esp = medicoNegocio.ObtenerEspecialidades(MedicoId);
+            ddlEspecialidad.DataSource = esp;
+            ddlEspecialidad.DataValueField = "EspecialidadID";
+            ddlEspecialidad.DataTextField = "Nombre";
+            ddlEspecialidad.DataBind();
+
+            ddlEspecialidad.Items.Insert(0, new ListItem("-- Seleccionar --", ""));
+        }
+
         private void CargarGrilla()
         {
             lblMensaje.Visible = false;
@@ -93,13 +107,17 @@ namespace TP_Turnos_Clinica
 
             try
             {
+                if (!int.TryParse(ddlEspecialidad.SelectedValue, out int especialidadId) || especialidadId <= 0)
+                    throw new Exception("Seleccioná una especialidad.");
+
                 if (!byte.TryParse(ddlDia.SelectedValue, out byte diaSemana) || diaSemana < 1 || diaSemana > 7)
                     throw new Exception("Día inválido.");
 
                 if (!int.TryParse(ddlTurnoTrabajo.SelectedValue, out int turnoTrabajoId) || turnoTrabajoId <= 0)
                     throw new Exception("Seleccioná un turno de trabajo.");
 
-                mttNegocio.Asignar(MedicoId, turnoTrabajoId, diaSemana);
+               
+                mttNegocio.Asignar(MedicoId, turnoTrabajoId, especialidadId, diaSemana);
 
                 lblMensaje.Text = "Asignación guardada correctamente.";
                 lblMensaje.CssClass = "alert alert-success d-block mb-3";
@@ -114,7 +132,6 @@ namespace TP_Turnos_Clinica
                 lblMensaje.Visible = true;
             }
         }
-
         protected void gvAsignaciones_ComandoFila(object sender, GridViewCommandEventArgs e)
         {
             if (e.CommandName != "CambiarEstado")
