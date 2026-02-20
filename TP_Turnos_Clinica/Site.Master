@@ -65,7 +65,7 @@
                             </li>
                         </asp:PlaceHolder>
 
-                        <!-- ✅ MENÚ MÉDICO (CORREGIDO) -->
+                        
                         <asp:PlaceHolder ID="phMenuMedico" runat="server">
                             <li class="nav-item">
                                 <a class="nav-link" runat="server" href="~/PanelMedico.aspx">Panel médico</a>
@@ -75,15 +75,7 @@
                                 <a class="nav-link" runat="server" href="~/MisEstadisticas.aspx">Mis estadísticas</a>
                             </li>
 
-                            <%-- Dejamos esto comentado para NO borrarlo, pero que NO aparezca --%>
-                            <%-- 
-                            <li class="nav-item">
-                                <a class="nav-link" runat="server" href="~/MisTurnos.aspx">Mis turnos</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" runat="server" href="~/Evoluciones.aspx">Evoluciones</a>
-                            </li>
-                            --%>
+                            
                         </asp:PlaceHolder>
 
                     </ul>

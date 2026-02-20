@@ -10,7 +10,7 @@
         CssClass="alert alert-danger d-block mb-3"
         Visible="false" />
 
-    <!-- Filtros -->
+    
     <div class="card mb-3">
         <div class="card-body">
             <div class="row g-3 align-items-end">
@@ -52,7 +52,7 @@
         </div>
     </div>
 
-    <!-- Grilla -->
+    
     <asp:GridView ID="gvTurnos" runat="server"
         CssClass="table table-striped table-bordered align-middle"
         AutoGenerateColumns="false"

@@ -27,7 +27,7 @@ namespace TP_Turnos_Clinica
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            // Seguridad: solo Admin puede entrar
+            
             if (Session["usuario"] == null)
             {
                 Response.Redirect("~/Login.aspx");
@@ -66,7 +66,7 @@ namespace TP_Turnos_Clinica
         {
             ddlMedico.DataSource = medicosNegocio.Listar("", true);
 
-            // Si tu clase Medico NO tiene "Apellido", cambiá DataTextField al que tengas (por ej: "Nombre")
+            
             ddlMedico.DataTextField = "Apellido";
             ddlMedico.DataValueField = "MedicoID";
 
@@ -95,7 +95,7 @@ namespace TP_Turnos_Clinica
             Usuario u = negocio.ObtenerPorId(id);
 
             txtUsuario.Text = u.UsuarioNombre;
-            txtPassword.Text = ""; // no mostrar password
+            txtPassword.Text = ""; 
 
             txtNombre.Text = u.Nombre;
             txtApellido.Text = u.Apellido;
@@ -117,7 +117,7 @@ namespace TP_Turnos_Clinica
                 Usuario u = new Usuario();
                 u.UsuarioID = UsuarioId ?? 0;
                 u.UsuarioNombre = txtUsuario.Text.Trim();
-                u.Password = txtPassword.Text.Trim(); // si está vacío en edición, no se actualiza
+                u.Password = txtPassword.Text.Trim(); 
 
                 u.Nombre = txtNombre.Text.Trim();
                 u.Apellido = txtApellido.Text.Trim();

@@ -161,7 +161,7 @@ WHERE Nombre = @nombre
 
         public List<Especialidad> ListarActivas()
         {
-            // Reutiliza tu Listar()
+            
             return Listar("", true);
         }
 

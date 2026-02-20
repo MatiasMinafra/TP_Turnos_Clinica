@@ -13,7 +13,7 @@ namespace TP_Turnos_Clinica
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            // Seguridad: solo Admin
+            
             if (Session["usuario"] == null)
             {
                 Response.Redirect("~/Login.aspx");

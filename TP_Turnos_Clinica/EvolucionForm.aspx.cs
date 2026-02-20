@@ -34,7 +34,7 @@ namespace TP_Turnos_Clinica
 
             var u = (Usuario)Session["usuario"];
 
-            // Solo médicos
+            
             if (u.RolID != RolesIds.MEDICO)
             {
                 Response.Redirect("~/Home.aspx");
@@ -67,7 +67,7 @@ namespace TP_Turnos_Clinica
                 txtFechaTurno.Text = det.TurnoFecha.ToString("dd/MM/yyyy");
                 txtHorario.Text = $"{det.TurnoHoraInicio:hh\\:mm} - {det.TurnoHoraFin:hh\\:mm}";
 
-                // Link al historial (B: turnos + evoluciones)
+                
                 lnkHistorial.NavigateUrl = "~/HistorialPaciente.aspx?pacienteId=" + det.PacienteID;
             }
             catch (Exception ex)

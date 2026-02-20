@@ -81,7 +81,7 @@
                 <div class="col-md-4">
                     <label class="form-label">Disponibilidad del paciente</label>
 
-                    <!-- ✅ CORREGIDO: Value debe ser MANANA/TARDE/NOCHE -->
+                   
                     <asp:DropDownList ID="ddlFranja" runat="server" CssClass="form-select"
                         AutoPostBack="true"
                         OnSelectedIndexChanged="ddlFranja_SelectedIndexChanged">

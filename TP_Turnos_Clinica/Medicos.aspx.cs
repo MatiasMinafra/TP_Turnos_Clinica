@@ -28,7 +28,7 @@ namespace TP_Turnos_Clinica
         {
             bool soloActivos = !chkInactivos.Checked;
 
-            List<Medico> lista = negocio.Listar(filtro, soloActivos); // ✅ acá está la clave
+            List<Medico> lista = negocio.Listar(filtro, soloActivos); 
             gvMedicos.DataSource = lista;
             gvMedicos.DataBind();
         }

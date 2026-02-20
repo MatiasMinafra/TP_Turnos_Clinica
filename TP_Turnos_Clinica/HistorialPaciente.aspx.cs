@@ -53,7 +53,7 @@ namespace TP_Turnos_Clinica
 
                 int medicoId = u.MedicoID.Value;
 
-                // 🔹 Cargar datos del paciente
+                
                 var pacNeg = new PacienteNegocio();
                 var p = pacNeg.ObtenerPorId(PacienteId);
 

@@ -32,7 +32,7 @@
         </div>
 
         <div class="col-md-2 text-end">
-            <!-- CORREGIDO: va a EspecialidadesForm.aspx -->
+            
             <a class="btn btn-success w-100" href="<%= ResolveUrl("~/EspecialidadesForm.aspx") %>">
                 Nueva Especialidad
             </a>

@@ -274,7 +274,7 @@ INNER JOIN Especialidades e ON e.EspecialidadID = t.EspecialidadID
 INNER JOIN EstadosTurno et ON et.EstadoTurnoID = t.EstadoTurnoID
 LEFT JOIN Pagos pa ON pa.TurnoID = t.TurnoID
 LEFT JOIN EstadosPago ep ON ep.EstadoPagoID = pa.EstadoPagoID
-WHERE t.Activo = 1
+WHERE (t.Activo = 1 OR @incluirCancelados = 1)
   AND t.Fecha = @fecha
   AND (@incluirCancelados = 1 OR et.Nombre <> 'Cancelado')
 ORDER BY t.HoraInicio;";
@@ -428,14 +428,35 @@ WHERE TurnoID = @turnoId;
 
             try
             {
-                datos.setearProcedimiento("dbo.SP_ReprogramarTurno");
+                
+                datos.setearConsulta(@"
+DECLARE @Cancelado INT = (SELECT EstadoTurnoID FROM EstadosTurno WHERE Nombre = 'Cancelado');
+DECLARE @Atendido  INT = (SELECT EstadoTurnoID FROM EstadosTurno WHERE Nombre = 'Atendido');
 
+IF NOT EXISTS (SELECT 1 FROM Turnos WHERE TurnoID = @TurnoID)
+    THROW 50040, 'No existe el turno.', 1;
+
+IF EXISTS (SELECT 1 FROM Turnos WHERE TurnoID = @TurnoID AND EstadoTurnoID = @Cancelado)
+    THROW 50041, 'No se puede reprogramar un turno Cancelado.', 1;
+
+IF (@Atendido IS NOT NULL)
+BEGIN
+    IF EXISTS (SELECT 1 FROM Turnos WHERE TurnoID = @TurnoID AND EstadoTurnoID = @Atendido)
+        THROW 50042, 'No se puede reprogramar un turno Atendido/Cerrado.', 1;
+END
+");
+                datos.setearParametro("@TurnoID", turnoId);
+                datos.ejecutarLectura(); 
+                                         
+                datos.cerrarConexion();
+
+            
+                datos = new AccesoDatos();
+                datos.setearProcedimiento("dbo.SP_ReprogramarTurno");
                 datos.setearParametro("@TurnoID", turnoId);
                 datos.setearParametro("@NuevaFecha", fecha.Date);
                 datos.setearParametro("@NuevaHoraInicio", horaInicio);
                 datos.setearParametro("@NuevoMedicoID", medicoId);
-
-                
                 datos.setearParametro("@Motivo", motivo);
 
                 datos.ejecutarAccion();
@@ -480,18 +501,40 @@ WHERE TurnoID = @turnoId
             try
             {
                 datos.setearConsulta(@"
-DECLARE @NoAsistio INT = (SELECT EstadoTurnoID FROM EstadosTurno WHERE Nombre='No asistió');
-DECLARE @Cancelado INT = (SELECT EstadoTurnoID FROM EstadosTurno WHERE Nombre='Cancelado');
+DECLARE @NoAsistio INT = (SELECT EstadoTurnoID FROM EstadosTurno WHERE Nombre = 'No Asistió');
+DECLARE @Cancelado INT = (SELECT EstadoTurnoID FROM EstadosTurno WHERE Nombre = 'Cancelado');
+DECLARE @Atendido  INT = (SELECT EstadoTurnoID FROM EstadosTurno WHERE Nombre = 'Atendido');
 
-IF (@NoAsistio IS NULL) THROW 50030, 'Falta estado No asistió.', 1;
+IF (@NoAsistio IS NULL) THROW 50030, 'Falta estado No Asistió.', 1;
 
-IF EXISTS (SELECT 1 FROM Turnos WHERE TurnoID=@turnoId AND EstadoTurnoID=@Cancelado)
-    THROW 50031, 'No se puede marcar No asistió si está cancelado.', 1;
+-- Validar que exista el turno
+IF NOT EXISTS (SELECT 1 FROM Turnos WHERE TurnoID = @turnoId)
+    THROW 50032, 'No existe el turno.', 1;
+
+-- Bloqueo por estados finales
+IF EXISTS (SELECT 1 FROM Turnos WHERE TurnoID = @turnoId AND EstadoTurnoID = @Cancelado)
+    THROW 50031, 'No se puede marcar No Asistió si está Cancelado.', 1;
+
+IF (@Atendido IS NOT NULL) 
+BEGIN
+    IF EXISTS (SELECT 1 FROM Turnos WHERE TurnoID = @turnoId AND EstadoTurnoID = @Atendido)
+        THROW 50033, 'No se puede marcar No Asistió si el turno ya está Atendido/Cerrado.', 1;
+END
+
+-- Bloqueo por fecha/hora: solo si ya pasó
+DECLARE @Fecha DATE, @Hora TIME(7);
+SELECT @Fecha = Fecha, @Hora = HoraInicio
+FROM Turnos
+WHERE TurnoID = @turnoId;
+
+IF (CAST(@Fecha AS datetime) + CAST(@Hora AS datetime)) > GETDATE()
+    THROW 50034, 'No se puede marcar No Asistió antes de la fecha/hora del turno.', 1;
 
 UPDATE Turnos
-SET EstadoTurnoID=@NoAsistio
-WHERE TurnoID=@turnoId;
+SET EstadoTurnoID = @NoAsistio
+WHERE TurnoID = @turnoId;
 ");
+
                 datos.setearParametro("@turnoId", turnoId);
                 datos.ejecutarAccion();
             }
